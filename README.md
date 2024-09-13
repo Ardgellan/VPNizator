@@ -30,7 +30,7 @@
 ## Installation methods
 ### 1. Using `autoinstall.sh` script (recommended)
 ```bash
-wget https://raw.githubusercontent.com/Ardgellan/VPNizator/main/autoinstall.sh?token=GHSAT0AAAAAACXLL2FDDIZT6AHT5W5OBVFOZXEF73Q && chmod +x autoinstall.sh && ./autoinstall.sh
+wget https://raw.githubusercontent.com/Ardgellan/VPNizator/main/autoinstall.sh && chmod +x autoinstall.sh && ./autoinstall.sh
 ```
 
 ### 2. Manual
