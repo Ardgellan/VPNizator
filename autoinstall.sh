@@ -182,7 +182,8 @@ echo "............................................................"
 echo "$Defaul_color" | sed 's/\$//g'
 
 #install xray
-bash -c "$(curl -L https://raw.githubusercontent.com/Ardgellan/XTLS_Reality_Server/main/install-release.sh)" @ install
+bash -c "$(curl -L https://raw.githubusercontent.com/Ardgellan/XTLS_Reality_Server/main/install-release.sh)" -- install --install-user 'akhmet'
+
 # To increase performance, you can configure
 # Bottleneck Bandwidth and
 # Round-trip propagation time (BBR) congestion control algorithm on the server
