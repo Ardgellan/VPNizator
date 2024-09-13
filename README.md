@@ -30,7 +30,7 @@
 ## Installation methods
 ### 1. Using `autoinstall.sh` script (recommended)
 ```bash
-wget https://raw.githubusercontent.com/PheeZz/XTLS-Reality-bot/main/autoinstall.sh && chmod +x autoinstall.sh && ./autoinstall.sh
+wget https://raw.githubusercontent.com/Ardgellan/VPNizator/main/autoinstall.sh?token=GHSAT0AAAAAACXLL2FDFHML7KGZ72DKILJCZXEFFPQ && chmod +x autoinstall.sh && ./autoinstall.sh
 ```
 
 ### 2. Manual
