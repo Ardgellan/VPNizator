@@ -25,7 +25,7 @@ fi
 
 clear
 echo $Blue | sed 's/\$//g'
-echo "This script will install XTLS-Reality telegram bot on your server"
+echo "This script will install VPNizator telegram bot on your server"
 echo "It will install and configure:"
 echo $Orange | sed 's/\$//g'
 echo "- XRAY (XTLS-Reality)"
@@ -35,13 +35,13 @@ echo "- Poetry"
 echo "- Telegram Bot for manage XRAY"
 echo $Red | sed 's/\$//g'
 echo "............................................................"
-echo "...................made by PheeZz..........................."
+echo "...................//////////////..........................."
 echo "............................................................"
 
 echo $White | sed 's/\$//g'
 
 echo "Now need to input some data for bot configuration"
-echo "You can change it later in ~/XTLS-Reality-bot/data/.env file"
+echo "You can change it later in ~/VPNizator/data/.env file"
 echo ""
 
 
@@ -74,42 +74,42 @@ fi
 #ask user for Database name
 echo ""
 echo "Enter Database name:"
-echo "Just press ENTER for use default name [$Blue xtls_reality_bot $White]" | sed 's/\$//g'
+echo "Just press ENTER for use default name [$Blue vpnizator_database $White]" | sed 's/\$//g'
 read database_name
 if [ -z "$database_name" ]
 then
-      database_name="xtls_reality_bot"
+      database_name="vpnizator_database"
 fi
 
 #ask user for Database user
 echo ""
 echo "Enter Database user:"
-echo "Just press ENTER for use default user [$Blue xray_bot_user $White]" | sed 's/\$//g'
+echo "Just press ENTER for use default user [$Blue vpnizator_database_user $White]" | sed 's/\$//g'
 read database_user
 if [ -z "$database_user" ]
 then
-      database_user="xray_bot_user"
+      database_user="vpnizator_database_user"
 fi
 
 #ask user for Database password
 echo ""
 echo "Enter Database user password:"
-echo "Just press ENTER for use default password [$Blue bestpassword123 $White]" | sed 's/\$//g'
+echo "Just press ENTER for use default password [$Blue starscream $White]" | sed 's/\$//g'
 read database_passwd
 if [ -z "$database_passwd" ]
 then
-      database_passwd="bestpassword123"
+      database_passwd="starscream"
 fi
 
 #ask user for config name prefix
 echo ""
 echo "Enter config name prefix:"
-echo "Just press ENTER for use default prefix [$Blue XrayPheeZzVPN $White]" | sed 's/\$//g'
+echo "Just press ENTER for use default prefix [$Blue VPNizator $White]" | sed 's/\$//g'
 read config_prefix
 
 if [ -z "$config_prefix" ]
 then
-      config_prefix="XRAY_PheeZzVPN"
+      config_prefix="VPNizator"
 fi
 
 #ask user for base subscription monthly price
@@ -127,12 +127,12 @@ fi
 echo ""
 echo "Enter max configs count for each user:"
 echo "P.S admin can give more configs to any user from admin panel"
-echo "Just press ENTER for use default count [$Blue 2 $White]" | sed 's/\$//g'
+echo "Just press ENTER for use default count [$Blue 10 $White]" | sed 's/\$//g'
 read max_configs_count
 
 if [ -z "$max_configs_count" ]
 then
-      max_configs_count="2"
+      max_configs_count="10"
 fi
 
 #ask user for site url to hide reality
@@ -182,7 +182,7 @@ echo "............................................................"
 echo "$Defaul_color" | sed 's/\$//g'
 
 #install xray
-bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
+bash -c "$(curl -L https://raw.githubusercontent.com/Ardgellan/XTLS_Reality_Server/main/install-release.sh?token=GHSAT0AAAAAACXLL2FDOZDEWM424S5SZLJIZXEDJYA)" @ install
 
 # To increase performance, you can configure
 # Bottleneck Bandwidth and
@@ -276,15 +276,15 @@ su - postgres -c "psql -c \"GRANT ALL PRIVILEGES ON DATABASE $database_name TO $
 
 #clone bot repo
 cd ~
-git clone https://github.com/PheeZz/XTLS-Reality-bot.git
+git clone https://github.com/Ardgellan/VPNizator.git
 
 #create venv and install bot dependencies
-cd ~/XTLS-Reality-bot
+cd ~/VPNizator
 poetry install --no-root
 cd
 
 #configure bot .env file
-sudo cat <<EOF > ~/XTLS-Reality-bot/source/data/.env
+sudo cat <<EOF > ~/VPNizator/source/data/.env
 TG_BOT_TOKEN = "$bot_token"
 PAYMENT_CARD = "$payment_card"
 ADMINS_IDS = "$admins_ids"
@@ -305,21 +305,21 @@ USER_DEFAULT_MAX_CONFIGS_COUNT = "$max_configs_count"
 EOF
 
 #try to run create_database_tables.py if it fails, then give db user superuser privileges
-cd ~/XTLS-Reality-bot
+cd ~/VPNizator
 $(poetry env info --path)/bin/python3.11 create_database_tables.py || -u postgres psql -c "ALTER USER $database_user WITH SUPERUSER;" && $(poetry env info --path)/bin/python3.11 create_database_tables.py
 cd
 
 #create systemd service for bot
-cd ~/XTLS-Reality-bot
-sudo cat <<EOF > /etc/systemd/system/xtls-reality-bot.service
+cd ~/VPNizator
+sudo cat <<EOF > /etc/systemd/system/vpnizator.service
 [Unit]
-Description=XTLS-Reality telegram bot
+Description=VPNizator telegram bot
 After=network.target
 
 [Service]
 Type=simple
 User=$current_os_user
-ExecStart=/bin/bash -c 'cd ~/XTLS-Reality-bot/ && $(poetry env info --executable) app.py'
+ExecStart=/bin/bash -c 'cd ~/VPNizator/ && $(poetry env info --executable) app.py'
 Restart=on-failure
 
 [Install]
@@ -329,23 +329,23 @@ cd
 
 #enable and start bot service
 systemctl daemon-reload
-systemctl enable xtls-reality-bot.service
-systemctl start xtls-reality-bot.service
+systemctl enable vpnizator.service
+systemctl start vpnizator.service
 
 
 echo "$Green Installation completed successfully" | sed 's/\$//g'
 echo "$Defaul_color" | sed 's/\$//g'
 
-echo "$Blue Your .env file losudo cated at $Orange ~/XTLS-Reality-bot/source/data/.env" | sed 's/\$//g'
+echo "$Blue Your .env file losudo cated at $Orange ~/VPNizator/source/data/.env" | sed 's/\$//g'
 echo "$Blue Do u want to watch it? [ y / $Blue N $White]" | sed 's/\$//g'
 read watch_env_file
 
 if [ "$watch_env_file" = "y" ]
 then
-      sudo batcat ~/XTLS-Reality-bot/source/data/.env
+      sudo batcat ~/VPNizator/source/data/.env
 fi
 
-echo "$Blue Your bot logs losudo cated at $Orange ~/XTLS-Reality-bot/logs/" | sed 's/\$//g'
+echo "$Blue Your bot logs losudo cated at $Orange ~/VPNizator/logs/" | sed 's/\$//g'
 #thanks for install
 echo "$Green Thanks for install" | sed 's/\$//g'
 echo "$Defaul_color" | sed 's/\$//g'

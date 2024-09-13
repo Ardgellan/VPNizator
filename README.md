@@ -1,4 +1,4 @@
-<h1 align="center">PheeZz's XTLS-Reality bot</h1>
+<h1 align="center">XTLS-Reality bot</h1>
 <p align="center">
 <img src = "https://github.com/PheeZz/XTLS-Reality-bot/blob/main/source/data/img/logo/logo_wide.png?raw=true" width = 80%>
 </p>
@@ -15,9 +15,6 @@
 [![XTLS](https://img.shields.io/badge/XTLS-000000?style=for-the-badge&logo=xray&logoColor=white)](https://xtls.github.io/)
 
 </div>
-
-## Hosted bot: [@vpn_xray_by_pheezz_bot](https://t.me/vpn_xray_by_pheezz_bot)
-
 
 ## Tested on
 - Ubuntu 22.04 LTS
@@ -238,12 +235,12 @@ nano /etc/systemd/system/xtls-reality-bot.service
 ```
 ```ini
 [Unit]
-Description=XTLS-Reality telegram bot
+Description=VPNizator telegram bot
 After=network.target
 
 [Service]
 Type=simple
-User=root
+User=root (Или нужный нам, )
 ExecStart=/bin/bash -c 'cd ~/XTLS-Reality-bot/ && $(poetry env info --executable) app.py'
 Restart=on-failure
 
@@ -265,13 +262,3 @@ systemctl start xtls-reality-bot.service
   1. [Bleeding-edge обход блокировок с полной маскировкой: настраиваем сервер и клиент XRay с XTLS-Reality быстро и просто](https://habr.com/ru/articles/731608/)
   2. [3X-UI: Shadowsocks-2022 & XRay (XTLS) сервер с простой настройкой и приятным интерфейсом](https://habr.com/ru/articles/735536/)
   3. [Обход блокировок: настройка сервера XRay для Shadowsocks-2022 и VLESS с XTLS-Vision, Websockets и фейковым веб-сайтом](https://habr.com/ru/articles/728836/)
-
-
-## Say "thank you ❤️"
-
-You can support me by give ⭐️star to this repo or.. Donation..👉🏼👈🏼<br/>
-
-
-<a href = "https://www.donationalerts.com/r/pheezz"><img src = "https://upload.wikimedia.org/wikipedia/ru/thumb/a/ad/DA_Logo_Color.svg/640px-DA_Logo_Color.svg.png" width = 20%></a>
-
-#### ETH - 0x56936AE100f52F99E87767773Ccb2615f1E06ae4<br/>
