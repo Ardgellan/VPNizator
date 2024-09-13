@@ -182,7 +182,7 @@ echo "............................................................"
 echo "$Defaul_color" | sed 's/\$//g'
 
 #install xray
-bash -c "$(curl -L https://raw.githubusercontent.com/Ardgellan/XTLS_Reality_Server/main/install-release.sh)" @ install --install-user 'akhmet'
+bash -c "$(curl -L https://raw.githubusercontent.com/Ardgellan/XTLS_Reality_Server/main/install-release.sh)" @ install
 
 # To increase performance, you can configure
 # Bottleneck Bandwidth and
