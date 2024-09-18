@@ -280,6 +280,7 @@ git clone https://github.com/Ardgellan/VPNizator.git
 
 #create venv and install bot dependencies
 cd ~/VPNizator
+git switch develop
 poetry install --no-root
 cd
 
