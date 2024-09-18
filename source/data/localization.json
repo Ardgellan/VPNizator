@@ -1,8 +1,8 @@
 {
     "message": {
         "new_user_greeting": {
-            "en": "{is_admin_access}👋🏼 Welcome, <b>{user}</b>! We, in the <b>VPNizator</b> team, VPNize all kinds of stuff💻📱🖥️!\n\n<b>YouTube</b>, <b>Tik-Tok</b>, <b>Instagram</b> and anything else you can think of - <b>Everything Flies!</b>✅\n\n☝️ This is your first time with us, so be sure to take advantage of the <b>One Month Trial Period!</b>\n\nAnd, please, feel free to call me if you need my help with anything! 🫡",
-            "ru": "{is_admin_access}👋🏼 Добро пожаловать, <b>{user}</b>! Мы, в команде <b>VPNizator</b>, ВПНизируем все что угодно💻📱🖥️!\n\n<b>YouTube</b>, <b>Tik-Tok</b>, <b>Instagram</b> и любой другой сервис или приложение, которое только придет Вам на ум - <b>Работает Все!</b>✅\n\n☝️ Вы впервые у нас, так что не забудьте воспользоваться <b>Месячным Пробным Периодом!</b>\n\nЗовите, если понадобится моя помощь! 🫡"
+            "en": "{is_admin_access}👋🏼 Welcome, <b>{user}</b>! We, in the <b>VPNizator</b> team, VPNize all kinds of stuff💻📱🖥️!\n\n✅ <b>YouTube</b>, <b>Tik-Tok</b>, <b>Instagram</b> and anything else you can think of - <b>Everything Flies!</b>\n\n☝️ This is your first time with us, so be sure to take advantage of the <b>One Month Trial Period!</b>\n\nAnd, please, feel free to call me if you need my help with anything! 🫡",
+            "ru": "{is_admin_access}👋🏼 Добро пожаловать, <b>{user}</b>! Мы, в команде <b>VPNizator</b>, ВПНизируем все что угодно💻📱🖥️!\n\n✅ <b>YouTube</b>, <b>Tik-Tok</b>, <b>Instagram</b> и любой другой сервис или приложение, которое только придет Вам на ум - <b>Работает Все!</b>\n\n☝️ Вы впервые у нас, так что не забудьте воспользоваться <b>Месячным Пробным Периодом!</b>\n\nЗовите, если понадобится моя помощь! 🫡"
         },
         "greeting": {
             "en": "{is_admin_access}👋🏼 Hello, <b>{user}</b>! We are glad to see you again!\n\nWhat will we VPNize today? 🫡",
@@ -191,8 +191,8 @@
             "ru": "🍏IOS"
         },
         "my_configs": {
-            "en": "📄My configs",
-            "ru": "📄Мои конфиги"
+            "en": "📄My VPN connections",
+            "ru": "📄Мои VPN соединения"
         },
         "my_profile": {
             "en": "👤My profile",
@@ -269,6 +269,30 @@
         "confirm_mailing_message": {
             "en": "📨Send",
             "ru": "📨Отправить"
+        },
+        "trial_period": {
+            "en": "⏳Trial period",
+            "ru": "⌛Пробный период"
+        },
+        "start_trial_period": {
+            "en": "⏳Start trial period",
+            "ru": "⌛Начать пробный период"
+        },
+        "vpn_payment": {
+            "en": "💳VPN payment",
+            "ru": "💳Оплата VPN соединения"
+        },
+        "vpn_installation_manual": {
+            "en": "🛠️VPN installation manual",
+            "ru": "🛠️Инструкция по установке VPN"
+        },
+        "terms_of_use": {
+            "en": "📜Terms of use",
+            "ru": "📜Правила пользования"
+        },
+        "about_us": {
+            "en": "👊About us",
+            "ru": "👊О нас"
         }
     }
 }
