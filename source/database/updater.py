@@ -57,3 +57,23 @@ class Updater(DatabaseConnector):
             return False
         logger.debug(f"Set bonus config generations to user {user_id}")
         return True
+
+    async def activate_trial_period(self, user_id: int, trial_start: datetime, trial_end: datetime):
+        query = f"""--sql
+            UPDATE users
+            SET trial_start_date = '{trial_start}', trial_end_date = '{trial_end}'
+            WHERE user_id = {user_id};
+        """
+        await self._execute_query(query)
+        logger.debug(f"Trial period for user {user_id} activated: {trial_start} - {trial_end}")
+
+    async def mark_trial_as_used(self, user_id: int):
+        query = f"""--sql
+            UPDATE users
+            SET trial_used = TRUE
+            WHERE user_id = {user_id};
+        """
+        await self._execute_query(query)
+        logger.debug(f"User {user_id} marked as having used the trial period")
+
+

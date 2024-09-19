@@ -263,3 +263,13 @@ class Selector(DatabaseConnector):
         result = await self._execute_query(query)
         logger.debug(f"Unblocked users ids: {result}")
         return [record[0] for record in result]
+
+    async def is_trial_used(self, user_id: int) -> bool:
+        query = f"""--sql
+            SELECT trial_used
+            FROM users
+            WHERE user_id = {user_id};
+        """
+        result = await self._execute_query(query)
+        return result[0][0] if result else False
+

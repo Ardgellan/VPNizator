@@ -377,3 +377,29 @@ async def insert_button_confirm_mailing_message(
         language_code=language_code,
     )
     return keyboard
+
+# Это клавиатура которую я добавил сам.
+async def trial_menu_keyboard(language_code: str):
+    keyboard = InlineKeyboardMarkup(row_width=1)
+    buttons = [
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.start_trial_period,
+            ),
+            callback_data="start_trial_period",
+        )
+    ]
+    
+    for button in buttons:
+        keyboard.insert(button)
+
+    # Добавляем кнопку возврата в главное меню
+    keyboard = await insert_button_back_to_main_menu(
+        keyboard=keyboard,
+        language_code=language_code,
+    )
+
+    return keyboard
+
+

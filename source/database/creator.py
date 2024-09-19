@@ -50,6 +50,9 @@ class Creator(DatabaseConnector):
                 username VARCHAR(32) DEFAULT NULL,
                 is_banned BOOLEAN NOT NULL DEFAULT FALSE,
                 subscription_end_date DATE DEFAULT DATE '1970-01-01',
+                trial_used BOOLEAN NOT NULL DEFAULT FALSE,
+                trial_start_date TIMESTAMP DEFAULT NULL,
+                trial_end_date TIMESTAMP DEFAULT NULL,     
                 created_at TIMESTAMP NOT NULL DEFAULT NOW(),
                 updated_at TIMESTAMP NOT NULL DEFAULT NOW()
             );

@@ -11,6 +11,7 @@ from .guide import register_show_help_guide_handlers
 from .my_profile import show_my_profile
 from .pay import *
 from .start import *
+from .trial import *
 
 
 def register_user_handlers(dp: Dispatcher):
@@ -41,6 +42,18 @@ def register_user_handlers(dp: Dispatcher):
         dp.register_callback_query_handler(
             ask_user_for_question_to_support,
             lambda call: call.data == "create_support_ticket",
+            state="*",
+        )
+
+        dp.register_callback_query_handler(
+            trial_period_function,
+            lambda call: call.data == "trial_period",
+            state="*",
+        )
+
+        dp.register_callback_query_handler(
+            start_trial_period_function,
+            lambda call: call.data == "start_trial_period",
             state="*",
         )
 
