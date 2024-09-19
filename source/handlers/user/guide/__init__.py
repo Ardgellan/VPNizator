@@ -16,6 +16,11 @@ def register_show_help_guide_handlers(dp: Dispatcher):
             state="*",
         )
         dp.register_callback_query_handler(
+            show_help_guide,
+            lambda call: call.data == "vpn_installation_manual",
+            state="*",
+        )
+        dp.register_callback_query_handler(
             show_help_guide_ios,
             lambda call: call.data == "show_help_ios",
             state="*",

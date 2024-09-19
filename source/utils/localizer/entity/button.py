@@ -101,3 +101,11 @@ class LocalizedButtonText(BaseLocalizedObject):
     @property
     def trial_period(self) -> LocalizedText:
         return self._get_entity_text("trial_period")
+
+    @property
+    def vpn_payment(self) -> LocalizedText:
+        return self._get_entity_text("vpn_payment")
+
+    @property
+    def vpn_installation_manual(self) -> LocalizedText:
+        return self._get_entity_text("vpn_installation_manual")
