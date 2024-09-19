@@ -10,11 +10,6 @@ from .pc import show_help_guide_pc
 
 def register_show_help_guide_handlers(dp: Dispatcher):
     try:
-        dp.register_message_handler(
-            show_help_guide,
-            commands=["help", "guide", "h"],
-            state="*",
-        )
         dp.register_callback_query_handler(
             show_help_guide,
             lambda call: call.data == "vpn_installation_manual",
@@ -33,6 +28,11 @@ def register_show_help_guide_handlers(dp: Dispatcher):
         dp.register_callback_query_handler(
             show_help_guide_pc,
             lambda call: call.data == "show_help_pc",
+            state="*",
+        )
+        dp.register_message_handler(
+            show_help_guide,
+            commands=["help", "guide", "h"],
             state="*",
         )
 
