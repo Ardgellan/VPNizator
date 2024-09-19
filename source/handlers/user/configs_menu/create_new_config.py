@@ -9,7 +9,7 @@ from source.utils.xray import xray_config
 from ..check_is_user_have_active_subscription import is_user_subscribed
 
 
-@rate_limit(limit=1)
+'''@rate_limit(limit=1)
 #@is_user_subscribed
 async def request_user_for_config_name(call: types.CallbackQuery, state: FSMContext):
     await call.message.edit_text(
@@ -46,4 +46,9 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
         parse_mode=types.ParseMode.HTML,
     )
 
-    await state.finish()
+    await state.finish()'''
+
+async def start_trial_period_function(call: types.CallbackQuery):
+    # Простое сообщение для проверки, сработал ли хендлер
+    await call.message.answer("Хендлер сработал. Контакт установлен!")
+    await call.answer()  # Закрываем уведомление
