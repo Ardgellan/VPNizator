@@ -10,7 +10,7 @@ from ..check_is_user_have_active_subscription import is_user_subscribed
 
 
 @rate_limit(limit=1)
-@is_user_subscribed
+#@is_user_subscribed
 async def request_user_for_config_name(call: types.CallbackQuery, state: FSMContext):
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
