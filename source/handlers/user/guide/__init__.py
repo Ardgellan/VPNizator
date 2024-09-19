@@ -3,15 +3,20 @@ from aiogram.types import ContentType
 from loguru import logger
 
 from .android import show_help_guide_android
-from .guide_menu import show_help_guide
+from .guide_menu import show_help_guide, show_help_guide_inline
 from .ios import show_help_guide_ios
 from .pc import show_help_guide_pc
 
 
 def register_show_help_guide_handlers(dp: Dispatcher):
     try:
-        dp.register_callback_query_handler(
+        dp.register_message_handler(
             show_help_guide,
+            commands=["help", "guide", "h"],
+            state="*",
+        )
+        dp.register_callback_query_handler(
+            show_help_guide_inline,
             lambda call: call.data == "vpn_installation_manual",
             state="*",
         )
@@ -28,11 +33,6 @@ def register_show_help_guide_handlers(dp: Dispatcher):
         dp.register_callback_query_handler(
             show_help_guide_pc,
             lambda call: call.data == "show_help_pc",
-            state="*",
-        )
-        dp.register_message_handler(
-            show_help_guide,
-            commands=["help", "guide", "h"],
             state="*",
         )
 
