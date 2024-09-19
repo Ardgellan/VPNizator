@@ -31,6 +31,13 @@ async def start_menu_kb(language_code: str, user_id: int):
                 user_language_code=language_code,
                 text_localization=localizer.button.my_configs,
             ),
+            callback_data="trial_period",
+        ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.my_configs,
+            ),
             callback_data="my_configs",
         ),
         InlineKeyboardButton(
