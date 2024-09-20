@@ -265,6 +265,7 @@ class Selector(DatabaseConnector):
         return [record[0] for record in result]
 
     async def is_trial_used(self, user_id: int) -> bool:
+        logger.debug(f"Breakpoint in debugging is_trial_used #1")
         query = f"""--sql
             SELECT trial_used
             FROM users
