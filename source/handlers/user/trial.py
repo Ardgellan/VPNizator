@@ -62,9 +62,9 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
     logger.info(f"Debugger breakpoint for start_trial_period_function #5")
     trial_end = trial_start + timedelta(days=7)  # Например, пробный период длится 7 дней
     logger.info(f"Debugger breakpoint for start_trial_period_function #6")
-    await db_manager.updater.activate_trial_period(user_id=user_id, trial_start=trial_start, trial_end=trial_end)
+    await db_manager.activate_trial_period(user_id=user_id, trial_start=trial_start, trial_end=trial_end)
     logger.info(f"Debugger breakpoint for start_trial_period_function #7")
-    await db_manager.updater.mark_trial_as_used(user_id=user_id)
+    await db_manager.mark_trial_as_used(user_id=user_id)
     logger.info(f"Debugger breakpoint for start_trial_period_function #8")
     # Используем существующую функцию для запроса имени нового VPN-конфига
     await configs_menu.request_user_for_config_name(call, state)
