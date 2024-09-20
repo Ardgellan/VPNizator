@@ -47,10 +47,10 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
             parse_mode=types.ParseMode.HTML,
             reply_markup=await inline.back_to_main_menu_keyboard(language_code=language_code)
         )
-
         await call.answer()
         await state.finish()
         return
+    logger.info(f"Perviy raz ne vodolaz")
 
     # Если пробный период не использован, активируем его
     trial_start = datetime.now()
