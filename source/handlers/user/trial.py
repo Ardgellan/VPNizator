@@ -41,6 +41,8 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
     trial_used = await db_manager.is_trial_used(user_id=user_id)
     logger.info(f"Debugger breakpoint for start_trial_period_function #2")
 
+    trial_used = trial_used == 't'
+
     if trial_used:
         # Если пробный период уже использован, отправляем сообщение об отказе
         await call.message.answer(
