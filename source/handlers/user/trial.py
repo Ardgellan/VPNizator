@@ -6,7 +6,7 @@ from loader import db_manager
 from source.keyboard import inline
 from source.middlewares import rate_limit
 from source.utils import localizer
-from source.handlers.user.configs_menu import request_user_for_config_name  # Импорт существующей функции
+from source.handlers.user.configs_menu import *  # Импорт существующей функции
 from datetime import datetime, timedelta
 
 
