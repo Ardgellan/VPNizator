@@ -37,7 +37,7 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
     # Проверяем, использовал ли пользователь пробный период
     trial_used = await db_manager.is_trial_used(user_id=user_id)
 
-    if trial_used:
+    if trial_used == True:
         # Если пробный период уже использован, отправляем сообщение об отказе
         await call.message.answer(
             text=localizer.get_user_localized_text(
