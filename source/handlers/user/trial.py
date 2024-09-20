@@ -27,7 +27,7 @@ async def trial_period_function(call: types.CallbackQuery, state: FSMContext):
     )
     await state.finish()
 
-"""
+
 # Функция для проверки и инициализации пробного периода
 @rate_limit(limit=1)
 async def start_trial_period_function(call: types.CallbackQuery, state: FSMContext):
@@ -61,9 +61,3 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
     # Используем существующую функцию для запроса имени нового VPN-конфига
     await request_user_for_config_name(call, state)
     await call.answer()
-"""
-async def start_trial_period_function(call: types.CallbackQuery):
-    # Проверочное сообщение для подтверждения работы хендлера
-    await call.message.answer("Хендлер сработал. Контакт установлен!")
-    await call.answer()  # Закрываем уведомление
-
