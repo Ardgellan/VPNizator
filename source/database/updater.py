@@ -68,6 +68,7 @@ class Updater(DatabaseConnector):
         """
         await self._execute_query(query)
         logger.debug(f"Trial period for user {user_id} activated: {trial_start} - {trial_end}")
+        return True
 
     async def mark_trial_as_used(self, user_id: int):
         query = f"""--sql
@@ -77,5 +78,6 @@ class Updater(DatabaseConnector):
         """
         await self._execute_query(query)
         logger.debug(f"User {user_id} marked as having used the trial period")
+        return True
 
 

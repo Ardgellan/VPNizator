@@ -271,5 +271,6 @@ class Selector(DatabaseConnector):
             WHERE user_id = {user_id};
         """
         result = await self._execute_query(query)
+        logger.debug(f"Note about used trial was made: {result}")
         return result[0][0] if result else False
 
