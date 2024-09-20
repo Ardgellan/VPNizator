@@ -36,7 +36,8 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
     
     # Проверяем, использовал ли пользователь пробный период
     trial_used = await db_manager.selector.is_trial_used(user_id=user_id)
-    
+    logger.info(f"User {call.from_user.id} has already used his trial = {trial_used}")
+
     if trial_used:
         # Если пробный период уже использован, отправляем сообщение об отказе
         await call.message.answer(
@@ -50,14 +51,16 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
         await call.answer()
         await state.finish()
         return
-    
+    logger.info(f"User {call.from_user.id} is approved to start trial")
+
     # Если пробный период не использован, активируем его
     trial_start = datetime.now()
     trial_end = trial_start + timedelta(days=7)  # Например, пробный период длится 7 дней
 
     await db_manager.updater.activate_trial_period(user_id=user_id, trial_start=trial_start, trial_end=trial_end)
+
     await db_manager.updater.mark_trial_as_used(user_id=user_id)
 
     # Используем существующую функцию для запроса имени нового VPN-конфига
-    await request_user_for_config_name(call, state)
+    await configs_menu.request_user_for_config_name(call, state)
     await call.answer()
