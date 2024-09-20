@@ -39,6 +39,7 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
 
     if trial_used == True:
         # Если пробный период уже использован, отправляем сообщение об отказе
+        logger.info(f"STEP 1")
         await call.message.answer(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
@@ -47,8 +48,11 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
             parse_mode=types.ParseMode.HTML,
             reply_markup=await inline.back_to_main_menu_keyboard(language_code=language_code)
         )
+        logger.info(f"STEP 2")
         await call.answer()
+        logger.info(f"STEP 3")
         await state.finish()
+        logger.info(f"STEP 4")
         return
     logger.info(f"Perviy raz ne vodolaz")
 
