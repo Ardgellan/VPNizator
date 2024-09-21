@@ -38,12 +38,13 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
    )
     config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(config)
     await message.answer_photo(
-        photo=config_qr_code,
-        caption=localizer.get_user_localized_text(
-            user_language_code=message.from_user.language_code,
-            text_localization=localizer.message.config_generated,
-        ).format(config_name=config_name, config_data=config),
-        parse_mode=types.ParseMode.HTML,
+        # photo=config_qr_code,
+        # caption=localizer.get_user_localized_text(
+        #     user_language_code=message.from_user.language_code,
+        #     text_localization=localizer.message.config_generated,
+        # ).format(config_name=config_name, config_data=config),
+        # parse_mode=types.ParseMode.HTML,
+        "Salam petushara"
         reply_markup=config_generated_keyboard(language_code=message.from_user.language_code),
     )
 
