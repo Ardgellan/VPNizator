@@ -428,12 +428,12 @@ async def config_generated_keyboard(language_code: str) -> InlineKeyboardMarkup:
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.back_to_menu,  # Текст кнопки для получения справки
+                text_localization=localizer.button.back_to_main_menu,  # Текст кнопки для получения справки
             ),
-            callback_data="back_to_menu"  # Callback для показа справки по подключению
+            callback_data="back_to_main_menu"  # Callback для показа справки по подключению
         )
     ]
     for button in buttons:
         keyboard.insert(button)
-        
+
     return keyboard
