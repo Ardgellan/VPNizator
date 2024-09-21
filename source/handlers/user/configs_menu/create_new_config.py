@@ -44,6 +44,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
             text_localization=localizer.message.config_generated,
         ).format(config_name=config_name, config_data=config),
         parse_mode=types.ParseMode.HTML,
+        reply_markup=await config_generated_keyboard(language_code=message.from_user.language_code)
     )
 
     await state.finish()

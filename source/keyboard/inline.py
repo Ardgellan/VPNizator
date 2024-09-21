@@ -415,3 +415,25 @@ async def trial_menu_keyboard(language_code: str):
     return keyboard
 
 
+async def config_generated_keyboard(language_code: str) -> InlineKeyboardMarkup:
+    keyboard = InlineKeyboardMarkup(row_width=1)
+    buttons = [
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.vpn_installation_manual,  # Текст кнопки для возврата в меню
+            ),
+            callback_data="vpn_installation_manual"  # Callback для возврата в меню
+        ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.back_to_menu,  # Текст кнопки для получения справки
+            ),
+            callback_data="back_to_menu"  # Callback для показа справки по подключению
+        )
+    ]
+    for button in buttons:
+        keyboard.insert(button)
+        
+    return keyboard
