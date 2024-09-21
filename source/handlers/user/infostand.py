@@ -1,5 +1,5 @@
 from aiogram import types
-from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher import FSMContext # МОЖЕТ НАДО УДАЛИТЬ
 from source.keyboard import inline
 
 from source.utils import localizer
@@ -22,7 +22,6 @@ async def function_show_about_us(call: types.CallbackQuery):
 
 
 @rate_limit(limit=1)
-@is_user_banned
 async def function_show_terms_of_use(call: types.CallbackQuery):
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
