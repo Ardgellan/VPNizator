@@ -12,7 +12,7 @@ from .my_profile import show_my_profile
 from .pay import *
 from .start import *
 from .trial import *
-from .infostand import show_about_us, show_terms_of_use
+from .infostand import *
 
 
 def register_user_handlers(dp: Dispatcher):
