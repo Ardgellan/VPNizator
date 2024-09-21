@@ -265,13 +265,6 @@ async def delete_specified_config_keyboard(
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.my_configs,
-            ),
-            callback_data="my_configs",
-        ),
-        InlineKeyboardButton(
-            text=localizer.get_user_localized_text(
-                user_language_code=language_code,
                 text_localization=localizer.button.delete_config,
             ),
             callback_data=f"delete_config_{config_uuid}",
