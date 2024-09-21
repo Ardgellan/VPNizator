@@ -6,6 +6,8 @@ from source.utils import localizer, qr_generator
 from source.utils.states.user import GeneratingNewConfig
 from source.utils.xray import xray_config
 
+from loguru import logger
+
 from ..check_is_user_have_active_subscription import is_user_subscribed
 
 
@@ -44,7 +46,9 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
             text_localization=localizer.message.config_generated,
         ).format(config_name=config_name, config_data=config),
         parse_mode=types.ParseMode.HTML,
+        logger.debug("OTVALILOS 1.")
         reply_markup=await config_generated_keyboard(language_code=message.from_user.language_code),
+        logger.debug("OTVALILOS 2.")
     )
 
     await state.finish()
