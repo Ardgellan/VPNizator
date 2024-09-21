@@ -16,10 +16,10 @@ async def show_user_configs(call: types.CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
     logger.debug("GARBANUSHKA")
     # Завершаем текущее состояние, чтобы оно не мешало следующей обработке
-    await state.finish()
+    #await state.finish()
     logger.debug("GARBANUSHKA2")
     is_user_have_any_configs = await db_manager.is_user_have_any_config(user_id=user_id)
-    logger.debug("GARBANUSHKA3")
+    logger.debug("GARBANUSHKA3") # ОБА РАЗА ДОХОДИТ ДОСЮДА! НО ТУТ КРАШИТСЯ
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
@@ -34,4 +34,4 @@ async def show_user_configs(call: types.CallbackQuery, state: FSMContext):
             user_id=user_id, language_code=call.from_user.language_code
         ),
     )
-    logger.debug("GARBANUSHKA_4")
+    logger.debug("GARBANUSHKA_4") # ВОТ ЭТО УЖЕ НЕ ПОВТОРЯЕТСЯ ПРИ ЗАХОДЕ ИЗ МЕНЮ КОНКРЕТНОГО КОНФИГА
