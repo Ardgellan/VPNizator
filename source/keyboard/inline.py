@@ -61,20 +61,6 @@ async def start_menu_kb(language_code: str, user_id: int):
             ),
             callback_data="vpn_installation_manual",
         ),
-         InlineKeyboardButton(
-            text=localizer.get_user_localized_text(
-                user_language_code=language_code,
-                text_localization=localizer.button.terms_of_use,
-            ),
-            callback_data="terms_of_use",
-        ),
-         InlineKeyboardButton(
-            text=localizer.get_user_localized_text(
-                user_language_code=language_code,
-                text_localization=localizer.button.about_us,
-            ),
-            callback_data="about_us",
-        ),
     ]
 
     for button in buttons:
