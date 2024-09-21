@@ -274,14 +274,26 @@ async def delete_specified_config_keyboard(
     config_uuid: int, language_code: str
 ) -> InlineKeyboardMarkup:
     keyboard = InlineKeyboardMarkup(row_width=1)
-    button = InlineKeyboardButton(
-        text=localizer.get_user_localized_text(
-            user_language_code=language_code,
-            text_localization=localizer.button.delete_config,
+    
+    buttons = [
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.delete_config,
+            ),
+            callback_data=f"delete_config_{config_uuid}",
         ),
-        callback_data=f"delete_config_{config_uuid}",
-    )
-    keyboard.insert(button)
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.my_configs,
+            ),
+            callback_data="my_configs",
+        ),
+    ]
+    for button in buttons:
+        keyboard.insert(button)
+
     keyboard = await insert_button_back_to_main_menu(keyboard=keyboard, language_code=language_code)
     return keyboard
 
