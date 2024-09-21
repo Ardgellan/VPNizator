@@ -37,37 +37,26 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
     trial_used = await db_manager.is_trial_used(user_id=user_id)
 
     if trial_used == True:
-        # Если пробный период уже использован, отправляем сообщение об отказе
-        logger.info(f"STEP 1")
-    
-        try:
-            rejection_text = localizer.get_user_localized_text(
-                user_language_code=call.from_user.language_code,
-                text_localization=localizer.message.trial_period_rejection
-            )
-            logger.info(f"Localized rejection text: {rejection_text}")
+    # Если пробный период уже использован, отправляем сообщение об отказе
+        rejection_text = localizer.get_user_localized_text(
+            user_language_code=call.from_user.language_code,
+            text_localization=localizer.message.trial_period_rejection
+        )
 
-            keyboard = await inline.back_to_main_menu_keyboard(language_code=call.from_user.language_code)
-            logger.info(f"Keyboard created: {keyboard}")
+        keyboard = await inline.insert_button_back_to_main_menu(
+            keyboard=None,
+            language_code=call.from_user.language_code
+        )
 
-            await call.message.answer(
-                text=rejection_text,
-                parse_mode=types.ParseMode.HTML,
-                reply_markup=keyboard,
-            )
-            logger.info(f"STEP 2")
+        await call.message.answer(
+            text=rejection_text,
+            parse_mode=types.ParseMode.HTML,
+            reply_markup=keyboard,
+        )
 
-            await call.answer()
-            logger.info(f"STEP 3")
-        except Exception as e:
-            logger.error(f"Error in sending rejection message: {e}")
-    
+        await call.answer()
         await state.finish()
-        logger.info(f"STEP 4")
         return
-
-    logger.info(f"Perviy raz ne vodolaz")
-
 
     # Если пробный период не использован, активируем его
     trial_start = datetime.now()
