@@ -58,17 +58,17 @@ def register_user_handlers(dp: Dispatcher):
             state="*",
         )
 
-        # dp.register_callback_query_handler(
-        #     show_terms_of_use,
-        #     lambda call: call.data == "terms_of_use",
-        #     state="*",
-        # )
+        dp.register_callback_query_handler(
+            show_terms_of_use,
+            lambda call: call.data == "terms_of_use",
+            state="*",
+        )
 
-        # dp.register_callback_query_handler(
-        #     show_about_us,
-        #     lambda call: call.data == "about_us",
-        #     state="*",
-        # )
+        dp.register_callback_query_handler(
+            show_about_us,
+            lambda call: call.data == "about_us",
+            state="*",
+        )
         
         dp.register_message_handler(
             forward_question_to_admins,
