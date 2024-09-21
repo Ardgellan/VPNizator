@@ -18,7 +18,7 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
     )
     config_qr_code = create_qr_code_from_config_as_link_str(config=config_as_link_str)
 
-    #await call.message.delete()
+    await call.message.delete()
 
     await call.message.answer_photo(
         photo=config_qr_code,
