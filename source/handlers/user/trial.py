@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 async def trial_period_function(call: types.CallbackQuery, state: FSMContext):
     logger.info(f"User {call.from_user.id} opened trial period menu")
     # Отправляем пользователю сообщение с предложением начать пробный период
-    await call.message.answer(
+    await call.message.edit_text(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
             text_localization=localizer.message.trial_period_greeting,  # Сообщение о пробном периоде
@@ -48,7 +48,7 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
             language_code=call.from_user.language_code
         )
 
-        await call.message.answer(
+        await call.message.edit_text(
             text=rejection_text,
             parse_mode=types.ParseMode.HTML,
             reply_markup=keyboard,
