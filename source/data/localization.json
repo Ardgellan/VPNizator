@@ -177,12 +177,20 @@
             "ru": "✅Сообщение отправлено всем пользователям"
         },
         "trial_period_greeting": {
-            "en":"Of course! You want to start a trial now?",
-            "ru":"Конечно! Хотите начать пробный период сейчас?" 
+            "en": "Of course! You want to start a trial now?",
+            "ru": "Конечно! Хотите начать пробный период сейчас?" 
         },
         "trial_period_rejection": {
-            "en":"⌛Unfortunately you already used your trial period 😔. One month subscription costs <b>100</b> rubles. Do you want to extend your existing VPN connection or acquire a new one?",
-            "ru":"⌛К сожалению ваш пробный период закончился 😔. Месячная подписка стоит <b>100</b> рублей. Хотите продлить существующее VPN соединение или приобрести новое?" 
+            "en": "⌛Unfortunately you already used your trial period 😔. One month subscription costs <b>100</b> rubles. Do you want to extend your existing VPN connection or acquire a new one?",
+            "ru": "⌛К сожалению ваш пробный период закончился 😔. Месячная подписка стоит <b>100</b> рублей. Хотите продлить существующее VPN соединение или приобрести новое?" 
+        },
+        "terms_of_use_message": {
+            "en": "Here shall be some text soon.",
+            "ru": "Здесь скоро будет какой-нибудь текст."
+        },
+        "about_us_message": {
+            "en": "Here shall be some text soon as well.",
+            "ru": "Здесь тоже скоро будет какой-нибудь текст."
         }
     },
     "button": {

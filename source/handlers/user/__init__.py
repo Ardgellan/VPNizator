@@ -12,6 +12,7 @@ from .my_profile import show_my_profile
 from .pay import *
 from .start import *
 from .trial import *
+from .infostand import *
 
 
 def register_user_handlers(dp: Dispatcher):
@@ -54,6 +55,18 @@ def register_user_handlers(dp: Dispatcher):
         dp.register_callback_query_handler(
             start_trial_period_function,
             lambda call: call.data == "start_trial_period",
+            state="*",
+        )
+
+        dp.register_callback_query_handler(
+            show_terms_of_use,
+            lambda call: call.data == "terms_of_use",
+            state="*",
+        )
+
+        dp.register_callback_query_handler(
+            show_about_us,
+            lambda call: call.data == "about_us",
             state="*",
         )
 
