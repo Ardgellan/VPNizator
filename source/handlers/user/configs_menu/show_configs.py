@@ -20,18 +20,35 @@ async def show_user_configs(call: types.CallbackQuery, state: FSMContext):
     logger.debug("GARBANUSHKA2")
     is_user_have_any_configs = await db_manager.is_user_have_any_config(user_id=user_id)
     logger.debug("GARBANUSHKA3") # ОБА РАЗА ДОХОДИТ ДОСЮДА! НО ТУТ КРАШИТСЯ
-    await call.message.answer(
-        text=localizer.get_user_localized_text(
-            user_language_code=call.from_user.language_code,
-            text_localization=(
-                localizer.message.user_configs_list
-                if is_user_have_any_configs
-                else localizer.message.no_configs_found_create_new_one
+    try:
+        await call.message.edit_text( # СМЕНА С call.message.edit_text на call.message.answer рещила проблему, но фунцкция превратилась в кошмарный спам. 
+            text=localizer.get_user_localized_text(
+                user_language_code=call.from_user.language_code,
+                text_localization=(
+                    localizer.message.user_configs_list
+                    if is_user_have_any_configs
+                    else localizer.message.no_configs_found_create_new_one
+                ),
             ),
-        ),
-        parse_mode=types.ParseMode.HTML,
-        reply_markup=await inline.user_configs_list_keyboard(
-            user_id=user_id, language_code=call.from_user.language_code
-        ),
-    )
+            parse_mode=types.ParseMode.HTML,
+            reply_markup=await inline.user_configs_list_keyboard(
+                user_id=user_id, language_code=call.from_user.language_code
+            ),
+        )
+    except Exception as e:
+        await call.message.answer( # СМЕНА С call.message.edit_text на call.message.answer рещила проблему, но фунцкция превратилась в кошмарный спам. 
+            text=localizer.get_user_localized_text(
+                user_language_code=call.from_user.language_code,
+                text_localization=(
+                    localizer.message.user_configs_list
+                    if is_user_have_any_configs
+                    else localizer.message.no_configs_found_create_new_one
+                ),
+            ),
+            parse_mode=types.ParseMode.HTML,
+            reply_markup=await inline.user_configs_list_keyboard(
+                user_id=user_id, language_code=call.from_user.language_code
+            ),
+        )
+
     logger.debug("GARBANUSHKA_4") # ВОТ ЭТО УЖЕ НЕ ПОВТОРЯЕТСЯ ПРИ ЗАХОДЕ ИЗ МЕНЮ КОНКРЕТНОГО КОНФИГА
