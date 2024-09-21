@@ -17,6 +17,8 @@ async def show_user_configs(call: types.CallbackQuery, state: FSMContext):
     logger.debug("GARBANUSHKA")
     # Завершаем текущее состояние, чтобы оно не мешало следующей обработке
     #await state.finish()
+    if call.message.photo:  # Проверяем, есть ли фото в сообщении
+    await call.message.delete()
     logger.debug("GARBANUSHKA2")
     is_user_have_any_configs = await db_manager.is_user_have_any_config(user_id=user_id)
     logger.debug("GARBANUSHKA3") # ОБА РАЗА ДОХОДИТ ДОСЮДА! НО ТУТ КРАШИТСЯ
@@ -36,6 +38,7 @@ async def show_user_configs(call: types.CallbackQuery, state: FSMContext):
             ),
         )
     except Exception as e:
+        await call.message.delete()
         await call.message.answer( # СМЕНА С call.message.edit_text на call.message.answer рещила проблему, но фунцкция превратилась в кошмарный спам. 
             text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
