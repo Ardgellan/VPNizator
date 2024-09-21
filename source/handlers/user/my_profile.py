@@ -18,7 +18,7 @@ async def show_my_profile(
     state: FSMContext,
 ):
     logger.info(f"User {call.from_user.id} requested info about himself")
-    await call.message.answer(
+    await call.message.edit_text(
         text=await create_user_info_message_text(user_id=call.from_user.id),
         parse_mode=types.ParseMode.HTML,
         reply_markup=await inline.insert_button_back_to_main_menu(

@@ -21,7 +21,7 @@ async def show_help_guide(message: types.Message):
 @rate_limit(limit=1)
 async def show_help_guide_inline(call: types.CallbackQuery):
     # Отправляем сообщение с тем же текстом и клавиатурой, что и в show_help_guide
-    await call.message.answer(
+    await call.message.edit_text(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
             text_localization=localizer.message.help_guide_select_device,
