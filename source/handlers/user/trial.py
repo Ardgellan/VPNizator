@@ -39,21 +39,35 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
     if trial_used == True:
         # Если пробный период уже использован, отправляем сообщение об отказе
         logger.info(f"STEP 1")
-        await call.message.answer(
-           text=localizer.get_user_localized_text(
-               user_language_code=call.from_user.language_code,
-               text_localization=localizer.message.trial_period_rejection,  # Сообщение об отказе
-           ),
-           parse_mode=types.ParseMode.HTML,
-           reply_markup=await inline.back_to_main_menu_keyboard(language_code=call.from_user.language_code),
-        )
-        logger.info(f"STEP 2")
-        await call.answer()
-        logger.info(f"STEP 3")
+    
+        try:
+            rejection_text = localizer.get_user_localized_text(
+                user_language_code=call.from_user.language_code,
+                text_localization=localizer.message.trial_period_rejection
+            )
+            logger.info(f"Localized rejection text: {rejection_text}")
+
+            keyboard = await inline.back_to_main_menu_keyboard(language_code=call.from_user.language_code)
+            logger.info(f"Keyboard created: {keyboard}")
+
+            await call.message.answer(
+                text=rejection_text,
+                parse_mode=types.ParseMode.HTML,
+                reply_markup=keyboard,
+            )
+            logger.info(f"STEP 2")
+
+            await call.answer()
+            logger.info(f"STEP 3")
+        except Exception as e:
+            logger.error(f"Error in sending rejection message: {e}")
+    
         await state.finish()
         logger.info(f"STEP 4")
         return
+
     logger.info(f"Perviy raz ne vodolaz")
+
 
     # Если пробный период не использован, активируем его
     trial_start = datetime.now()
