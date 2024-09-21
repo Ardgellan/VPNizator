@@ -20,7 +20,7 @@ async def show_user_configs(call: types.CallbackQuery, state: FSMContext):
     logger.debug("GARBANUSHKA2")
     is_user_have_any_configs = await db_manager.is_user_have_any_config(user_id=user_id)
     logger.debug("GARBANUSHKA3") # ОБА РАЗА ДОХОДИТ ДОСЮДА! НО ТУТ КРАШИТСЯ
-    await call.message.edit_text(
+    await call.message.answer(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
             text_localization=(
