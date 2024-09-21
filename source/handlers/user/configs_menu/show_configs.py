@@ -8,15 +8,16 @@ from source.utils import localizer
 
 from ..check_is_user_banned import is_user_banned
 
+from loguru import logger
 
 @rate_limit(limit=1)
 @is_user_banned
 async def show_user_configs(call: types.CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
-
+    logger.debug("GARBANUSHKA")
     # Завершаем текущее состояние, чтобы оно не мешало следующей обработке
     await state.finish()
-
+    logger.debug("GARBANUSHKA2")
     is_user_have_any_configs = await db_manager.is_user_have_any_config(user_id=user_id)
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
