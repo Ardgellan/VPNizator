@@ -14,6 +14,9 @@ from ..check_is_user_banned import is_user_banned
 async def show_user_configs(call: types.CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
 
+    # Завершаем текущее состояние, чтобы оно не мешало следующей обработке
+    await state.finish()
+
     is_user_have_any_configs = await db_manager.is_user_have_any_config(user_id=user_id)
     await call.message.edit_text(
         text=localizer.get_user_localized_text(

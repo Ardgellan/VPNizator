@@ -9,6 +9,7 @@ from source.utils.xray import xray_config
 
 
 async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
+    
     config_uuid = call.data.split("_")[-1]
     config_name = await db_manager.get_config_name_by_config_uuid(config_uuid=config_uuid)
     config_as_link_str = await xray_config.create_user_config_as_link_string(
@@ -30,3 +31,6 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
             config_uuid=config_uuid, language_code=call.from_user.language_code
         ),
     )
+
+     # Завершаем текущее состояние перед удалением сообщения
+    await state.finish()
