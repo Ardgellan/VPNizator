@@ -12,7 +12,7 @@ def register_configs_menu_handlers(dp: Dispatcher):
     try:
         dp.register_callback_query_handler(
             show_user_configs,
-            lambda call: call.data.startswith("my_configs"),
+            lambda call: call.data == "my_configs",
             state="*",
         )
 
