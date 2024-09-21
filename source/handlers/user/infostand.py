@@ -4,7 +4,6 @@ from loader import db_manager
 from source.keyboard import inline
 
 from source.utils import localizer
-from loguru import logger
 
 from source.middlewares import rate_limit
 from .check_is_user_banned import is_user_banned
