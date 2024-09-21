@@ -63,7 +63,7 @@ def register_user_handlers(dp: Dispatcher):
             lambda call: call.data == "terms_of_use",
             state="*",
         )
-        #logger.info("CHECK ABOUT")
+
         dp.register_callback_query_handler(
             show_about_us,
             lambda call: call.data == "about_us",

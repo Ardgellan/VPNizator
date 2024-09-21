@@ -6,11 +6,8 @@ from source.keyboard import inline
 from source.utils import localizer
 
 from source.middlewares import rate_limit
-from .check_is_user_banned import is_user_banned
-
 
 @rate_limit(limit=1)
-@is_user_banned
 async def show_about_us(call: types.CallbackQuery):
     logger.info("SALAM")
     await call.message.edit_text(
