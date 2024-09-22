@@ -67,7 +67,7 @@ from aiogram import types
 from aiogram.types import LabeledPrice, PreCheckoutQuery
 
 async def send_test_invoice(message: types.Message):
-    prices = [types.LabeledPrice(label="Тест VPN", amount=10000)]  # 100 рублей в копейках
+    prices = [types.LabeledPrice(label="Тест VPN", 100 * 100)]  # 100 рублей в копейках
     
     await message.bot.send_invoice(
         chat_id=message.chat.id,
