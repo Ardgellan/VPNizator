@@ -10,7 +10,7 @@ from source.utils.xray import xray_config
 from loguru import logger
 
 async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
-    logger.info("KONKRETNIY KONFIG 1")
+
     config_uuid = call.data.split("_")[-1]
     config_name = await db_manager.get_config_name_by_config_uuid(config_uuid=config_uuid)
     config_as_link_str = await xray_config.create_user_config_as_link_string(
@@ -18,9 +18,9 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
         config_name=config_name,
     )
     config_qr_code = create_qr_code_from_config_as_link_str(config=config_as_link_str)
-    logger.info("KONKRETNIY KONFIG 2")
+
     await call.message.delete()
-    logger.info("KONKRETNIY KONFIG 3")
+
     await call.message.answer_photo(
         photo=config_qr_code,
         caption=localizer.get_user_localized_text(
@@ -32,6 +32,5 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
             config_uuid=config_uuid, language_code=call.from_user.language_code
         ),
     )
-    logger.info("KONKRETNIY KONFIG 4")
      # Завершаем текущее состояние перед удалением сообщения
     await state.finish()

@@ -2,7 +2,7 @@
 name = "vpnizator"
 version = "0.1.0"
 description = ""
-authors = ["aegiev01@gmial.com"]
+authors = ["Ard Gellan <aegiev01@gmial.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -16,6 +16,7 @@ qrcode = {extras = ["pil"], version = "^7.4.2"}
 apscheduler = "^3.10.4"
 emoji-country-flag = "^1.3.2"
 requests = "^2.31.0"
+yookassa = "^3.3.0"
 
 
 [tool.poetry.group.dev.dependencies]
