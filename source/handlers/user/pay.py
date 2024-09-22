@@ -85,6 +85,6 @@ async def send_test_invoice(message: types.Message):
 #     await pre_checkout_query.answer(ok=True)  # Подтверждаем, что всё готово для оплаты
 
 
-async def successful_payment(message: types.Message):
-    await message.answer("Оплата прошла успешно! Ваш VPN будет активирован.")
-    # Логика активации VPN для пользователя
+# async def successful_payment(message: types.Message):
+#     await message.answer("Оплата прошла успешно! Ваш VPN будет активирован.")
+#     # Логика активации VPN для пользователя
