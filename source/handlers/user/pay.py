@@ -81,8 +81,8 @@ async def send_test_invoice(message: types.Message):
     )
 
 
-async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
-    await pre_checkout_query.answer(ok=True)  # Подтверждаем, что всё готово для оплаты
+# async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
+#     await pre_checkout_query.answer(ok=True)  # Подтверждаем, что всё готово для оплаты
 
 
 async def successful_payment(message: types.Message):

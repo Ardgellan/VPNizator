@@ -25,7 +25,7 @@ def register_user_handlers(dp: Dispatcher):
 #        dp.register_message_handler(show_payment_method, commands="pay", state="*")
         dp.register_message_handler(send_test_invoice, commands="pay", state="*")
 
-        dp.register_pre_checkout_query_handler(process_pre_checkout_query)
+        # dp.register_pre_checkout_query_handler(process_pre_checkout_query)
 
         dp.register_message_handler(successful_payment, content_types=types.ContentType.SUCCESSFUL_PAYMENT)
 
