@@ -77,8 +77,7 @@ async def send_test_invoice(message: types.Message):
         provider_token="381764678:TEST:95796",  # Тестовый токен от BotFather
         currency="RUB",
         prices=prices,
-        start_parameter="test-vpn-payment",
-        need_email=True  # Запрос email для проверки
+        start_parameter="test-vpn-payment"
     )
 
 
