@@ -63,28 +63,28 @@
 #             ),
 #         )
 
-# from aiogram import types
-# from aiogram.types import LabeledPrice, PreCheckoutQuery
+from aiogram import types
+from aiogram.types import LabeledPrice, PreCheckoutQuery
 
-# async def send_test_invoice(message: types.Message):
-#     prices = [types.LabeledPrice(label="Тест VPN", amount=100 * 100 )]  # 100 рублей в копейках
+async def send_test_invoice(message: types.Message):
+    prices = [types.LabeledPrice(label="Тест VPN", amount=100 * 100 )]  # 100 рублей в копейках
     
-#     await message.bot.send_invoice(
-#         chat_id=message.chat.id,
-#         title="Тестовая оплата VPN",
-#         description="Оплата за тестовый VPN на 1 месяц",
-#         payload="vpn_test_payment",
-#         provider_token="381764678:TEST:95796",  # Тестовый токен от BotFather
-#         currency="RUB",
-#         prices=prices,
-#         # start_parameter="test-vpn-payment"
-#     )
+    await message.bot.send_invoice(
+        chat_id=message.chat.id,
+        title="Тестовая оплата VPN",
+        description="Оплата за тестовый VPN на 1 месяц",
+        payload="vpn_test_payment",
+        provider_token="381764678:TEST:95796",  # Тестовый токен от BotFather
+        currency="RUB",
+        prices=prices,
+        # start_parameter="test-vpn-payment"
+    )
 
 
-# async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
-#     await pre_checkout_query.answer(ok=True)  # Подтверждаем, что всё готово для оплаты
+async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
+    await pre_checkout_query.answer(ok=True)  # Подтверждаем, что всё готово для оплаты
 
 
-# async def successful_payment(message: types.Message):
-#     await message.answer("Оплата прошла успешно! Ваш VPN будет активирован.")
-#     # Логика активации VPN для пользователя
+async def successful_payment(message: types.Message):
+    await message.answer("Оплата прошла успешно! Ваш VPN будет активирован.")
+    # Логика активации VPN для пользователя
