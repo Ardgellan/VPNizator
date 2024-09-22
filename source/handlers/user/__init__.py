@@ -22,7 +22,7 @@ def register_user_handlers(dp: Dispatcher):
             lambda call: call.data == "back_to_main_menu",
             state="*",
         )
- 
+        dp.register_message_handler(send_test_invoice, commands="pay", state="*")
         dp.register_message_handler(
             notify_admin_about_new_payment,
             content_types=[
@@ -60,7 +60,7 @@ def register_user_handlers(dp: Dispatcher):
             forward_question_to_admins,
             state=AskSupport.waiting_for_question,
         )
-        dp.register_message_handler(send_test_invoice, commands="pay", state="*")
+
         register_configs_menu_handlers(dp)
         register_show_help_guide_handlers(dp)
     except Exception as e:
