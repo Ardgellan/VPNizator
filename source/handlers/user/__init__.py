@@ -9,7 +9,7 @@ from .configs_menu import register_configs_menu_handlers
 from .configs_menu.show_configs import *
 from .guide import register_show_help_guide_handlers
 from .my_profile import show_my_profile
-# from .pay import *
+from .pay import *
 from .start import *
 from .trial import *
 from .banners import terms_of_use_function, about_us_function
