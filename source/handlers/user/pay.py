@@ -82,7 +82,7 @@ async def send_test_invoice(message: types.Message):
         title="Тестовая оплата VPN",
         description="Оплата за тестовый VPN на 1 месяц",
         payload="vpn_test_payment",
-        provider_token="381764678:TEST:95796",  # Тестовый токен от BotFather
+        provider_token="",  # Тестовый токен от BotFather
         currency="RUB",
         prices=prices,
         start_parameter="test-vpn-payment"
