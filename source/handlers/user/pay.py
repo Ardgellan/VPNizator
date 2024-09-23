@@ -67,6 +67,7 @@
 from aiogram import types
 from aiogram.types import LabeledPrice, PreCheckoutQuery
 from loguru import logger
+from loader import dp
 
 
 # Отправляем инвойс
@@ -90,7 +91,7 @@ async def send_test_invoice(message: types.Message):
 async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
     logger.info(f"Pre-checkout query received from {pre_checkout_query.from_user.id}")
     try:
-        await message.bot.pre_checkout_query(ok=True)  # Подтверждаем готовность к оплате
+        await dp.bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)  # Подтверждаем готовность к оплате
         logger.info(f"Pre-checkout query answered successfully for {pre_checkout_query.from_user.id}")
     except Exception as e:
         logger.error(f"Error while answering PreCheckoutQuery: {e}")
