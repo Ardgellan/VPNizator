@@ -17,7 +17,7 @@ from .trial import *
 def register_user_handlers(dp: Dispatcher):
     try: 
         dp.register_message_handler(start, commands=["start", "menu"], state="*") # Был на 1 месте. Над "back_to_main_menu"
-        
+
         dp.register_callback_query_handler( # Был на 2 месте, под "/start/menu"
             main_menu_by_button,
             lambda call: call.data == "back_to_main_menu",
@@ -36,8 +36,6 @@ def register_user_handlers(dp: Dispatcher):
             lambda call: call.data == "create_support_ticket",
             state="*",
         )
-
-        dp.register_message_handler(show_payment_method, commands="pay", state="*") - # Был на 3 месте.
 
         dp.register_callback_query_handler( # Был на 7 месте
             trial_period_function,
