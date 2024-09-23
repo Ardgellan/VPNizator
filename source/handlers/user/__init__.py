@@ -18,7 +18,7 @@ def register_user_handlers(dp: Dispatcher):
     try: 
         dp.register_message_handler(start, commands=["start", "menu"], state="*") # Был на 1 месте. Над "back_to_main_menu"
 
-        dp.register_callback_query_handler( # Был на 2 месте, под "/start/menu"
+        dp.register_callback_query_handler(
             main_menu_by_button,
             lambda call: call.data == "back_to_main_menu",
             state="*",
@@ -26,7 +26,7 @@ def register_user_handlers(dp: Dispatcher):
         
         dp.register_message_handler(show_payment_method, commands="pay", state="*") - # Был на 3 месте.
 
-        dp.register_message_handler( # Был на 4 месте.
+        dp.register_message_handler(
             notify_admin_about_new_payment,
             content_types=[
                 ContentType.PHOTO,
@@ -35,31 +35,31 @@ def register_user_handlers(dp: Dispatcher):
             state=PaymentViaBankTransfer.waiting_for_payment_screenshot_or_receipt,
         )
 
-        dp.register_callback_query_handler( # Был на 5 месте
+        dp.register_callback_query_handler(
             show_my_profile,
             lambda call: call.data == "my_profile",
             state="*",
         )
 
-        dp.register_callback_query_handler( # Был на 6 месте
+        dp.register_callback_query_handler(
             ask_user_for_question_to_support,
             lambda call: call.data == "create_support_ticket",
             state="*",
         )
 
-        dp.register_callback_query_handler( # Был на 7 месте
+        dp.register_callback_query_handler(
             trial_period_function,
             lambda call: call.data == "trial_period",
             state="*",
         )
         
-        dp.register_callback_query_handler( # Был на 8 месте
+        dp.register_callback_query_handler(
             start_trial_period_function,
             lambda call: call.data == "start_trial_period",
             state="*",
         )
 
-        dp.register_message_handler( # Был на 9 месте
+        dp.register_message_handler(
             forward_question_to_admins, 
             state=AskSupport.waiting_for_question,
         )
