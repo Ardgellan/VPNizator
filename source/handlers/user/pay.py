@@ -1,14 +1,14 @@
-from aiogram import types
-from aiogram.dispatcher import FSMContext
-from loguru import logger
+# from aiogram import types
+# from aiogram.dispatcher import FSMContext
+# from loguru import logger
 
-from source.data import config
-from source.keyboard import inline
-from source.middlewares import rate_limit
-from source.utils import localizer
-from source.utils.states.user import PaymentViaBankTransfer
+# from source.data import config
+# from source.keyboard import inline
+# from source.middlewares import rate_limit
+# from source.utils import localizer
+# from source.utils.states.user import PaymentViaBankTransfer
 
-from .check_is_user_banned import is_user_banned
+# from .check_is_user_banned import is_user_banned
 
 
 # @rate_limit(limit=1)
