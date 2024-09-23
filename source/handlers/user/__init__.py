@@ -41,15 +41,14 @@ def register_user_handlers(dp: Dispatcher):
             state="*",
         )
 
-        dp.register_message_handler( # Был на 9 месте
-            forward_question_to_admins, 
-            state=AskSupport.waiting_for_question,
-        )
-
         dp.register_callback_query_handler( # Был на 6 месте
             ask_user_for_question_to_support,
             lambda call: call.data == "create_support_ticket",
             state="*",
+        )
+        dp.register_message_handler( # Был на 9 месте
+            forward_question_to_admins, 
+            state=AskSupport.waiting_for_question,
         )
 
         dp.register_callback_query_handler( # Был на 7 месте
