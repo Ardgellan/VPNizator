@@ -26,6 +26,15 @@ def register_user_handlers(dp: Dispatcher):
         
         dp.register_message_handler(show_payment_method, commands="pay", state="*") - # Был на 3 месте.
 
+        dp.register_message_handler( # Был на 4 месте.
+            notify_admin_about_new_payment,
+            content_types=[
+                ContentType.PHOTO,
+                ContentType.DOCUMENT,
+            ],
+            state=PaymentViaBankTransfer.waiting_for_payment_screenshot_or_receipt,
+        )
+
         dp.register_message_handler( # Был на 9 месте
             forward_question_to_admins, 
             state=AskSupport.waiting_for_question,
@@ -47,15 +56,6 @@ def register_user_handlers(dp: Dispatcher):
             show_my_profile,
             lambda call: call.data == "my_profile",
             state="*",
-        )
-
-        dp.register_message_handler( # Был на 4 месте.
-            notify_admin_about_new_payment,
-            content_types=[
-                ContentType.PHOTO,
-                ContentType.DOCUMENT,
-            ],
-            state=PaymentViaBankTransfer.waiting_for_payment_screenshot_or_receipt,
         )
         
         dp.register_callback_query_handler( # Был на 8 месте
