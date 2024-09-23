@@ -19,15 +19,15 @@ def register_user_handlers(dp: Dispatcher):
         # Место 1
         dp.register_message_handler(
             start, commands=["start", "menu"], state="*"
-        )# Был на месте 1
+        )
 
         
         # Место 2
-        dp.register_callback_query_handler(
-            main_menu_by_button,
-            lambda call: call.data == "back_to_main_menu",
-            state="*",
-        )# Был на месте 2
+        # dp.register_callback_query_handler(
+        #     main_menu_by_button,
+        #     lambda call: call.data == "back_to_main_menu",
+        #     state="*",
+        # )
         
         # Место 3
         dp.register_message_handler(
