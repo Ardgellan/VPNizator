@@ -113,7 +113,7 @@ class LocalizedButtonText(BaseLocalizedObject):
     @property
     def vpn_installation_manual(self) -> LocalizedText:
         return self._get_entity_text("vpn_installation_manual")
-    
+
     @property
     def terms_of_use(self) -> LocalizedText:
         return self._get_entity_text("terms_of_use")

@@ -18,6 +18,7 @@ async def show_help_guide(message: types.Message):
         ),
     )
 
+
 @rate_limit(limit=1)
 async def show_help_guide_inline(call: types.CallbackQuery):
     # Отправляем сообщение с тем же текстом и клавиатурой, что и в show_help_guide

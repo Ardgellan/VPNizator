@@ -1,5 +1,6 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
+from loguru import logger
 
 from loader import db_manager
 from source.keyboard import inline
@@ -7,7 +8,6 @@ from source.utils import localizer
 from source.utils.qr_generator import create_qr_code_from_config_as_link_str
 from source.utils.xray import xray_config
 
-from loguru import logger
 
 async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
 
@@ -32,5 +32,5 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
             config_uuid=config_uuid, language_code=call.from_user.language_code
         ),
     )
-     # Завершаем текущее состояние перед удалением сообщения
+    # Завершаем текущее состояние перед удалением сообщения
     await state.finish()

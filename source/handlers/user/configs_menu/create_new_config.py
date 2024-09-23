@@ -35,7 +35,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
 
     config = await xray_config.add_new_user(
         config_name=config_name, user_telegram_id=message.from_user.id
-   )
+    )
     config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(config)
     await message.answer_photo(
         photo=config_qr_code,

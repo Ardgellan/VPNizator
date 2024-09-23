@@ -1,5 +1,4 @@
 from aiogram import types
-
 from aiogram.dispatcher import FSMContext
 from loguru import logger
 
@@ -64,12 +63,13 @@ async def notify_admin_about_new_payment(message: types.Message, state: FSMConte
             ),
         )
 
+
 # from aiogram import types
 # from aiogram.types import LabeledPrice, PreCheckoutQuery
 
 # async def send_test_invoice(message: types.Message):
 #     prices = [types.LabeledPrice(label="Тест VPN", amount=100 * 100 )]  # 100 рублей в копейках
-    
+
 #     await message.bot.send_invoice(
 #         chat_id=message.chat.id,
 #         title="Тестовая оплата VPN",

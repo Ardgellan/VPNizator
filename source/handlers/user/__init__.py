@@ -23,8 +23,8 @@ def register_user_handlers(dp: Dispatcher):
             lambda call: call.data == "back_to_main_menu",
             state="*",
         )
-        
-        dp.register_message_handler(show_payment_method, commands="pay", state="*") - # Был на 3 месте.
+
+        dp.register_message_handler(show_payment_method, commands="pay", state="*") # Был на 3 месте.
 
         dp.register_message_handler(
             notify_admin_about_new_payment,
@@ -52,7 +52,7 @@ def register_user_handlers(dp: Dispatcher):
             lambda call: call.data == "trial_period",
             state="*",
         )
-        
+
         dp.register_callback_query_handler(
             start_trial_period_function,
             lambda call: call.data == "start_trial_period",

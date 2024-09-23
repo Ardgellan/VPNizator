@@ -197,7 +197,7 @@ class LocalizedMessageText(BaseLocalizedObject):
     @property
     def trial_period_rejection(self) -> LocalizedText:
         return self._get_entity_text("trial_period_rejection")
-    
+
     @property
     def terms_of_use_message(self) -> LocalizedText:
         return self._get_entity_text("terms_of_use_message")

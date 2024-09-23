@@ -10,11 +10,15 @@ from source.utils import localizer
 
 def is_user_subscribed(func):
     async def wrapper(message_or_call: types.Message | types.CallbackQuery, state: FSMContext):
-        
+
         user_id = message_or_call.from_user.id
-        trial_used = await db_manager.is_trial_used(user_id=user_id) # ВОТ ЭТА СТРОКА МОЯ САМОДЕЯТЕЛЬНОСТЬ. НЕ ЗАБУДЬ!
-        
-        if user_id not in config.admins_ids and trial_used == True: # ТУТ Я ПЫТАЮСЬ ДОПОЛНИТЬ ЛОГИКУ ТАК ЧТОБЫ ОНА ПРОПУСКАЛА АДМИНОВ И ТЕХ КТО НЕ ИСПОЛЬЗОВАЛ ЕЩЕ ПРОБНЫЙ ПЕРИОД И БЛОЧИЛА ОСТАЛЬНЫХ
+        trial_used = await db_manager.is_trial_used(
+            user_id=user_id
+        )  # ВОТ ЭТА СТРОКА МОЯ САМОДЕЯТЕЛЬНОСТЬ. НЕ ЗАБУДЬ!
+
+        if (
+            user_id not in config.admins_ids and trial_used == True
+        ):  # ТУТ Я ПЫТАЮСЬ ДОПОЛНИТЬ ЛОГИКУ ТАК ЧТОБЫ ОНА ПРОПУСКАЛА АДМИНОВ И ТЕХ КТО НЕ ИСПОЛЬЗОВАЛ ЕЩЕ ПРОБНЫЙ ПЕРИОД И БЛОЧИЛА ОСТАЛЬНЫХ
             if isinstance(message_or_call, types.CallbackQuery):
                 message = message_or_call.message
                 language_code = (

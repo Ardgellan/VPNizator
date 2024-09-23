@@ -260,7 +260,7 @@ async def delete_specified_config_keyboard(
     config_uuid: int, language_code: str
 ) -> InlineKeyboardMarkup:
     keyboard = InlineKeyboardMarkup(row_width=1)
-    
+
     buttons = [
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
@@ -369,6 +369,7 @@ async def insert_button_confirm_mailing_message(
     )
     return keyboard
 
+
 # Это клавиатура которую я добавил сам.
 async def trial_menu_keyboard(language_code: str):
     keyboard = InlineKeyboardMarkup(row_width=1)
@@ -381,7 +382,7 @@ async def trial_menu_keyboard(language_code: str):
             callback_data="start_trial_period",
         )
     ]
-    
+
     for button in buttons:
         keyboard.insert(button)
 
@@ -402,15 +403,15 @@ async def config_generated_keyboard(language_code: str) -> InlineKeyboardMarkup:
                 user_language_code=language_code,
                 text_localization=localizer.button.vpn_installation_manual,  # Текст кнопки для возврата в меню
             ),
-            callback_data="vpn_installation_manual"  # Callback для возврата в меню
+            callback_data="vpn_installation_manual",  # Callback для возврата в меню
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
                 text_localization=localizer.button.back_to_main_menu,  # Текст кнопки для получения справки
             ),
-            callback_data="back_to_main_menu"  # Callback для показа справки по подключению
-        )
+            callback_data="back_to_main_menu",  # Callback для показа справки по подключению
+        ),
     ]
     for button in buttons:
         keyboard.insert(button)

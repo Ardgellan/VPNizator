@@ -1,8 +1,8 @@
+from datetime import datetime, timedelta
+
 from loguru import logger
 
 from .connector import DatabaseConnector
-
-from datetime import datetime, timedelta
 
 
 class Updater(DatabaseConnector):
@@ -79,5 +79,3 @@ class Updater(DatabaseConnector):
         await self._execute_query(query)
         logger.debug(f"User {user_id} marked as having used the trial period")
         return True
-
-
