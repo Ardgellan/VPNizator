@@ -23,16 +23,16 @@ def register_user_handlers(dp: Dispatcher):
 
         
         # Место 2
-        # dp.register_callback_query_handler(
-        #     main_menu_by_button,
-        #     lambda call: call.data == "back_to_main_menu",
-        #     state="*",
-        # )
+        dp.register_callback_query_handler(
+            main_menu_by_button,
+            lambda call: call.data == "back_to_main_menu",
+            state="*",
+        )
         
         # Место 3
-        dp.register_message_handler(
-            show_payment_method, commands="pay", state="*"
-        )# Был на месте 3
+        # dp.register_message_handler(
+        #     show_payment_method, commands="pay", state="*"
+        # )
 
         # Место 4
         dp.register_message_handler(
