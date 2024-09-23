@@ -35,6 +35,12 @@ def register_user_handlers(dp: Dispatcher):
             state=PaymentViaBankTransfer.waiting_for_payment_screenshot_or_receipt,
         )
 
+        dp.register_callback_query_handler( # Был на 5 месте
+            show_my_profile,
+            lambda call: call.data == "my_profile",
+            state="*",
+        )
+
         dp.register_message_handler( # Был на 9 месте
             forward_question_to_admins, 
             state=AskSupport.waiting_for_question,
@@ -49,12 +55,6 @@ def register_user_handlers(dp: Dispatcher):
         dp.register_callback_query_handler( # Был на 7 месте
             trial_period_function,
             lambda call: call.data == "trial_period",
-            state="*",
-        )
-
-        dp.register_callback_query_handler( # Был на 5 месте
-            show_my_profile,
-            lambda call: call.data == "my_profile",
             state="*",
         )
         
