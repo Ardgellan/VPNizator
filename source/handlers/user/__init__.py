@@ -52,18 +52,18 @@ def register_user_handlers(dp: Dispatcher):
         )
         
         # Место 6
-        # dp.register_callback_query_handler(
-        #     ask_user_for_question_to_support,
-        #     lambda call: call.data == "create_support_ticket",
-        #     state="*",
-        # )
+        dp.register_callback_query_handler(
+            ask_user_for_question_to_support,
+            lambda call: call.data == "create_support_ticket",
+            state="*",
+        )
 
         # Место 7
-        dp.register_callback_query_handler(
-            trial_period_function,
-            lambda call: call.data == "trial_period",
-            state="*",
-        )# Был на месте 7
+        # dp.register_callback_query_handler(
+        #     trial_period_function,
+        #     lambda call: call.data == "trial_period",
+        #     state="*",
+        # )
 
         # Место 8
         dp.register_callback_query_handler(
