@@ -87,12 +87,14 @@ async def send_test_invoice(message: types.Message):
         start_parameter="test-vpn-payment"
     )
 
-# Обработка запроса на оплату (PreCheckoutQuery)
 async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
-
     logger.info(f"Pre-checkout query received from {pre_checkout_query.from_user.id}")
+    try:
+        await pre_checkout_query.answer(ok=True)  # Подтверждаем готовность к оплате
+        logger.info(f"Pre-checkout query answered successfully for {pre_checkout_query.from_user.id}")
+    except Exception as e:
+        logger.error(f"Error while answering PreCheckoutQuery: {e}")
 
-    await pre_checkout_query.answer(ok=True)  # Подтверждаем, что всё готово для оплаты
 
 # Обработка успешной оплаты
 async def successful_payment(message: types.Message):
