@@ -16,12 +16,14 @@ from .trial import *
 
 def register_user_handlers(dp: Dispatcher):
     try:
-        #dp.register_message_handler(start, commands=["start", "menu"], state="*") #Вторая проверка. Начинаем "выключать" хендлеры. Cначала закоментим старт и посмотрим что произойдет.
+        dp.register_message_handler(start, commands=["start", "menu"], state="*") #Вторая проверка. Начинаем "выключать" хендлеры. Cначала закоментим старт и посмотрим что произойдет.
+        
         dp.register_callback_query_handler(
             main_menu_by_button,
             lambda call: call.data == "back_to_main_menu",
             state="*",
         )
+        
         dp.register_message_handler(show_payment_method, commands="pay", state="*")
         # Мы тут проверяем, отваливается ли все накуй если добавить внутрь коммент. Это самая первая проверка - результат - не отваливается. Комменты не мешают.
         dp.register_message_handler(
