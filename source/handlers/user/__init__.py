@@ -30,6 +30,17 @@ def register_user_handlers(dp: Dispatcher):
             state="*",
         )
         
+        # Сегмент для хендлеров ЮКАССЫ
+
+        # Хендлер для отправки инвойса (команда /pay)
+        dp.register_message_handler(send_test_invoice, commands="pay", state="*")
+
+        # Хендлер для обработки PreCheckoutQuery
+        dp.register_pre_checkout_query_handler(process_pre_checkout_query)
+
+        # Хендлер для обработки успешного платежа
+        dp.register_message_handler(successful_payment, content_types=types.ContentType.SUCCESSFUL_PAYMENT)
+        
         # Место 3
         # dp.register_message_handler(
         #     show_payment_method, commands="pay", state="*"

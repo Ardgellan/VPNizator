@@ -64,28 +64,40 @@
 #         )
 
 
-# from aiogram import types
-# from aiogram.types import LabeledPrice, PreCheckoutQuery
-
-# async def send_test_invoice(message: types.Message):
-#     prices = [types.LabeledPrice(label="Тест VPN", amount=100 * 100 )]  # 100 рублей в копейках
-
-#     await message.bot.send_invoice(
-#         chat_id=message.chat.id,
-#         title="Тестовая оплата VPN",
-#         description="Оплата за тестовый VPN на 1 месяц",
-#         payload="vpn_test_payment",
-#         provider_token="381764678:TEST:95796",  # Тестовый токен от BotFather
-#         currency="RUB",
-#         prices=prices,
-#         # start_parameter="test-vpn-payment"
-#     )
+from aiogram import types
+from aiogram.types import LabeledPrice, PreCheckoutQuery
+from loguru import logger
 
 
-# async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
-#     await pre_checkout_query.answer(ok=True)  # Подтверждаем, что всё готово для оплаты
+# Отправляем инвойс
+async def send_test_invoice(message: types.Message):
+    
+    logger.info(f"User {message.from_user.id} started invoice payment")
 
+    prices = [types.LabeledPrice(label="Тест VPN", amount=100 * 100 )]  # 100 рублей в копейках
 
-# async def successful_payment(message: types.Message):
-#     await message.answer("Оплата прошла успешно! Ваш VPN будет активирован.")
-#     # Логика активации VPN для пользователя
+    await message.bot.send_invoice(
+        chat_id=message.chat.id,
+        title="Тестовая оплата VPN",
+        description="Оплата за тестовый VPN на 1 месяц",
+        payload="vpn_test_payment",
+        provider_token="381764678:TEST:95796",  # Тестовый токен от BotFather
+        currency="RUB",
+        prices=prices,
+        start_parameter="test-vpn-payment"
+    )
+
+# Обработка запроса на оплату (PreCheckoutQuery)
+async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
+
+    logger.info(f"Pre-checkout query received from {pre_checkout_query.from_user.id}")
+
+    await pre_checkout_query.answer(ok=True)  # Подтверждаем, что всё готово для оплаты
+
+# Обработка успешной оплаты
+async def successful_payment(message: types.Message):
+
+    logger.info(f"User {message.from_user.id} made a successful payment")
+
+    await message.answer("Оплата прошла успешно! Ваш VPN будет активирован.")
+    # Здесь добавляется логика активации VPN или подписки для пользователя
