@@ -66,17 +66,17 @@ def register_user_handlers(dp: Dispatcher):
         )
 
         # Место 8
-        # dp.register_callback_query_handler(
-        #     start_trial_period_function,
-        #     lambda call: call.data == "start_trial_period",
-        #     state="*",
-        # )
+        dp.register_callback_query_handler(
+            start_trial_period_function,
+            lambda call: call.data == "start_trial_period",
+            state="*",
+        )
 
         # Место 9
-        dp.register_message_handler(
-            forward_question_to_admins,
-            state=AskSupport.waiting_for_question,
-        )# Был на месте 9
+        # dp.register_message_handler(
+        #     forward_question_to_admins,
+        #     state=AskSupport.waiting_for_question,
+        # )
 
         register_configs_menu_handlers(dp)
         register_show_help_guide_handlers(dp)
