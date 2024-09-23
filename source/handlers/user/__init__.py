@@ -59,18 +59,18 @@ def register_user_handlers(dp: Dispatcher):
         )
 
         # Место 7
-        # dp.register_callback_query_handler(
-        #     trial_period_function,
-        #     lambda call: call.data == "trial_period",
-        #     state="*",
-        # )
+        dp.register_callback_query_handler(
+            trial_period_function,
+            lambda call: call.data == "trial_period",
+            state="*",
+        )
 
         # Место 8
-        dp.register_callback_query_handler(
-            start_trial_period_function,
-            lambda call: call.data == "start_trial_period",
-            state="*",
-        )# Был на месте 8
+        # dp.register_callback_query_handler(
+        #     start_trial_period_function,
+        #     lambda call: call.data == "start_trial_period",
+        #     state="*",
+        # )
 
         # Место 9
         dp.register_message_handler(
