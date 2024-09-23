@@ -36,14 +36,14 @@ def register_user_handlers(dp: Dispatcher):
         # )
 
         # Место 4
-        dp.register_message_handler(
-            notify_admin_about_new_payment,
-            content_types=[
-                ContentType.PHOTO,
-                ContentType.DOCUMENT,
-            ],
-            state=PaymentViaBankTransfer.waiting_for_payment_screenshot_or_receipt,
-        )
+        # dp.register_message_handler(
+        #     notify_admin_about_new_payment,
+        #     content_types=[
+        #         ContentType.PHOTO,
+        #         ContentType.DOCUMENT,
+        #     ],
+        #     state=PaymentViaBankTransfer.waiting_for_payment_screenshot_or_receipt,
+        # )
 
         # Место 5
         dp.register_callback_query_handler(
