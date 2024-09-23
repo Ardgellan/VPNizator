@@ -16,13 +16,13 @@ from .trial import *
 
 def register_user_handlers(dp: Dispatcher):
     try: 
+        dp.register_message_handler(start, commands=["start", "menu"], state="*") # Был на 1 месте. Над "back_to_main_menu"
+
         dp.register_callback_query_handler( # Был на 2 месте, под "/start/menu"
             main_menu_by_button,
             lambda call: call.data == "back_to_main_menu",
             state="*",
         )
-
-        dp.register_message_handler(start, commands=["start", "menu"], state="*") # Был на 1 месте. Над "back_to_main_menu"
             
         dp.register_message_handler( # Был на 9 месте
             forward_question_to_admins, 
@@ -63,7 +63,7 @@ def register_user_handlers(dp: Dispatcher):
             lambda call: call.data == "start_trial_period",
             state="*",
         )
-        
+
         register_configs_menu_handlers(dp)
         register_show_help_guide_handlers(dp)
     except Exception as e:
