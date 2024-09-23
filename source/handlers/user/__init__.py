@@ -31,9 +31,9 @@ def register_user_handlers(dp: Dispatcher):
         )
         
         # Место 3
-        dp.register_message_handler(
-            show_payment_method, commands="pay", state="*"
-        )
+        # dp.register_message_handler(
+        #     show_payment_method, commands="pay", state="*"
+        # )
 
         # Место 4
         dp.register_message_handler(
