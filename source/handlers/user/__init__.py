@@ -45,18 +45,18 @@ def register_user_handlers(dp: Dispatcher):
         )
 
         # Место 5
-        # dp.register_callback_query_handler(
-        #     show_my_profile,
-        #     lambda call: call.data == "my_profile",
-        #     state="*",
-        # )
+        dp.register_callback_query_handler(
+            show_my_profile,
+            lambda call: call.data == "my_profile",
+            state="*",
+        )
         
         # Место 6
-        dp.register_callback_query_handler(
-            ask_user_for_question_to_support,
-            lambda call: call.data == "create_support_ticket",
-            state="*",
-        )# Был на месте 6
+        # dp.register_callback_query_handler(
+        #     ask_user_for_question_to_support,
+        #     lambda call: call.data == "create_support_ticket",
+        #     state="*",
+        # )
 
         # Место 7
         dp.register_callback_query_handler(
