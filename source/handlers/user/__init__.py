@@ -12,7 +12,7 @@ from .my_profile import show_my_profile
 from .pay import *
 from .start import *
 from .trial import *
-from .banners import terms_of_use_function
+from .banners import terms_of_use_function, about_us_function
 
 
 def register_user_handlers(dp: Dispatcher):
@@ -81,6 +81,13 @@ def register_user_handlers(dp: Dispatcher):
         )
 
         # Место 10
+        dp.register_callback_query_handler(
+            about_us_function,
+            lambda call: call.data == "about_us",
+            state="*",
+        )
+
+        # Место 11
         dp.register_message_handler(
             forward_question_to_admins,
             state=AskSupport.waiting_for_question,
