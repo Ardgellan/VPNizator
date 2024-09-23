@@ -23,7 +23,7 @@ def register_user_handlers(dp: Dispatcher):
             state="*",
         )
         dp.register_message_handler(show_payment_method, commands="pay", state="*")
-        
+        # Мы тут проверяем, отваливается ли все накуй если добавить внутрь коммент.
         dp.register_message_handler(
             notify_admin_about_new_payment,
             content_types=[
