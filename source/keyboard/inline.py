@@ -441,42 +441,42 @@ async def balance_top_up_menu_keyboard(language_code: str):
                 user_language_code=language_code,
                 text_localization=localizer.button.fifty_rubles,
             ),
-            callback_data="fifty_rubles",
+            callback_data="pay_fifty_rubles",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
                 text_localization=localizer.button.hundred_rubles,
             ),
-            callback_data="hundred_rubles",
+            callback_data="pay_hundred_rubles",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
                 text_localization=localizer.button.three_hundred_rubles,
             ),
-            callback_data="three_hundred_rubles",
+            callback_data="pay_three_hundred_rubles",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
                 text_localization=localizer.button.five_hundred_rubles,
             ),
-            callback_data="five_hundred_rubles",
+            callback_data="pay_five_hundred_rubles",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
                 text_localization=localizer.button.seven_hundred_rubles,
             ),
-            callback_data="seven_hundred_rubles",
+            callback_data="pay_seven_hundred_rubles",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
                 text_localization=localizer.button.thousand_rubles,
             ),
-            callback_data="thousand_rubles",
+            callback_data="pay_thousand_rubles",
         ),
     ]
 

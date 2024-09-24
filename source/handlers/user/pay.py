@@ -91,36 +91,59 @@ async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FS
 
 
 # Отправляем инвойс
-# async def send_test_invoice(message: types.Message):
+async def handle_payment(call: types.CallbackQuery):
+    # Карта соответствия callback_data и суммы
+    amount_map = {
+        "pay_fifty_rubles": 50,
+        "pay_hundred_rubles": 100,
+        "pay_three_hundred_rubles": 300,
+        "pay_five_hundred_rubles": 500,
+        "pay_seven_hundred_rubles": 700,
+        "pay_thousand_rubles": 1000,
+    }
+    
+    # Получаем ключ из callback_data
+    amount_key = call.data  # Например, "pay_fifty_rubles"
+    amount = amount_map.get(amount_key)  # Извлекаем соответствующую сумму
+    
+    if amount:
+        # Логируем процесс
+        logger.info(f"Пользователь {call.from_user.id} выбрал оплату на {amount} рублей")
+        
+        # Создаем инвойс с указанной суммой
+        prices = [types.LabeledPrice(label=f"Пополнение баланса на {amount} руб.", amount=amount * 100)]  # Сумма в копейках
+        
+        # Отправляем инвойс
+        await call.message.bot.send_invoice(
+            chat_id=call.message.chat.id,
+            title=f"Пополнение баланса на {amount} руб.",
+            description=f"Оплата {amount} рублей на баланс.",
+            payload=f"payment_{amount}",  # Платёжный идентификатор
+            provider_token="381764678:TEST:95796",  # Тестовый токен Юкассы
+            currency="RUB",
+            prices=prices,
+            start_parameter="pay"
+        )
+        
+        # Подтверждаем обработку коллбека
+        await call.answer()
+    else:
+        logger.error(f"Неизвестная сумма: {call.data}")
+        await call.answer("Произошла ошибка при выборе суммы", show_alert=True)
 
-#     logger.info(f"User {message.from_user.id} started invoice payment")
-
-#     prices = [types.LabeledPrice(label="Тест VPN", amount=100 * 100 )]  # 100 рублей в копейках
-
-#     await message.bot.send_invoice(
-#         chat_id=message.chat.id,
-#         title="Тестовая оплата VPN",
-#         description="Оплата за тестовый VPN на 1 месяц",
-#         payload="vpn_test_payment",
-#         provider_token="381764678:TEST:95796",  # Тестовый токен от BotFather
-#         currency="RUB",
-#         prices=prices,
-#         start_parameter="test-vpn-payment"
-#     )
-
-# async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
-#     logger.info(f"Pre-checkout query received from {pre_checkout_query.from_user.id}")
-#     try:
-#         await dp.bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)  # Подтверждаем готовность к оплате
-#         logger.info(f"Pre-checkout query answered successfully for {pre_checkout_query.from_user.id}")
-#     except Exception as e:
-#         logger.error(f"Error while answering PreCheckoutQuery: {e}")
+async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
+    logger.info(f"Pre-checkout query received from {pre_checkout_query.from_user.id}")
+    try:
+        await dp.bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)  # Подтверждаем готовность к оплате
+        logger.info(f"Pre-checkout query answered successfully for {pre_checkout_query.from_user.id}")
+    except Exception as e:
+        logger.error(f"Error while answering PreCheckoutQuery: {e}")
 
 
-# # Обработка успешной оплаты
-# async def successful_payment(message: types.Message):
+# Обработка успешной оплаты
+async def successful_payment(message: types.Message):
 
-#     logger.info(f"User {message.from_user.id} made a successful payment")
+    logger.info(f"User {message.from_user.id} made a successful payment")
 
-#     await message.answer("Оплата прошла успешно! Ваш VPN будет активирован.")
-#     # Здесь добавляется логика активации VPN или подписки для пользователя
+    await message.answer("Оплата прошла успешно! Ваш VPN будет активирован.")
+    # Здесь добавляется логика активации VPN или подписки для пользователя

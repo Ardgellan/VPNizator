@@ -314,27 +314,27 @@
             "en": "👊About us",
             "ru": "👊О нас"
         },
-        "fifty_rubles":{
+        "pay_fifty_rubles":{
             "en": "🪙 50 rubles 🪙",
             "ru": "🪙 50 рублей 🪙"
         },
-        "hundred_rubles":{
+        "pay_hundred_rubles":{
             "en": "🪙 100 rubles 🪙",
             "ru": "🪙 100 рублей 🪙"
         },
-        "three_hundred_rubles":{
+        "pay_three_hundred_rubles":{
             "en": "🪙 300 rubles 🪙",
             "ru": "🪙 300 рублей 🪙"
         },
-        "five_hundred_rubles":{
+        "pay_five_hundred_rubles":{
             "en": "🪙 500 rubles 🪙",
             "ru": "🪙 500 рублей 🪙"
         },
-        "seven_hundred_rubles":{
+        "pay_seven_hundred_rubles":{
             "en": "🪙 700 rubles 🪙",
             "ru": "🪙 700 рублей 🪙"
         },
-        "thousand_rubles":{
+        "pay_thousand_rubles":{
             "en": "🪙 1000 rubles 🪙",
             "ru": "🪙 1000 рублей 🪙"
         }
