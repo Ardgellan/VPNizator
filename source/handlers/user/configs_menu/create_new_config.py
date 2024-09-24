@@ -6,11 +6,11 @@ from source.utils import localizer, qr_generator
 from source.utils.states.user import GeneratingNewConfig
 from source.utils.xray import xray_config
 
-from ..check_is_user_have_active_subscription import is_user_subscribed
+from ..check_balance import has_sufficient_balance
 
 
 @rate_limit(limit=1)
-@is_user_subscribed
+@has_sufficient_balance
 async def request_user_for_config_name(call: types.CallbackQuery, state: FSMContext):
     await call.message.edit_text(
         text=localizer.get_user_localized_text(

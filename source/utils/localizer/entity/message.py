@@ -213,3 +213,15 @@ class LocalizedMessageText(BaseLocalizedObject):
     @property
     def balance_top_up_message(self) -> LocalizedText:
         return self._get_entity_text("balance_top_up_message")
+
+    @property
+    def insufficient_balance_for_conf_gen_message(self) -> LocalizedText:
+        return self._get_entity_text("insufficient_balance_for_conf_gen_message")
+
+    @property
+    def subscription_restored(self) -> LocalizedText:
+        return self._get_entity_text("subscription_restored")
+
+    @property
+    def insufficient_balance_for_sub_renewal(self) -> LocalizedText:
+        return self._get_entity_text("insufficient_balance_for_sub_renewal")

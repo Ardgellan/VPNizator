@@ -199,6 +199,18 @@
         "balance_top_up_message": {
             "en": "💳Please select the amount you would like to top up your balance with.💸 Money will be debited from it daily at 00:00 for each active connection - 3 rubles per day!",
             "ru": "💳Пожалуйста, выберите сумму, на которую хотите пополнить свой баланс.💸 Деньги с него, будут списываться ежедневно в 00:00 за каждое активное соединение - 3 рубля в день!"
+        },
+        "insufficient_balance_for_conf_gen_message": {
+            "en": "❌Insufficient funds on your balance!",
+            "ru": "❌На вашем балансе не достаточно средств!"
+        },
+        "subscription_restored": {
+            "en": "✅ Your subscription has been successfully restored!",
+            "ru": "✅ Ваша подписка успешно восстановлена!"
+        },
+        "insufficient_balance_for_sub_renewal": {
+            "en": "❌ Insufficient funds to renew the subscription. Please top up your balance or delete unused configurations.",
+            "ru": "❌ Недостаточно средств для продления подписки. Пожалуйста, пополните баланс или удалите неиспользуемые конфигурации."
         }
     },
     "button": {
@@ -341,6 +353,10 @@
         "pay_thousand_rubles":{
             "en": "🪙 1000 rubles 🪙",
             "ru": "🪙 1000 рублей 🪙"
+        },
+        "renew_subscription": {
+            "en": "🔄 Renew Subscription",
+            "ru": "🔄 Восстановить подписку"
         }
     }
 }
