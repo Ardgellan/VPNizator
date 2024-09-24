@@ -177,12 +177,16 @@
             "ru": "✅Сообщение отправлено всем пользователям"
         },
         "trial_period_greeting": {
-            "en": "Of course! You want to start a trial now?",
-            "ru": "Конечно! Хотите начать пробный период сейчас?" 
+            "en": "Of course! After starting a <b>Trial Period</b>, 100 rubles will be added to your accounts balance and you will be offered to create a new VPN connection. Don't worry! We will closely guide you through the whole process, you will see it is not hard at all 😊!\n\n<b>You want to start a trial now?</b>\n\nYour current <b>Balance</b>: {current_balance} rubles",
+            "ru": "Конечно! После активации <b>Пробного Периода</b>, 100 рублей будет начисленно на Ваш счет и Вам будет предложено создать новое VPN соединение. Не волнуйтесь! Мы подробно проведем вас через весь процесс, вы увидите что это вовсе не сложно 😊!\n\n<b>Хотите начать пробный период сейчас?</b>\n\nВаш текущий <b>Баланс</b>: {current_balance} rubles" 
+        },
+        "trial_period_success": {
+            "en": "Perfect! Your Trial Period was successfully activated!\n\nYour current <b>Balance</b>: {current_balance} rubles\n\nNow, let's create your first VPN configuration together. It's easy-peasy, we will guide you!\n\nOr you can do it yourself later, of course, from 'My VPN configurations' menu.",
+            "ru": "Отлично! Ваш Пробный Период был успешно активирован!\n\nВаш текущий <b>Баланс</b>: {current_balance} рублей\n\nТеперь давайте вместе создадим Ваше первое VPN соединение. Это легче легкого, мы покажем!\n\nИли вы можете сделать это сами, потом, из меню 'Мои VPN соединения'."
         },
         "trial_period_rejection": {
-            "en": "⌛Unfortunately you already used your trial period 😔. One month subscription costs <b>100</b> rubles. Do you want to extend your existing VPN connection or acquire a new one?",
-            "ru": "⌛К сожалению ваш пробный период закончился 😔. Месячная подписка стоит <b>100</b> рублей. Хотите продлить существующее VPN соединение или приобрести новое?" 
+            "en": "⌛Unfortunately you already used your trial period 😔. If you haven't already, try creating new VPN connfiguration in 'My VPN connections' menu. You can access it from Main Menu. Or top up your balance.",
+            "ru": "⌛К сожалению Вы уже использовали свой пробный период 😔. Попробуйте создать новое VPN соединение в меню 'Мои VPN соединения', если Вы еще этого не сделали. Вы можете обратиться к нему из Главного Меню. Или пополните свой баланс." 
         },
         "terms_of_use_message": {
             "en": "Here shall be some text soon.",

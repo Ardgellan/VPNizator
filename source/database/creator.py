@@ -51,8 +51,7 @@ class Creator(DatabaseConnector):
                 is_banned BOOLEAN NOT NULL DEFAULT FALSE,
                 subscription_end_date DATE DEFAULT DATE '1970-01-01',
                 trial_used BOOLEAN NOT NULL DEFAULT FALSE,
-                trial_start_date TIMESTAMP DEFAULT NULL,
-                trial_end_date TIMESTAMP DEFAULT NULL,     
+                balance NUMERIC(10, 2) NOT NULL DEFAULT 0.00,     
                 created_at TIMESTAMP NOT NULL DEFAULT NOW(),
                 updated_at TIMESTAMP NOT NULL DEFAULT NOW()
             );

@@ -488,3 +488,21 @@ async def balance_top_up_menu_keyboard(language_code: str):
         language_code=language_code,
     )
     return keyboard
+
+
+async def trial_period_success_keyboard(language_code: str):
+    keyboard = InlineKeyboardMarkup(row_width=1)
+    keyboard.add(
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.create_new_config,
+            ),
+            callback_data="create_new_config",
+        )
+    )
+    keyboard = await insert_button_back_to_main_menu(
+        keyboard=keyboard,
+        language_code=language_code,
+    )
+    return keyboard

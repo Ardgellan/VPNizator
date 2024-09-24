@@ -79,3 +79,17 @@ class Updater(DatabaseConnector):
         await self._execute_query(query)
         logger.debug(f"User {user_id} marked as having used the trial period")
         return True
+
+    async def update_user_balance(self, user_id: int, amount: float) -> bool:
+    """Обновляем баланс пользователя, добавляя или вычитая средства"""
+    query = f"""--sql
+        UPDATE users
+        SET balance = balance + {amount}
+        WHERE user_id = {user_id};
+    """
+    if await self._execute_query(query) is False:
+        logger.error(f"Error while updating balance for user {user_id}")
+        return False
+    logger.debug(f"Updated balance for user {user_id} by {amount}")
+    return True
+

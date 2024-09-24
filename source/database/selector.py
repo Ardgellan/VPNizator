@@ -274,3 +274,20 @@ class Selector(DatabaseConnector):
         result = await self._execute_query(query)
         logger.debug(f"Note about used trial was made: {result}")
         return result[0][0] if result else False
+    
+    async def get_user_balance(self, user_id: int) -> float:
+        """Получаем текущий баланс пользователя по его user_id"""
+            query = f"""--sql
+            SELECT balance
+            FROM users
+            WHERE user_id = {user_id};
+        """
+        result = await self._execute_query(query)
+        if result:
+            balance = result[0][0]
+            logger.debug(f"User {user_id} balance fetched: {balance}")
+            return balance
+        else:
+            logger.error(f"User {user_id} not found or balance could not be retrieved")
+            return 0.0  # Возвращаем 0.0, если баланс не найден
+
