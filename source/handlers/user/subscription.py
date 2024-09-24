@@ -1,8 +1,10 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from loader import db_manager
 from loguru import logger
+
+from loader import db_manager
 from source.utils import localizer
+
 
 async def get_current_subscription_cost(user_id: int) -> int:
     # Получаем количество активных конфигов
@@ -10,6 +12,7 @@ async def get_current_subscription_cost(user_id: int) -> int:
     # Рассчитываем общую стоимость подписки (3 рубля за каждый активный конфиг)
     total_cost = active_configs_count * 3
     return total_cost
+
 
 async def check_and_renew_subscription(user_id: int) -> bool:
     # Получаем текущий баланс пользователя
@@ -30,6 +33,7 @@ async def check_and_renew_subscription(user_id: int) -> bool:
     else:
         logger.info(f"У пользователя {user_id} недостаточно средств для продления подписки.")
         return False
+
 
 async def restore_subscription(call: types.CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
