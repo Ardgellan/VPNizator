@@ -94,7 +94,7 @@ async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FS
 async def handle_payment(call: types.CallbackQuery):
     # Карта соответствия callback_data и суммы
     amount_map = {
-        "pay_fifty_rubles": 50,
+        "pay_fifty_rubles": 100,
         "pay_hundred_rubles": 100,
         "pay_three_hundred_rubles": 300,
         "pay_five_hundred_rubles": 500,
