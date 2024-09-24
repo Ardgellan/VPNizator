@@ -37,12 +37,12 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     
     await message.answer_chat_action(action=types.ChatActions.UPLOAD_PHOTO)
 
+    await db_manager.update_user_balance(user_id, -3.00)
+    logger.info(f"Списано 3 рубля за генерацию конфига для пользователя {user_id}")
+
     config = await xray_config.add_new_user(
         config_name=config_name, user_telegram_id=message.from_user.id
     )
-    
-    await db_manager.update_user_balance(user_id, -3.00)
-    logger.info(f"Списано 3 рубля за генерацию конфига для пользователя {user_id}")
 
     config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(config)
     
