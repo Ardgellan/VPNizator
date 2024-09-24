@@ -7,8 +7,9 @@ from source.keyboard import inline
 from source.middlewares import rate_limit
 from source.utils import localizer
 
+
 async def terms_of_use_function(call: types.CallbackQuery, state: FSMContext):
-    
+
     await state.finish()
 
     await call.message.edit_text(
@@ -18,14 +19,14 @@ async def terms_of_use_function(call: types.CallbackQuery, state: FSMContext):
         ),
         reply_markup=await inline.insert_button_back_to_main_menu(
             language_code=call.from_user.language_code,
-        )
+        ),
     )
 
     await call.answer()
 
 
 async def about_us_function(call: types.CallbackQuery, state: FSMContext):
-    
+
     await state.finish()
 
     await call.message.edit_text(
@@ -35,7 +36,7 @@ async def about_us_function(call: types.CallbackQuery, state: FSMContext):
         ),
         reply_markup=await inline.insert_button_back_to_main_menu(
             language_code=call.from_user.language_code,
-        )
+        ),
     )
 
     await call.answer()

@@ -18,18 +18,15 @@ from .banners import terms_of_use_function, about_us_function
 def register_user_handlers(dp: Dispatcher):
     try:
         # Место 1
-        dp.register_message_handler(
-            start, commands=["start", "menu"], state="*"
-        )
+        dp.register_message_handler(start, commands=["start", "menu"], state="*")
 
-        
         # Место 2
         dp.register_callback_query_handler(
             main_menu_by_button,
             lambda call: call.data == "back_to_main_menu",
             state="*",
         )
-        
+
         dp.register_callback_query_handler(
             show_balance_top_up_menu_function,
             lambda call: call.data == "balance_top_up",
@@ -46,7 +43,7 @@ def register_user_handlers(dp: Dispatcher):
 
         # Хендлер для обработки успешного платежа
         # dp.register_message_handler(successful_payment, content_types=types.ContentType.SUCCESSFUL_PAYMENT)
-        
+
         # Место 3
         # dp.register_message_handler(
         #     show_payment_method, commands="pay", state="*"
@@ -68,7 +65,7 @@ def register_user_handlers(dp: Dispatcher):
             lambda call: call.data == "my_profile",
             state="*",
         )
-        
+
         # Место 6
         dp.register_callback_query_handler(
             ask_user_for_question_to_support,

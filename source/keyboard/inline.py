@@ -432,53 +432,53 @@ async def config_generated_keyboard(language_code: str) -> InlineKeyboardMarkup:
 
     return keyboard
 
-    
+
 async def balance_top_up_menu_keyboard(language_code: str):
     keyboard = InlineKeyboardMarkup(row_width=1)
     buttons = [
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
-            user_language_code=language_code,
-            text_localization=localizer.button.fifty_rubles,
+                user_language_code=language_code,
+                text_localization=localizer.button.fifty_rubles,
             ),
             callback_data="fifty_rubles",
-            ),
+        ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
-            user_language_code=language_code,
-            text_localization=localizer.button.hundred_rubles,
+                user_language_code=language_code,
+                text_localization=localizer.button.hundred_rubles,
             ),
             callback_data="hundred_rubles",
-            ),
+        ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
-            user_language_code=language_code,
-            text_localization=localizer.button.three_hundred_rubles,
+                user_language_code=language_code,
+                text_localization=localizer.button.three_hundred_rubles,
             ),
             callback_data="three_hundred_rubles",
-            ),
+        ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
-            user_language_code=language_code,
-            text_localization=localizer.button.five_hundred_rubles,
+                user_language_code=language_code,
+                text_localization=localizer.button.five_hundred_rubles,
             ),
             callback_data="five_hundred_rubles",
-            ),
+        ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
-            user_language_code=language_code,
-            text_localization=localizer.button.seven_hundred_rubles,
+                user_language_code=language_code,
+                text_localization=localizer.button.seven_hundred_rubles,
             ),
             callback_data="seven_hundred_rubles",
-            ),
+        ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
-            user_language_code=language_code,
-            text_localization=localizer.button.thousand_rubles,
+                user_language_code=language_code,
+                text_localization=localizer.button.thousand_rubles,
             ),
             callback_data="thousand_rubles",
-            ),
-        ]
+        ),
+    ]
 
     for button in buttons:
         keyboard.insert(button)

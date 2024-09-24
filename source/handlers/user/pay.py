@@ -72,20 +72,24 @@ from source.keyboard import inline
 from aiogram.dispatcher import FSMContext
 
 
-async def show_balance_top_up_menu_function (call: types.CallbackQuery, state: FSMContext):
+async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FSMContext):
+    logger.info(f"Пользователь {call.from_user.id} открыл меню пополнения баланса")
     await state.finish()
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
             text_localization=localizer.message.balance_top_up_message,
         ),
-        reply_markup=await inline.balance_top_up_menu_keyboard(language_code=call.from_user.language_code),
+        reply_markup=await inline.balance_top_up_menu_keyboard(
+            language_code=call.from_user.language_code
+        ),
     )
     await call.answer()
 
+
 # Отправляем инвойс
 # async def send_test_invoice(message: types.Message):
-    
+
 #     logger.info(f"User {message.from_user.id} started invoice payment")
 
 #     prices = [types.LabeledPrice(label="Тест VPN", amount=100 * 100 )]  # 100 рублей в копейках
