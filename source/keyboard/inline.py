@@ -439,42 +439,42 @@ async def balance_top_up_menu_keyboard(language_code: str):
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.fifty_rubles,
+                text_localization=localizer.button.pay_fifty_rubles,
             ),
             callback_data="pay_fifty_rubles",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.hundred_rubles,
+                text_localization=localizer.button.pay_hundred_rubles,
             ),
             callback_data="pay_hundred_rubles",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.three_hundred_rubles,
+                text_localization=localizer.button.pay_three_hundred_rubles,
             ),
             callback_data="pay_three_hundred_rubles",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.five_hundred_rubles,
+                text_localization=localizer.button.pay_five_hundred_rubles,
             ),
             callback_data="pay_five_hundred_rubles",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.seven_hundred_rubles,
+                text_localization=localizer.button.pay_seven_hundred_rubles,
             ),
             callback_data="pay_seven_hundred_rubles",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.thousand_rubles,
+                text_localization=localizer.button.pay_thousand_rubles,
             ),
             callback_data="pay_thousand_rubles",
         ),
