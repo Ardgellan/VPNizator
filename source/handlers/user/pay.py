@@ -66,10 +66,13 @@
 
 from aiogram import types
 from aiogram.types import LabeledPrice, PreCheckoutQuery
-from loguru import logger
-from loader import dp
-from source.keyboard import inline
+
 from aiogram.dispatcher import FSMContext
+from loader import dp
+from loguru import logger
+
+from source.keyboard import inline
+from source.utils import localizer
 
 
 async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FSMContext):
