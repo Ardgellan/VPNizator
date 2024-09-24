@@ -8,6 +8,9 @@ from source.utils.xray import xray_config
 
 from ..check_balance import has_sufficient_balance
 
+from loguru import logger
+from loader import db_manager
+
 
 @rate_limit(limit=1)
 @has_sufficient_balance
@@ -37,9 +40,6 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     
     await message.answer_chat_action(action=types.ChatActions.UPLOAD_PHOTO)
 
-    await db_manager.update_user_balance(user_id, -3.00)
-    logger.info(f"Списано 3 рубля за генерацию конфига для пользователя {user_id}")
-
     config = await xray_config.add_new_user(
         config_name=config_name, user_telegram_id=message.from_user.id
     )
@@ -54,5 +54,8 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
         ).format(config_name=config_name, config_data=config),
         parse_mode=types.ParseMode.HTML,
     )
+
+    await db_manager.update_user_balance(user_id, -3.00)
+    logger.info(f"Списано 3 рубля за генерацию конфига для пользователя {user_id}")
 
     await state.finish()
