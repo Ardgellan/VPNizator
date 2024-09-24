@@ -65,12 +65,11 @@
 
 
 from aiogram import types
-from aiogram.types import LabeledPrice, PreCheckoutQuery
-
 from aiogram.dispatcher import FSMContext
-from loader import dp
+from aiogram.types import LabeledPrice, PreCheckoutQuery
 from loguru import logger
 
+from loader import dp
 from source.keyboard import inline
 from source.utils import localizer
 
@@ -101,18 +100,20 @@ async def handle_payment(call: types.CallbackQuery):
         "pay_seven_hundred_rubles": 700,
         "pay_thousand_rubles": 1000,
     }
-    
+
     # Получаем ключ из callback_data
     amount_key = call.data  # Например, "pay_fifty_rubles"
     amount = amount_map.get(amount_key)  # Извлекаем соответствующую сумму
-    
+
     if amount:
         # Логируем процесс
         logger.info(f"Пользователь {call.from_user.id} выбрал оплату на {amount} рублей")
-        
+
         # Создаем инвойс с указанной суммой
-        prices = [types.LabeledPrice(label=f"Пополнение баланса на {amount} руб.", amount=amount * 100)]  # Сумма в копейках
-        
+        prices = [
+            types.LabeledPrice(label=f"Пополнение баланса на {amount} руб.", amount=amount * 100)
+        ]  # Сумма в копейках
+
         # Отправляем инвойс
         await call.message.bot.send_invoice(
             chat_id=call.message.chat.id,
@@ -122,20 +123,25 @@ async def handle_payment(call: types.CallbackQuery):
             provider_token="381764678:TEST:95796",  # Тестовый токен Юкассы
             currency="RUB",
             prices=prices,
-            start_parameter="pay"
+            start_parameter="pay",
         )
-        
+
         # Подтверждаем обработку коллбека
         await call.answer()
     else:
         logger.error(f"Неизвестная сумма: {call.data}")
         await call.answer("Произошла ошибка при выборе суммы", show_alert=True)
 
+
 async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
     logger.info(f"Pre-checkout query received from {pre_checkout_query.from_user.id}")
     try:
-        await dp.bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)  # Подтверждаем готовность к оплате
-        logger.info(f"Pre-checkout query answered successfully for {pre_checkout_query.from_user.id}")
+        await dp.bot.answer_pre_checkout_query(
+            pre_checkout_query.id, ok=True
+        )  # Подтверждаем готовность к оплате
+        logger.info(
+            f"Pre-checkout query answered successfully for {pre_checkout_query.from_user.id}"
+        )
     except Exception as e:
         logger.error(f"Error while answering PreCheckoutQuery: {e}")
 

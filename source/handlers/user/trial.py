@@ -16,13 +16,13 @@ from source.utils import localizer
 # Функция для показа меню с предложением начать пробный период
 @rate_limit(limit=1)
 async def trial_period_function(call: types.CallbackQuery, state: FSMContext):
-    
+
     logger.info(f"User {call.from_user.id} opened trial period menu")
     # Отправляем пользователю сообщение с предложением начать пробный период
-    
+
     # Получаем текущий баланс пользователя
     current_balance = await db_manager.get_user_balance(user_id=call.from_user.id)
-    
+
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
@@ -78,7 +78,9 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
             text_localization=localizer.message.trial_period_success,  # Сообщение о пробном периоде
         ).format(current_balance=current_balance),
         parse_mode=types.ParseMode.HTML,
-        reply_markup=await inline.trial_period_success_keyboard(language_code=call.from_user.language_code),
+        reply_markup=await inline.trial_period_success_keyboard(
+            language_code=call.from_user.language_code
+        ),
     )
 
     await call.answer()

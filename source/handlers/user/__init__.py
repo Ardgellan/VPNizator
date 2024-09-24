@@ -5,6 +5,7 @@ from loguru import logger
 from source.utils.states.user import PaymentViaBankTransfer
 
 from .ask_support import *
+from .banners import about_us_function, terms_of_use_function
 from .configs_menu import register_configs_menu_handlers
 from .configs_menu.show_configs import *
 from .guide import register_show_help_guide_handlers
@@ -12,7 +13,6 @@ from .my_profile import show_my_profile
 from .pay import *
 from .start import *
 from .trial import *
-from .banners import terms_of_use_function, about_us_function
 
 
 def register_user_handlers(dp: Dispatcher):
@@ -35,16 +35,16 @@ def register_user_handlers(dp: Dispatcher):
 
         # Хендлер обработчик платежей
         dp.register_callback_query_handler(
-        handle_payment,
-        lambda call: call.data.startswith("pay_"),
-        state="*"
+            handle_payment, lambda call: call.data.startswith("pay_"), state="*"
         )
 
         # Хендлер для обработки PreCheckoutQuery
         dp.register_pre_checkout_query_handler(process_pre_checkout_query)
 
         # Хендлер для обработки успешного платежа
-        dp.register_message_handler(successful_payment, content_types=types.ContentType.SUCCESSFUL_PAYMENT)
+        dp.register_message_handler(
+            successful_payment, content_types=types.ContentType.SUCCESSFUL_PAYMENT
+        )
 
         # Место 3
         # dp.register_message_handler(
