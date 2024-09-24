@@ -42,7 +42,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     )
     
     config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(config)
-    logger.info(f"Отправляем фото пользователю {user_id}")
+    
     await message.answer_photo(
         photo=config_qr_code,
         caption=localizer.get_user_localized_text(
