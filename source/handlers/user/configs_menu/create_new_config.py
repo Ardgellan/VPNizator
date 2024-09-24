@@ -23,7 +23,10 @@ async def request_user_for_config_name(call: types.CallbackQuery, state: FSMCont
 
 
 async def generate_config_for_user(message: types.Message, state: FSMContext):
+    
     config_name = message.text
+    user_id = message.from_user.id
+
     await message.answer(
         text=localizer.get_user_localized_text(
             user_language_code=message.from_user.language_code,
@@ -31,12 +34,15 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
         ),
         parse_mode=types.ParseMode.HTML,
     )
+    
     await message.answer_chat_action(action=types.ChatActions.UPLOAD_PHOTO)
 
     config = await xray_config.add_new_user(
         config_name=config_name, user_telegram_id=message.from_user.id
     )
+    
     config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(config)
+    
     await message.answer_photo(
         photo=config_qr_code,
         caption=localizer.get_user_localized_text(
@@ -46,4 +52,8 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
         parse_mode=types.ParseMode.HTML,
     )
 
+    # Списываем средства за генерацию конфигурации (3 рубля)
+    await db_manager.update_user_balance(user_id, -3.00)
+    logger.info(f"Списано 3 рубля за генерацию конфига для пользователя {user_id}")
+    
     await state.finish()
