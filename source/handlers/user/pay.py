@@ -76,13 +76,14 @@ async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FS
     logger.info(f"Пользователь {call.from_user.id} открыл меню пополнения баланса")
     await state.finish()
     await call.message.edit_text(
-        text=localizer.get_user_localized_text(
-            user_language_code=call.from_user.language_code,
-            text_localization=localizer.message.balance_top_up_message,
-        ),
-        reply_markup=await inline.balance_top_up_menu_keyboard(
-            language_code=call.from_user.language_code
-        ),
+        text="SALAM",
+        # localizer.get_user_localized_text(
+        #     user_language_code=call.from_user.language_code,
+        #     text_localization=localizer.message.balance_top_up_message,
+        # ),
+        # reply_markup=await inline.balance_top_up_menu_keyboard(
+        #     language_code=call.from_user.language_code
+        # ),
     )
     await call.answer()
 
