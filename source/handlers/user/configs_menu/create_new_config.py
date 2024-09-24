@@ -53,7 +53,8 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     )
 
     # Списываем средства за генерацию конфигурации (3 рубля)
+    logger.info(f"SALAM")
     await db_manager.update_user_balance(user_id, -3.00)
     logger.info(f"Списано 3 рубля за генерацию конфига для пользователя {user_id}")
-    
+
     await state.finish()
