@@ -107,8 +107,8 @@ class LocalizedButtonText(BaseLocalizedObject):
         return self._get_entity_text("start_trial_period")
 
     @property
-    def vpn_payment(self) -> LocalizedText:
-        return self._get_entity_text("vpn_payment")
+    def balance_top_up(self) -> LocalizedText:
+        return self._get_entity_text("balance_top_up")
 
     @property
     def vpn_installation_manual(self) -> LocalizedText:
@@ -121,3 +121,27 @@ class LocalizedButtonText(BaseLocalizedObject):
     @property
     def about_us(self) -> LocalizedText:
         return self._get_entity_text("about_us")
+
+    @property
+    def fifty_rubles(self) -> LocalizedText:
+        return self._get_entity_text("fifty_rubles")
+
+    @property
+    def hundred_rubles(self) -> LocalizedText:
+        return self._get_entity_text("hundred_rubles")
+
+    @property
+    def three_hundred_rubles(self) -> LocalizedText:
+        return self._get_entity_text("three_hundred_rubles")
+
+    @property
+    def five_hundred_rubles(self) -> LocalizedText:
+        return self._get_entity_text("five_hundred_rubles")
+
+    @property
+    def seven_hundred_rubles(self) -> LocalizedText:
+        return self._get_entity_text("seven_hundred_rubles")
+
+    @property
+    def thousand_rubles(self) -> LocalizedText:
+        return self._get_entity_text("thousand_rubles")

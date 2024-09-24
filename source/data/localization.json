@@ -191,6 +191,10 @@
         "about_us_message": {
             "en": "Here shall be some text soon as well.",
             "ru": "Здесь тоже скоро будет какой-нибудь текст."
+        },
+        "balance_top_up_message": {
+            "en": "💳Please select the amount you would like to top up your balance with. 💸Money will be debited from it daily at 00:00 for each active connection - 3 rubles per day!💸",
+            "ru": "💳Пожалуйста, выберите сумму, на которую хотите пополнить свой баланс. 💸Деньги с него, будут списываться ежедневно в 00:00 за каждое активное соединение - 3 рубля в день!💸"
         }
     },
     "button": {
@@ -294,9 +298,9 @@
             "en": "⏳Start trial period",
             "ru": "⌛Начать пробный период"
         },
-        "vpn_payment": {
-            "en": "💳VPN payment",
-            "ru": "💳Оплата VPN соединения"
+        "balance_top_up": {
+            "en": "💳Top Up the Balance",
+            "ru": "💳Пополнить Баланс"
         },
         "vpn_installation_manual": {
             "en": "🛠️VPN installation manual",
@@ -309,6 +313,30 @@
         "about_us": {
             "en": "👊About us",
             "ru": "👊О нас"
+        },
+        "fifty_rubles":{
+            "en": "🪙 <b>50</b> rubles 🪙",
+            "ru": "🪙 <b>50</b> рублей 🪙"
+        },
+        "hundred_rubles":{
+            "en": "🪙 <b>100</b> rubles 🪙",
+            "ru": "🪙 <b>100</b> рублей 🪙"
+        },
+        "three_hundred_rubles":{
+            "en": "🪙 <b>300</b> rubles 🪙",
+            "ru": "🪙 <b>300</b> рублей 🪙"
+        },
+        "five_hundred_rubles":{
+            "en": "🪙 <b>500</b> rubles 🪙",
+            "ru": "🪙 <b>500</b> рублей 🪙"
+        },
+        "seven_hundred_rubles":{
+            "en": "🪙 <b>700</b> rubles 🪙",
+            "ru": "🪙 <b>700</b> рублей 🪙"
+        },
+        "thousand_rubles":{
+            "en": "🪙 <b>1000</b> rubles 🪙",
+            "ru": "🪙 <b>1000</b> рублей 🪙"
         }
     }
 }

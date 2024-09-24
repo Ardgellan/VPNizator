@@ -36,9 +36,9 @@ async def start_menu_kb(language_code: str, user_id: int):
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.vpn_payment,
+                text_localization=localizer.button.balance_top_up,
             ),
-            callback_data="vpn_payment",
+            callback_data="balance_top_up",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
@@ -415,19 +415,76 @@ async def config_generated_keyboard(language_code: str) -> InlineKeyboardMarkup:
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.vpn_installation_manual,  # Текст кнопки для возврата в меню
+                text_localization=localizer.button.vpn_installation_manual,
             ),
-            callback_data="vpn_installation_manual",  # Callback для возврата в меню
+            callback_data="vpn_installation_manual",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.back_to_main_menu,  # Текст кнопки для получения справки
+                text_localization=localizer.button.back_to_main_menu,
             ),
-            callback_data="back_to_main_menu",  # Callback для показа справки по подключению
+            callback_data="back_to_main_menu",
         ),
     ]
     for button in buttons:
         keyboard.insert(button)
 
+    return keyboard
+
+    
+async def balance_top_up_menu_keyboard(language_code: str):
+    keyboard = InlineKeyboardMarkup(row_width=1)
+    buttons = [
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+            user_language_code=language_code,
+            text_localization=localizer.button.fifty_rubles,
+            ),
+            callback_data="fifty_rubles",
+            ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+            user_language_code=language_code,
+            text_localization=localizer.button.hundred_rubles,
+            ),
+            callback_data="hundred_rubles",
+            ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+            user_language_code=language_code,
+            text_localization=localizer.button.three_hundred_rubles,
+            ),
+            callback_data="three_hundred_rubles",
+            ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+            user_language_code=language_code,
+            text_localization=localizer.button.five_hundred_rubles,
+            ),
+            callback_data="five_hundred_rubles",
+            ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+            user_language_code=language_code,
+            text_localization=localizer.button.seven_hundred_rubles,
+            ),
+            callback_data="seven_hundred_rubles",
+            ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+            user_language_code=language_code,
+            text_localization=localizer.button.thousand_rubles,
+            ),
+            callback_data="thousand_rubles",
+            ),
+        ]
+
+    for button in buttons:
+        keyboard.insert(button)
+
+    keyboard = await insert_button_back_to_main_menu(
+        keyboard=keyboard,
+        language_code=language_code,
+    )
     return keyboard

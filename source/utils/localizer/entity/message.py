@@ -205,3 +205,7 @@ class LocalizedMessageText(BaseLocalizedObject):
     @property
     def about_us_message(self) -> LocalizedText:
         return self._get_entity_text("about_us_message")
+
+    @property
+    def balance_top_up_message(self) -> LocalizedText:
+        return self._get_entity_text("balance_top_up_message")

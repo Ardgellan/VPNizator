@@ -23,7 +23,7 @@ async def trial_period_function(call: types.CallbackQuery, state: FSMContext):
             user_language_code=call.from_user.language_code,
             text_localization=localizer.message.trial_period_greeting,  # Сообщение о пробном периоде
         ),
-        parse_mode=types.ParseMode.HTML,
+        # parse_mode=types.ParseMode.HTML,
         reply_markup=await inline.trial_menu_keyboard(language_code=call.from_user.language_code),
     )
     await state.finish()

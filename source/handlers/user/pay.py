@@ -68,39 +68,53 @@ from aiogram import types
 from aiogram.types import LabeledPrice, PreCheckoutQuery
 from loguru import logger
 from loader import dp
+from source.keyboard import inline
+from aiogram.dispatcher import FSMContext
 
+
+async def show_balance_top_up_menu_function (call: types.CallbackQuery, state: FSMContext):
+    await state.finish()
+    await call.message.edit_text(
+        text=localizer.get_user_localized_text(
+            user_language_code=call.from_user.language_code,
+            text_localization=localizer.message.balance_top_up_message,
+        ),
+        reply_markup=await inline.balance_top_up_menu_keyboard(language_code=call.from_user.language_code)
+
+    )
+    await call.answer()
 
 # Отправляем инвойс
-async def send_test_invoice(message: types.Message):
+# async def send_test_invoice(message: types.Message):
     
-    logger.info(f"User {message.from_user.id} started invoice payment")
+#     logger.info(f"User {message.from_user.id} started invoice payment")
 
-    prices = [types.LabeledPrice(label="Тест VPN", amount=100 * 100 )]  # 100 рублей в копейках
+#     prices = [types.LabeledPrice(label="Тест VPN", amount=100 * 100 )]  # 100 рублей в копейках
 
-    await message.bot.send_invoice(
-        chat_id=message.chat.id,
-        title="Тестовая оплата VPN",
-        description="Оплата за тестовый VPN на 1 месяц",
-        payload="vpn_test_payment",
-        provider_token="",  # Тестовый токен от BotFather
-        currency="RUB",
-        prices=prices,
-        start_parameter="test-vpn-payment"
-    )
+#     await message.bot.send_invoice(
+#         chat_id=message.chat.id,
+#         title="Тестовая оплата VPN",
+#         description="Оплата за тестовый VPN на 1 месяц",
+#         payload="vpn_test_payment",
+#         provider_token="381764678:TEST:95796",  # Тестовый токен от BotFather
+#         currency="RUB",
+#         prices=prices,
+#         start_parameter="test-vpn-payment"
+#     )
 
-async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
-    logger.info(f"Pre-checkout query received from {pre_checkout_query.from_user.id}")
-    try:
-        await dp.bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)  # Подтверждаем готовность к оплате
-        logger.info(f"Pre-checkout query answered successfully for {pre_checkout_query.from_user.id}")
-    except Exception as e:
-        logger.error(f"Error while answering PreCheckoutQuery: {e}")
+# async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
+#     logger.info(f"Pre-checkout query received from {pre_checkout_query.from_user.id}")
+#     try:
+#         await dp.bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)  # Подтверждаем готовность к оплате
+#         logger.info(f"Pre-checkout query answered successfully for {pre_checkout_query.from_user.id}")
+#     except Exception as e:
+#         logger.error(f"Error while answering PreCheckoutQuery: {e}")
 
 
-# Обработка успешной оплаты
-async def successful_payment(message: types.Message):
+# # Обработка успешной оплаты
+# async def successful_payment(message: types.Message):
 
-    logger.info(f"User {message.from_user.id} made a successful payment")
+#     logger.info(f"User {message.from_user.id} made a successful payment")
 
-    await message.answer("Оплата прошла успешно! Ваш VPN будет активирован.")
-    # Здесь добавляется логика активации VPN или подписки для пользователя
+#     await message.answer("Оплата прошла успешно! Ваш VPN будет активирован.")
+#     # Здесь добавляется логика активации VPN или подписки для пользователя
