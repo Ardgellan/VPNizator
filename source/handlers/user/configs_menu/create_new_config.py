@@ -42,7 +42,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     )
     
     config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(config)
-    
+    logger.info(f"Отправляем фото пользователю {user_id}")
     await message.answer_photo(
         photo=config_qr_code,
         caption=localizer.get_user_localized_text(
@@ -51,7 +51,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
         ).format(config_name=config_name, config_data=config),
         parse_mode=types.ParseMode.HTML,
     )
-
+    logger.info(f"Фото отправлено пользователю {user_id}")
     # Списываем средства за генерацию конфигурации (3 рубля)
     logger.info(f"SALAM")
     await db_manager.update_user_balance(user_id, -3.00)
