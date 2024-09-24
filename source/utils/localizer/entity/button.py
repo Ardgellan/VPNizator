@@ -124,24 +124,24 @@ class LocalizedButtonText(BaseLocalizedObject):
 
     @property
     def pay_fifty_rubles(self) -> LocalizedText:
-        return self._get_entity_text("fifty_rubles")
+        return self._get_entity_text("pay_fifty_rubles")
 
     @property
     def pay_hundred_rubles(self) -> LocalizedText:
-        return self._get_entity_text("hundred_rubles")
+        return self._get_entity_text("pay_hundred_rubles")
 
     @property
     def pay_three_hundred_rubles(self) -> LocalizedText:
-        return self._get_entity_text("three_hundred_rubles")
+        return self._get_entity_text("pay_three_hundred_rubles")
 
     @property
     def pay_five_hundred_rubles(self) -> LocalizedText:
-        return self._get_entity_text("five_hundred_rubles")
+        return self._get_entity_text("pay_five_hundred_rubles")
 
     @property
     def pay_seven_hundred_rubles(self) -> LocalizedText:
-        return self._get_entity_text("seven_hundred_rubles")
+        return self._get_entity_text("pay_seven_hundred_rubles")
 
     @property
     def pay_thousand_rubles(self) -> LocalizedText:
-        return self._get_entity_text("thousand_rubles")
+        return self._get_entity_text("pay_thousand_rubles")
