@@ -41,6 +41,9 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
         config_name=config_name, user_telegram_id=message.from_user.id
     )
     
+    await db_manager.update_user_balance(user_id, -3.00)
+    logger.info(f"Списано 3 рубля за генерацию конфига для пользователя {user_id}")
+
     config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(config)
     
     await message.answer_photo(
@@ -51,10 +54,5 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
         ).format(config_name=config_name, config_data=config),
         parse_mode=types.ParseMode.HTML,
     )
-    logger.info(f"Фото отправлено пользователю {user_id}")
-    # Списываем средства за генерацию конфигурации (3 рубля)
-    logger.info(f"SALAM")
-    await db_manager.update_user_balance(user_id, -3.00)
-    logger.info(f"Списано 3 рубля за генерацию конфига для пользователя {user_id}")
 
     await state.finish()
