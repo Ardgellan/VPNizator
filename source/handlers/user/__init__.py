@@ -13,6 +13,7 @@ from .my_profile import show_my_profile
 from .pay import *
 from .start import *
 from .trial import *
+from .subscription import manual_renew_subscription
 
 
 def register_user_handlers(dp: Dispatcher):
