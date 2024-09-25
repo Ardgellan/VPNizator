@@ -215,8 +215,8 @@ async def user_configs_list_keyboard(
                 user_language_code=language_code,
                 text_localization=localizer.button.renew_subscription,
             ),
-        ),
-        callback_data="renew_subscription",
+            callback_data="renew_subscription"
+        )
     )
     keyboard = await insert_button_back_to_main_menu(keyboard=keyboard, language_code=language_code)
     return keyboard
