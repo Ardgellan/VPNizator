@@ -8,7 +8,7 @@ from source.keyboard import inline
 from source.utils import localizer
 
 
-def has_sufficient_balance(func):
+def has_sufficient_balance_for_conf_generation(func):
     async def wrapper(message_or_call: types.Message | types.CallbackQuery, state: FSMContext):
         user_id = message_or_call.from_user.id
 
@@ -19,7 +19,9 @@ def has_sufficient_balance(func):
         if current_balance < 3.00:
             if isinstance(message_or_call, types.CallbackQuery):
                 message = message_or_call.message
-                language_code = (await message_or_call.bot.get_chat_member(chat_id=user_id, user_id=user_id)).user.language_code
+                language_code = (
+                    await message_or_call.bot.get_chat_member(chat_id=user_id, user_id=user_id)
+                ).user.language_code
             else:
                 message = message_or_call
                 language_code = message_or_call.from_user.language_code
@@ -36,6 +38,7 @@ def has_sufficient_balance(func):
 
         # Если средств хватает, продолжаем выполнение функции
         await func(message_or_call, state)
+
     return wrapper
 
 

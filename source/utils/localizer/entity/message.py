@@ -219,9 +219,13 @@ class LocalizedMessageText(BaseLocalizedObject):
         return self._get_entity_text("insufficient_balance_for_conf_gen_message")
 
     @property
-    def subscription_restored(self) -> LocalizedText:
-        return self._get_entity_text("subscription_restored")
-
-    @property
     def insufficient_balance_for_sub_renewal(self) -> LocalizedText:
         return self._get_entity_text("insufficient_balance_for_sub_renewal")
+
+    @property
+    def subscription_already_renewed_today(self) -> LocalizedText:
+        return self._get_entity_text("subscription_already_renewed_today")
+
+    @property
+    def subscription_renewed_successfully(self) -> LocalizedText:
+        return self._get_entity_text("subscription_renewed_successfully")

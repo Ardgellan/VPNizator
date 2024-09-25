@@ -183,21 +183,21 @@ class Selector(DatabaseConnector):
         logger.debug(f"Users ids by configs uuids {configs_uuid}: {users_ids}")
         return users_ids
 
-    async def get_users_ids_with_last_day_left_subscription(self) -> list[int]:
-        return await self._get_users_ids_by_subscription_ends_in_days(days=1)
+    # async def get_users_ids_with_last_day_left_subscription(self) -> list[int]:
+    #     return await self._get_users_ids_by_subscription_ends_in_days(days=1)
 
-    async def get_users_ids_with_two_days_left_subscription(self) -> list[int]:
-        return await self._get_users_ids_by_subscription_ends_in_days(days=2)
+    # async def get_users_ids_with_two_days_left_subscription(self) -> list[int]:
+    #     return await self._get_users_ids_by_subscription_ends_in_days(days=2)
 
-    async def _get_users_ids_by_subscription_ends_in_days(self, days: int) -> list[int]:
-        query = f"""--sql
-            SELECT user_id
-            FROM users
-            WHERE subscription_end_date = NOW()::date + INTERVAL '{days} days';
-        """
-        result = await self._execute_query(query)
-        logger.debug(f"Users ids with {days} days left subscription: {result}")
-        return [record[0] for record in result]
+    # async def _get_users_ids_by_subscription_ends_in_days(self, days: int) -> list[int]:
+    #     query = f"""--sql
+    #         SELECT user_id
+    #         FROM users
+    #         WHERE subscription_end_date = NOW()::date + INTERVAL '{days} days';
+    #     """
+    #     result = await self._execute_query(query)
+    #     logger.debug(f"Users ids with {days} days left subscription: {result}")
+    #     return [record[0] for record in result]
 
     async def get_user_id_by_username(self, username: str) -> int | None:
         query = f"""--sql
@@ -290,3 +290,74 @@ class Selector(DatabaseConnector):
         else:
             logger.error(f"User {user_id} not found or balance could not be retrieved")
             return 0.0  # Возвращаем 0.0, если баланс не найден
+
+    async def get_current_subscription_cost(self, user_id: int) -> float:
+        """Получаем текущую стоимость подписки пользователя"""
+        # Получаем количество активных конфигов пользователя
+        query = f"""--sql
+            SELECT COUNT(*)
+            FROM vpn_configs
+            WHERE user_id = {user_id}
+        """
+        result = await self._execute_query(query)
+
+        if result:
+            active_configs_count = result[0][0]  # Количество активных конфигов
+            subscription_cost = active_configs_count * 3  # Стоимость подписки — 3 рубля за конфиг
+            return subscription_cost
+        else:
+            logger.error(f"Не удалось получить активные конфиги для пользователя {user_id}")
+            return 0.0
+
+    async def get_users_with_active_configs(self) -> list[int]:
+        """Получаем список всех пользователей, у которых есть активные конфиги"""
+        query = """--sql
+            SELECT DISTINCT user_id
+            FROM vpn_configs;
+        """
+        result = await self._execute_query(query)
+        return [record[0] for record in result] if result else []
+
+    async def get_users_ids_with_last_day_left_subscription(self) -> list[int]:
+        """
+        Получаем список пользователей, у которых баланс позволяет оплатить только один день подписки
+        """
+        query = """--sql
+            SELECT DISTINCT user_id
+            FROM users
+            WHERE EXISTS (
+                SELECT 1
+                FROM vpn_configs
+                WHERE vpn_configs.user_id = users.user_id
+            )
+            AND (SELECT balance FROM users WHERE user_id = users.user_id) >= (
+                SELECT COUNT(*) * 3  -- 3 рубля за каждый активный конфиг
+                FROM vpn_configs
+                WHERE vpn_configs.user_id = users.user_id
+            )
+            AND (SELECT balance FROM users WHERE user_id = users.user_id) < (
+                SELECT COUNT(*) * 3 * 2  -- Проверка на один день подписки
+                FROM vpn_configs
+                WHERE vpn_configs.user_id = users.user_id
+            );
+        """
+        result = await self._execute_query(query)
+        return [record[0] for record in result] if result else []
+
+    async def get_last_subscription_payment(self, user_id: int) -> datetime:
+        """Получаем время последнего платежа пользователя по его user_id"""
+        query = f"""--sql
+            SELECT last_subscription_payment
+            FROM users
+            WHERE user_id = {user_id};
+        """
+        result = await self._execute_query(query)
+        if result:
+            last_payment_time = result[0][0]
+            logger.debug(f"User {user_id} last subscription payment fetched: {last_payment_time}")
+            return last_payment_time
+        else:
+            logger.error(
+                f"User {user_id} not found or last subscription payment could not be retrieved"
+            )
+            return None  # Возвращаем None, если данные не найдены

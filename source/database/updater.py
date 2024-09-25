@@ -92,3 +92,34 @@ class Updater(DatabaseConnector):
             return False
         logger.debug(f"Updated balance for user {user_id} by {amount}")
         return True
+
+    async def update_last_subscription_payment(self, user_id: int, payment_time: datetime) -> bool:
+        """Обновляем время последнего платежа для пользователя по его user_id"""
+        query = f"""--sql
+            UPDATE users
+            SET last_subscription_payment = '{payment_time}'
+            WHERE user_id = {user_id};
+        """
+        if await self._execute_query(query) is False:
+            logger.error(f"Error while updating last subscription payment for user {user_id}")
+            return False
+        logger.debug(f"User {user_id} last subscription payment updated to {payment_time}")
+        return True
+
+    async def deactivate_configs(self, uuids: list[str]) -> bool:
+        """Деактивируем конфиги в базе данных вместо их удаления"""
+        query = f"""--sql
+            UPDATE vpn_configs
+            SET is_active = FALSE
+            WHERE config_uuid = ANY(ARRAY[{', '.join(f"'{uuid}'" for uuid in uuids)}]);
+        """
+        return await self._execute_query(query)
+
+    async def reactivate_configs(self, user_id: int) -> bool:
+        """Активируем конфиги в базе данных"""
+        query = f"""--sql
+            UPDATE vpn_configs
+            SET is_active = TRUE
+            WHERE user_id = {user_id};
+        """
+        return await self._execute_query(query)

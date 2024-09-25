@@ -1,19 +1,18 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
+from loguru import logger
 
+from loader import db_manager
 from source.middlewares import rate_limit
 from source.utils import localizer, qr_generator
 from source.utils.states.user import GeneratingNewConfig
 from source.utils.xray import xray_config
 
-from ..check_balance import has_sufficient_balance
-
-from loguru import logger
-from loader import db_manager
+from ..check_balance import has_sufficient_balance_for_conf_generation
 
 
 @rate_limit(limit=1)
-@has_sufficient_balance
+@has_sufficient_balance_for_conf_generation
 async def request_user_for_config_name(call: types.CallbackQuery, state: FSMContext):
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
@@ -26,7 +25,7 @@ async def request_user_for_config_name(call: types.CallbackQuery, state: FSMCont
 
 
 async def generate_config_for_user(message: types.Message, state: FSMContext):
-    
+
     config_name = message.text
     user_id = message.from_user.id
 
@@ -37,7 +36,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
         ),
         parse_mode=types.ParseMode.HTML,
     )
-    
+
     await message.answer_chat_action(action=types.ChatActions.UPLOAD_PHOTO)
 
     config = await xray_config.add_new_user(
@@ -45,7 +44,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     )
 
     config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(config)
-    
+
     await message.answer_photo(
         photo=config_qr_code,
         caption=localizer.get_user_localized_text(

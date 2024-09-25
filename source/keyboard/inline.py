@@ -209,6 +209,15 @@ async def user_configs_list_keyboard(
         ]
         keyboard.add(*exist_configs_buttons)
 
+    keyboard.add(
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.renew_subscription,
+            ),
+        ),
+        callback_data="renew_subscription",
+    )
     keyboard = await insert_button_back_to_main_menu(keyboard=keyboard, language_code=language_code)
     return keyboard
 

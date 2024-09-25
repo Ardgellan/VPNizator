@@ -204,13 +204,17 @@
             "en": "❌Insufficient funds on your balance for new VPN connection generation!",
             "ru": "❌На вашем балансе недостаточно средств для генерации нового VPN соединения!"
         },
-        "subscription_restored": {
-            "en": "✅ Your subscription has been successfully restored!",
-            "ru": "✅ Ваша подписка успешно восстановлена!"
-        },
         "insufficient_balance_for_sub_renewal": {
             "en": "❌ Insufficient funds to renew the subscription. Please top up your balance or delete unused configurations.",
             "ru": "❌ Недостаточно средств для продления подписки. Пожалуйста, пополните баланс или удалите неиспользуемые конфигурации."
+        },
+        "subscription_already_renewed_today": {
+            "en": "⏳ Your subscription has already been renewed today. Please try again tomorrow.",
+            "ru": "⏳ Ваша подписка уже была продлена сегодня. Пожалуйста, попробуйте снова завтра."
+        },
+        "subscription_renewed_successfully": {
+            "en": "✅ Your subscription has been successfully renewed! Your VPN configurations are active again.",
+            "ru": "✅ Ваша подписка успешно продлена! Ваши VPN-конфигурации снова активны."
         }
     },
     "button": {

@@ -46,6 +46,12 @@ def register_user_handlers(dp: Dispatcher):
             successful_payment, content_types=types.ContentType.SUCCESSFUL_PAYMENT
         )
 
+        dp.register_callback_query_handler(
+            manual_renew_subscription,
+            lambda call: call.data == "renew_subscription",
+            state="*",
+        )
+
         # Место 3
         # dp.register_message_handler(
         #     show_payment_method, commands="pay", state="*"
