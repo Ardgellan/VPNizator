@@ -9,7 +9,7 @@ from source.utils import localizer
 
 
 async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext):
-    logger.info("BABASRAKA")
+    
     ser_id = call.from_user.id
 
     # Проверяем время последнего платежа

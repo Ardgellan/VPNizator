@@ -69,7 +69,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.types import LabeledPrice, PreCheckoutQuery
 from loguru import logger
 
-from loader import dp
+from loader import dp, db_manager
 from source.keyboard import inline
 from source.utils import localizer
 
@@ -164,4 +164,6 @@ async def successful_payment(message: types.Message):
     logger.info(f"Баланс пользователя {message.from_user.id} пополнен на {amount} руб.")
 
     # Отправляем сообщение пользователю об успешном пополнении баланса
-    await message.answer(f"Оплата на сумму {amount} руб. прошла успешно! Ваш баланс был пополнен.")
+    await message.answer(
+        f"Оплата на сумму {amount} руб. прошла успешно! Ваш баланс был пополнен."
+    )
