@@ -1,11 +1,11 @@
-from datetime import datetime
-
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from loguru import logger
+from datetime import datetime
 
 from loader import db_manager
 from source.utils import localizer
+from source.utils.xray import xray_config
 
 
 async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext):
