@@ -16,7 +16,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 00:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=21, minute=45)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=21, minute=55)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -30,6 +30,8 @@ class SubscriptionChecker:
         users_with_insufficient_balance = []
 
         for user_id in users_with_active_configs:
+            # Логируем начало работы с каждым пользователем
+            logger.info(f"Начинаем проверку для пользователя {user_id}")
 
             # *** Новая проверка: Проверяем время последнего списания ***
             if last_payment_time and last_payment_time.date() == datetime.now().date():
@@ -39,16 +41,13 @@ class SubscriptionChecker:
             # Проверяем баланс пользователя
             logger.info(f"Fetching balance for user {user_id}...")
             current_balance = await db_manager.get_user_balance(user_id)
+            logger.info(f"Current balance for user {user_id}: {current_balance}")
 
-            # Теперь проверяем стоимость подписки
-            logger.info(f"СУБСКРИПШН КОСТ ПРОВЕРЯЕМ!")
+            # Проверяем стоимость подписки
+            logger.info(f"СУБСКРИПШН КОСТ ПРОВЕРЯЕМ для пользователя {user_id}")
             subscription_cost = await db_manager.get_current_subscription_cost(user_id)
+            logger.info(f"Subscription cost for user {user_id}: {subscription_cost}")
 
-            logger.info(f"Checking balance for user {user_id}: current balance = {current_balance}, subscription cost = {subscription_cost}")
-            if current_balance >= subscription_cost:
-                users_with_sufficient_balance.append(user_id)
-            else:
-                users_with_insufficient_balance.append(user_id) 
 
         # Продление подписки для тех, у кого достаточно баланса
         logger.info(f"Users with insufficient balance: {users_with_insufficient_balance}")
