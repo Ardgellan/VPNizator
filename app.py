@@ -43,14 +43,18 @@ async def on_startup(dp):
     from loguru import logger
     from source import handlers, middlewares
 
+    print("Start of on_startup")
     logger.info("1_BABASRAKA")
     
     try:
         from source.utils.shedulers import SubscriptionChecker
+        print("Imported SubscriptionChecker")
         logger.info("2_BABASRAKA")
         subscription_checker = SubscriptionChecker()
+        print("Initialized SubscriptionChecker")
         logger.info("3_BABASRAKA")
     except Exception as e:
+        print(f"Error initializing subscription checker: {e}")
         logger.error(f"Error initializing subscription checker: {e}")
 
     middlewares.setup(dp)
@@ -65,7 +69,7 @@ async def on_startup(dp):
     )
 
     logger.success("[+] Bot started successfully")
-
+    print("End of on_startup")
 
 
 if __name__ == "__main__":
