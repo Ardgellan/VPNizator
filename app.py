@@ -43,6 +43,13 @@ async def on_startup(dp):
     from loguru import logger
     from source import handlers, middlewares
 
+    logger.add(
+        f'logs/{time.strftime("%Y-%m-%d__%H-%M")}.log',
+        level="DEBUG",
+        rotation="500 MB",
+        compression="zip",
+    )
+
     print("Start of on_startup")
     logger.info("1_BABASRAKA")
     
@@ -60,13 +67,6 @@ async def on_startup(dp):
     middlewares.setup(dp)
     await set_commands(dp)
     handlers.setup(dp)
-
-    logger.add(
-        f'logs/{time.strftime("%Y-%m-%d__%H-%M")}.log',
-        level="DEBUG",
-        rotation="500 MB",
-        compression="zip",
-    )
 
     logger.success("[+] Bot started successfully")
     print("End of on_startup")
