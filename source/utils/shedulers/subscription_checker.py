@@ -16,7 +16,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 00:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=21, minute=55)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=22, minute=22)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -33,6 +33,9 @@ class SubscriptionChecker:
             # Логируем начало работы с каждым пользователем
             logger.info(f"Начинаем проверку для пользователя {user_id}")
 
+            # Получаем время последнего списания
+            last_payment_time = await db_manager.get_last_subscription_payment(user_id)
+
             # *** Новая проверка: Проверяем время последнего списания ***
             if last_payment_time and last_payment_time.date() == datetime.now().date():
                 logger.info(f"Списания для пользователя {user_id} уже были сегодня, пропуск.")
@@ -48,18 +51,26 @@ class SubscriptionChecker:
             subscription_cost = await db_manager.get_current_subscription_cost(user_id)
             logger.info(f"Subscription cost for user {user_id}: {subscription_cost}")
 
+            if current_balance >= subscription_cost:
+                users_with_sufficient_balance.append(user_id)
+                logger.info(f"User {user_id} has sufficient balance.")
+            else:
+                users_with_insufficient_balance.append(user_id)
+                logger.info(f"User {user_id} has insufficient balance.")
 
-        # Продление подписки для тех, у кого достаточно баланса
-        logger.info(f"Users with insufficient balance: {users_with_insufficient_balance}")
+        logger.info(f"Users with sufficient balance: {users_with_sufficient_balance}")
         for user_id in users_with_sufficient_balance:
             await self._check_and_renew_subscription(user_id)
 
         if users_with_sufficient_balance:
             await xray_config.reactivate_user_configs_in_xray(users_with_sufficient_balance)
+        logger.info("Reactivated sufficient users")
 
         # Блокировка конфигов для тех, у кого недостаточно средств
+        logger.info(f"Users with insufficient balance: {users_with_insufficient_balance}")
         if users_with_insufficient_balance:
             await self._disconnect_configs_for_users(users_with_insufficient_balance)
+        
         logger.info("Looking for users with last day of subscription...")
         await self._find_and_notify_users_with_last_day_left_subscription()
         self._messages_limits_counter = 0
