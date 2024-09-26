@@ -15,7 +15,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 00:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=20, minute=48)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=21, minute=5)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -31,7 +31,7 @@ class SubscriptionChecker:
         for user_id in users_with_active_configs:
 
             # *** Новая проверка: Проверяем время последнего списания ***
-            last_payment_time = await db_manager.get_last_subscription_payment(user_id)
+            if last_payment_time and last_payment_time != datetime(1970, 1, 1) and last_payment_time.date() == datetime.now().date():
             if last_payment_time and last_payment_time.date() == datetime.now().date():
                 logger.info(f"Списания для пользователя {user_id} уже были сегодня, пропуск.")
                 continue
