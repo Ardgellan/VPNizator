@@ -13,17 +13,46 @@ async def set_commands(dp):
     )
 
 
+# async def on_startup(dp):
+#     import time
+
+#     from loguru import logger
+
+#     from source import handlers, middlewares
+#     logger.info("1_BABASRAKA")
+#     from source.utils.shedulers import SubscriptionChecker
+#     logger.info("2_BABASRAKA")
+#     subscription_checker = SubscriptionChecker()
+#     logger.info("3_BABASRAKA")
+#     middlewares.setup(dp)
+#     await set_commands(dp)
+#     handlers.setup(dp)
+
+#     logger.add(
+#         f'logs/{time.strftime("%Y-%m-%d__%H-%M")}.log',
+#         level="DEBUG",
+#         rotation="500 MB",
+#         compression="zip",
+#     )
+
+#     logger.success("[+] Bot started successfully")
+
+
 async def on_startup(dp):
     import time
-
     from loguru import logger
-
     from source import handlers, middlewares
+
     logger.info("1_BABASRAKA")
-    from source.utils.shedulers import SubscriptionChecker
-    logger.info("2_BABASRAKA")
-    subscription_checker = SubscriptionChecker()
-    logger.info("3_BABASRAKA")
+    
+    try:
+        from source.utils.shedulers import SubscriptionChecker
+        logger.info("2_BABASRAKA")
+        subscription_checker = SubscriptionChecker()
+        logger.info("3_BABASRAKA")
+    except Exception as e:
+        logger.error(f"Error initializing subscription checker: {e}")
+
     middlewares.setup(dp)
     await set_commands(dp)
     handlers.setup(dp)
@@ -36,6 +65,7 @@ async def on_startup(dp):
     )
 
     logger.success("[+] Bot started successfully")
+
 
 
 if __name__ == "__main__":
