@@ -57,7 +57,7 @@ def has_sufficient_balance_for_conf_generation(func):
                     user_language_code=language_code,
                     text_localization=localizer.message.config_generation_is_cost_prohibitive,  # Локализация сообщения
                 ).format(
-                    current_subscription_cost=current_subscription_cost, 
+                    current_balance=current_balance, 
                     total_cost_with_new_config=total_cost_with_new_config
                 ),
             )
