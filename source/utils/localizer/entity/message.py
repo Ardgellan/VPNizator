@@ -229,3 +229,12 @@ class LocalizedMessageText(BaseLocalizedObject):
     @property
     def subscription_renewed_successfully(self) -> LocalizedText:
         return self._get_entity_text("subscription_renewed_successfully")
+
+    @property
+    def config_generation_is_cost_prohibitive(self) -> LocalizedText:
+        return self._get_entity_text("config_generation_is_cost_prohibitive")
+
+    @property
+    def nothing_to_renew_message(self) -> LocalizedText:
+        return self._get_entity_text("nothing_to_renew_message")
+

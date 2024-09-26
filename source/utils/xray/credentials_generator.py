@@ -12,6 +12,6 @@ class CredentialsGenerator:
         uuid = self.generate_uuid()
         return {
             "id": uuid,
-            "email": f"{uuid}@{user_telegram_id}.com",
+            "email": f"{uuid}@example.com",
             "flow": "xtls-rprx-vision",
         }

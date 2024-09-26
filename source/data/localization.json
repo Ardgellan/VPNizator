@@ -204,6 +204,10 @@
             "en": "❌Insufficient funds on your balance for new VPN connection generation!",
             "ru": "❌На вашем балансе недостаточно средств для генерации нового VPN соединения!"
         },
+        "config_generation_is_cost_prohibitive": {
+            "en": "❌Generating new connections will make it impossible to renew your subscription!\n\nYour current balance: {current_subscription_cost}\n\nSubscription cost after generating new connection: {total_cost_with_new_config}",
+            "ru": "❌Генерация нового соединения приведет к невозможности продления подписки!\n\nВаш текущий баланс: {current_subscription_cost}\n\nСтоимость подписки после генерации нового соединения: {total_cost_with_new_config}"
+        },
         "insufficient_balance_for_sub_renewal": {
             "en": "❌ Insufficient funds to renew the subscription. Please top up your balance or delete unused configurations.",
             "ru": "❌ Недостаточно средств для продления подписки. Пожалуйста, пополните баланс или удалите неиспользуемые конфигурации."
@@ -215,7 +219,11 @@
         "subscription_renewed_successfully": {
             "en": "✅ Your subscription has been successfully renewed! Your VPN configurations are active again.",
             "ru": "✅ Ваша подписка успешно продлена! Ваши VPN-конфигурации снова активны."
-        }
+        },
+        "nothing_to_renew_message": {
+            "en": "🤷‍♂️ I am afrad there is nothing to renew!",
+            "ru": "🤷‍♂️ Боюсь, что продлевать нечего!"
+        }       
     },
     "button": {
         "pc": {

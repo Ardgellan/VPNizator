@@ -81,9 +81,8 @@ class SubscriptionChecker:
 
         # Собираем UUID конфигов для всех пользователей
         for user_id in users_ids:
-            user_configs = await db_manager.get_user_config_names_and_uuids(user_id)
-            config_uuids = [config.config_uuid for config in user_configs]
-            if config_uuids:
+            user_uuids = await db_manager.get_user_uuids_by_user_id(user_id)
+            if user_uuids:
                 all_config_uuids.extend(config_uuids)
 
         # Если есть конфиги для отключения, передаем их в Xray за один вызов
@@ -142,21 +141,21 @@ class SubscriptionChecker:
 
 # ##### ВЕРСИЯ ОРИГИНАЛ #####
 # class SubscriptionChecker:
-#     def __init__(self):
-#         self._messages_limits_counter = 0
-#         self._scheduler = AsyncIOScheduler()
-#         # start checking subscriptions every day at 00:00
-#         self._scheduler.add_job(self._check_subscriptions, "cron", hour=0, minute=0)
-#         self._scheduler.start()
-#         logger.info("Subscription checker was started...")
+    # def __init__(self):
+    #     self._messages_limits_counter = 0
+    #     self._scheduler = AsyncIOScheduler()
+    #     # start checking subscriptions every day at 00:00
+    #     self._scheduler.add_job(self._check_subscriptions, "cron", hour=0, minute=0)
+    #     self._scheduler.start()
+    #     logger.info("Subscription checker was started...")
 
-#     async def _check_subscriptions(self):
-#         """Check subscriptions and delete expired"""
-#         logger.info("Checking subscriptions...")
-#         await self._find_disconnect_and_notify_users_with_expired_subscription()
-#         await self._find_and_notify_users_with_last_day_left_subscription()
-#         await self._find_and_notify_users_with_two_days_left_subscription()
-#         self._messages_limits_counter = 0
+    # async def _check_subscriptions(self):
+    #     """Check subscriptions and delete expired"""
+    #     logger.info("Checking subscriptions...")
+    #     await self._find_disconnect_and_notify_users_with_expired_subscription()
+    #     await self._find_and_notify_users_with_last_day_left_subscription()
+    #     await self._find_and_notify_users_with_two_days_left_subscription()
+    #     self._messages_limits_counter = 0
 
 #     async def _find_disconnect_and_notify_users_with_expired_subscription(self):
 #         """Find, disconnect and notify users with expired subscription"""

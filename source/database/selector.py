@@ -320,26 +320,15 @@ class Selector(DatabaseConnector):
 
     async def get_users_ids_with_last_day_left_subscription(self) -> list[int]:
         """
-        Получаем список пользователей, у которых баланс позволяет оплатить только один день подписки
+        Получаем список пользователей, у которых баланс позволяет оплатить только один день подписки.
         """
         query = """--sql
-            SELECT DISTINCT user_id
-            FROM users
-            WHERE EXISTS (
-                SELECT 1
-                FROM vpn_configs
-                WHERE vpn_configs.user_id = users.user_id
-            )
-            AND (SELECT balance FROM users WHERE user_id = users.user_id) >= (
-                SELECT COUNT(*) * 3  -- 3 рубля за каждый активный конфиг
-                FROM vpn_configs
-                WHERE vpn_configs.user_id = users.user_id
-            )
-            AND (SELECT balance FROM users WHERE user_id = users.user_id) < (
-                SELECT COUNT(*) * 3 * 2  -- Проверка на один день подписки
-                FROM vpn_configs
-                WHERE vpn_configs.user_id = users.user_id
-            );
+            SELECT DISTINCT u.user_id
+            FROM users u
+            JOIN vpn_configs vc ON vc.user_id = u.user_id
+            GROUP BY u.user_id, u.balance
+            HAVING u.balance >= COUNT(*) * 3  -- Баланс достаточен для одного дня подписки
+                AND u.balance < COUNT(*) * 3 * 2  -- Баланс меньше, чем для двух дней подписки
         """
         result = await self._execute_query(query)
         return [record[0] for record in result] if result else []
@@ -361,3 +350,14 @@ class Selector(DatabaseConnector):
                 f"User {user_id} not found or last subscription payment could not be retrieved"
             )
             return None  # Возвращаем None, если данные не найдены
+
+    async def get_user_uuids_by_user_id(self, user_id: int) -> list[str]:
+        """Получаем все UUID конфигов пользователя по user_id"""
+        query = f"""--sql
+            SELECT config_uuid
+            FROM vpn_configs
+            WHERE user_id = {user_id};
+        """
+        result = await self._execute_query(query)
+        return [record[0] for record in result] if result else []
+

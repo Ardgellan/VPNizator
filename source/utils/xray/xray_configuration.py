@@ -11,6 +11,7 @@ from source.data import config
 from .credentials_generator import CredentialsGenerator
 
 
+
 class XrayConfiguration:
     def __init__(self):
         self._config_path = config.xray_config_path
@@ -181,22 +182,22 @@ class XrayConfiguration:
             await self._save_server_config(config)
             await self._restart_xray()
             return False
-
-        # Деактивируем конфиги в базе данных
-        await db_manager.deactivate_configs(uuids=uuids)
+        
         return True
 
     async def reactivate_user_configs_in_xray(self, user_ids: list[int]) -> bool:
         """Восстанавливаем конфиги в Xray для всех пользователей с продленной подпиской"""
-        # Собираем все конфиги пользователей
+    
+        # Собираем все UUID конфигов пользователей
         all_configs_to_restore = []
 
         for user_id in user_ids:
-            # Получаем конфиги каждого пользователя
-            user_configs = await db_manager.get_user_config_names_and_uuids(user_id=user_id)
-            if user_configs:
-                all_configs_to_restore.extend(user_configs)
+            # Получаем только UUID всех конфигов пользователя
+            user_uuids = await db_manager.get_user_uuids_by_user_id(user_id=user_id)
+            if user_uuids:
+                all_configs_to_restore.extend(user_uuids)
 
+        # Проверяем, если нет конфигов для восстановления
         if not all_configs_to_restore:
             logger.info("Нет конфигов для восстановления.")
             return False
@@ -205,26 +206,24 @@ class XrayConfiguration:
         server_config = await self._load_server_config()
         updated_config = deepcopy(server_config)
 
-        # Добавляем обратно все неактивные конфиги
-        for vpn_config in all_configs_to_restore:
-            # Восстанавливаем конфиги, если они не активны
+        # Добавляем обратно конфиги по UUID
+        for uuid in all_configs_to_restore:
             updated_config["inbounds"][0]["settings"]["clients"].append(
                 {
-                    "id": vpn_config.config_uuid,
-                    "email": f"{vpn_config.config_uuid}@{vpn_config.user_id}.com",
-                    "flow": "xtls-rprx-vision",
+                    "id": uuid,
+                    "email": f"{uuid}@example.com",  # Здесь можно использовать email-шаблон
+                    "flow": "xtls-rprx-vision",     # Xray flow
                 }
             )
 
         try:
-            # Сохраняем обновленный конфиг и перезагружаем Xray один раз
+            # Сохраняем обновленный конфиг и перезагружаем Xray
             await self._save_server_config(updated_config)
             await self._restart_xray()
         except Exception as e:
             logger.error(f"Ошибка при восстановлении конфигов: {e}")
             return False
 
-        # Активируем все конфиги в базе данных
-        await db_manager.reactivate_configs(user_ids=user_ids)
         logger.info(f"Все конфиги для пользователей {user_ids} успешно восстановлены.")
         return True
+

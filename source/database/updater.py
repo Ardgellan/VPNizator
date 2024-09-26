@@ -106,20 +106,20 @@ class Updater(DatabaseConnector):
         logger.debug(f"User {user_id} last subscription payment updated to {payment_time}")
         return True
 
-    async def deactivate_configs(self, uuids: list[str]) -> bool:
-        """Деактивируем конфиги в базе данных вместо их удаления"""
-        query = f"""--sql
-            UPDATE vpn_configs
-            SET is_active = FALSE
-            WHERE config_uuid = ANY(ARRAY[{', '.join(f"'{uuid}'" for uuid in uuids)}]);
-        """
-        return await self._execute_query(query)
+    # async def deactivate_configs(self, uuids: list[str]) -> bool:
+    #     """Деактивируем конфиги в базе данных вместо их удаления"""
+    #     query = f"""--sql
+    #         UPDATE vpn_configs
+    #         SET is_active = FALSE
+    #         WHERE config_uuid = ANY(ARRAY[{', '.join(f"'{uuid}'" for uuid in uuids)}]);
+    #     """
+    #     return await self._execute_query(query)
 
-    async def reactivate_configs(self, user_id: int) -> bool:
-        """Активируем конфиги в базе данных"""
-        query = f"""--sql
-            UPDATE vpn_configs
-            SET is_active = TRUE
-            WHERE user_id = {user_id};
-        """
-        return await self._execute_query(query)
+    # async def reactivate_configs(self, user_id: int) -> bool:
+    #     """Активируем конфиги в базе данных"""
+    #     query = f"""--sql
+    #         UPDATE vpn_configs
+    #         SET is_active = TRUE
+    #         WHERE user_id = {user_id};
+    #     """
+    #     return await self._execute_query(query)

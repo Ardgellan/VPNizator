@@ -9,12 +9,28 @@ from source.utils.xray import xray_config
 
 
 async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext):
-    logger.debug("BABASRAKA_1")
+    
     user_id = call.from_user.id
 
+    # Получаем текущий баланс и стоимость подписки
+    current_balance = await db_manager.get_user_balance(user_id)
+    subscription_cost = await db_manager.get_current_subscription_cost(user_id)
     # Проверяем время последнего платежа
     last_payment_time = await db_manager.get_last_subscription_payment(user_id)
-    logger.debug("BABASRAKA_2")
+
+    if current_balance == subscription_cost == 0.00:
+        await call.message.answer(
+            localizer.get_user_localized_text(
+                user_language_code=call.from_user.language_code,
+                text_localization=localizer.message.nothing_to_renew_message,
+            )
+        )
+        logger.info(
+            f"Попытка продления подписки для пользователя {user_id}, но баланс и подписка нулевые."
+        )
+        await call.answer()
+        return
+    
     if last_payment_time and last_payment_time.date() == datetime.now().date():
         await call.message.answer(
             localizer.get_user_localized_text(
@@ -27,27 +43,19 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
         )
         await call.answer()
         return
-    logger.debug("BABASRAKA_3")
-    # Получаем текущий баланс и стоимость подписки
-    current_balance = await db_manager.get_user_balance(user_id)
-    subscription_cost = await db_manager.get_current_subscription_cost(user_id)
-    logger.debug("BABASRAKA_4")
+
     if current_balance >= subscription_cost:
         # Продлеваем подписку
         await db_manager.update_user_balance(user_id, -subscription_cost)
-        logger.debug("BABASRAKA_5")
         await db_manager.update_last_subscription_payment(user_id, datetime.now())
-        logger.debug("BABASRAKA_6")
         # Восстанавливаем конфиги пользователя в Xray
         await xray_config.reactivate_user_configs_in_xray([user_id])
-        logger.debug("BABASRAKA_7")
         await call.message.answer(
             localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.subscription_renewed_successfully,
             )
         )
-        logger.debug("BABASRAKA_8")
         logger.info(f"Подписка пользователя {user_id} успешно продлена вручную.")
     else:
         # Недостаточно средств
@@ -58,5 +66,5 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
             )
         )
         logger.info(f"Недостаточно средств для продления подписки у пользователя {user_id}.")
-        logger.debug("BABASRAKA_9")
+
     await call.answer()
