@@ -15,7 +15,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 00:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=19, minute=55)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=20, minute=20)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -24,7 +24,7 @@ class SubscriptionChecker:
         logger.info("Checking subscriptions based on balance...")
         logger.info("ULTRABABASRAKA3000!!!")
         users_with_active_configs = await db_manager.get_users_with_active_configs()
-
+        logger.info(f"Users with active configs: {users_with_active_configs}")
         users_with_sufficient_balance = []
         users_with_insufficient_balance = []
 
@@ -39,13 +39,14 @@ class SubscriptionChecker:
             # Проверяем баланс пользователя
             current_balance = await db_manager.get_user_balance(user_id)
             subscription_cost = await db_manager.get_current_subscription_cost(user_id)
-
+            logger.info(f"Checking balance for user {user_id}: current balance = {current_balance}, subscription cost = {subscription_cost}")
             if current_balance >= subscription_cost:
                 users_with_sufficient_balance.append(user_id)
             else:
-                users_with_insufficient_balance.append(user_id)
+                users_with_insufficient_balance.append(user_id) 
 
         # Продление подписки для тех, у кого достаточно баланса
+        logger.info(f"Users with insufficient balance: {users_with_insufficient_balance}")
         for user_id in users_with_sufficient_balance:
             await self._check_and_renew_subscription(user_id)
 
@@ -55,7 +56,7 @@ class SubscriptionChecker:
         # Блокировка конфигов для тех, у кого недостаточно средств
         if users_with_insufficient_balance:
             await self._disconnect_configs_for_users(users_with_insufficient_balance)
-
+        logger.info("Looking for users with last day of subscription...")
         await self._find_and_notify_users_with_last_day_left_subscription()
         self._messages_limits_counter = 0
 
@@ -63,14 +64,14 @@ class SubscriptionChecker:
 
         # Сразу обновляем баланс, так как проверка уже была в основном цикле
         subscription_cost = await db_manager.get_current_subscription_cost(user_id)
-
+        logger.info(f"Renewing subscription for user {user_id}: subscription cost = {subscription_cost}")
         await db_manager.update_user_balance(user_id, -subscription_cost)
-        # Логгируем успешное продление подписки
-        logger.info(f"Подписка пользователя {user_id} успешно продлена.")
+        logger.info(f"Updated balance for user {user_id} after renewal")
+
 
         # *** Новое: обновляем время последнего платежа ***
         await db_manager.update_last_subscription_payment(user_id, datetime.now())
-
+        logger.info(f"Updated last payment time for user {user_id}")
         logger.info(f"Подписка пользователя {user_id} успешно продлена.")
         return True
 
@@ -83,31 +84,36 @@ class SubscriptionChecker:
         for user_id in users_ids:
             user_uuids = await db_manager.get_user_uuids_by_user_id(user_id)
             if user_uuids:
-                all_config_uuids.extend(config_uuids)
+                all_config_uuids.extend(user_uuids)
+                logger.info(f"Collected UUIDs for user {user_id}: {user_uuids}")
 
         # Если есть конфиги для отключения, передаем их в Xray за один вызов
         if all_config_uuids:
             await xray_config.deactivate_user_configs_in_xray(uuids=all_config_uuids)
-            logger.info(f"Отключены конфиги для пользователей {users_ids} из-за нехватки средств")
+            logger.info(f"Deactivated configs for users: {users_ids}")
 
         # Уведомляем всех пользователей с недостаточным балансом за один вызов
         await self._notify_users_about_subscription_status(
             users_ids=users_ids,  # Передаем список всех пользователей
             status=SubscriptionStatus.expired.value,  # Статус истекшей подписки
         )
+        logger.info(f"Notified users with expired subscription: {users_ids}")
 
     async def _find_and_notify_users_with_last_day_left_subscription(self):
         """Find and notify users with last day left subscription"""
         users_ids_with_last_day_left_subscription = (
             await db_manager.get_users_ids_with_last_day_left_subscription()
         )
+        logger.info(f"Users with last day of subscription: {users_ids_with_last_day_left_subscription}")
         await self._notify_users_about_subscription_status(
             users_ids=users_ids_with_last_day_left_subscription,
             status=SubscriptionStatus.last_day_left.value,
         )
+        logger.info(f"Notified users about last day of subscription: {users_ids_with_last_day_left_subscription}")
 
     async def _notify_users_about_subscription_status(self, users_ids: list[int], status: str):
         """Notify users about subscription status"""
+        logger.info(f"Notifying users {users_ids} about subscription status: {status}")
         match status:
             case SubscriptionStatus.expired.value:
                 message_text = localizer.message.subscription_expired_notification
@@ -119,6 +125,7 @@ class SubscriptionChecker:
         for user_id in users_ids:
             try:
                 user = (await bot.get_chat_member(chat_id=user_id, user_id=user_id)).user
+                logger.info(f"Sending message to user {user_id}")
                 await bot.send_message(
                     chat_id=user_id,
                     text=localizer.get_user_localized_text(
