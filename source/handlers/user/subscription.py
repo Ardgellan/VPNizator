@@ -10,7 +10,7 @@ from source.utils import localizer
 
 async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext):
     logger.debug("BABASRAKA_1")
-    ser_id = call.from_user.id
+    user_id = call.from_user.id
 
     # Проверяем время последнего платежа
     last_payment_time = await db_manager.get_last_subscription_payment(user_id)
