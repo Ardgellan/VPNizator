@@ -19,9 +19,11 @@ async def on_startup(dp):
     from loguru import logger
 
     from source import handlers, middlewares
+    logger.info("1_BABASRAKA")
     from source.utils.shedulers import SubscriptionChecker
-
+    logger.info("2_BABASRAKA")
     subscription_checker = SubscriptionChecker()
+    logger.info("3_BABASRAKA")
     middlewares.setup(dp)
     await set_commands(dp)
     handlers.setup(dp)
