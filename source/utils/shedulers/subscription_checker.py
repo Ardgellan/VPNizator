@@ -15,7 +15,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 00:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=20, minute=20)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=20, minute=48)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -37,8 +37,11 @@ class SubscriptionChecker:
                 continue
 
             # Проверяем баланс пользователя
-            current_balance = await db_manager.get_user_balance(user_id)
+            logger.info(f"СУБСКРИПШН КОСТ ПРОВЕРЯЕМ!")
             subscription_cost = await db_manager.get_current_subscription_cost(user_id)
+            logger.info(f"Fetching balance for user {user_id}...")
+            current_balance = await db_manager.get_user_balance(user_id)
+            
             logger.info(f"Checking balance for user {user_id}: current balance = {current_balance}, subscription cost = {subscription_cost}")
             if current_balance >= subscription_cost:
                 users_with_sufficient_balance.append(user_id)
