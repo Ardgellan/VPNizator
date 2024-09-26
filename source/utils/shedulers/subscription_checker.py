@@ -15,14 +15,14 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 00:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=0, minute=0)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=19, minute=55)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
     async def _check_subscriptions(self):
         """Проверяем подписки пользователей"""
         logger.info("Checking subscriptions based on balance...")
-
+        logger.info("ULTRABABASRAKA3000!!!")
         users_with_active_configs = await db_manager.get_users_with_active_configs()
 
         users_with_sufficient_balance = []
