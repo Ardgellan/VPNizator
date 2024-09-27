@@ -2,8 +2,6 @@ from aiogram import Dispatcher
 from aiogram.types import ContentType
 from loguru import logger
 
-from source.utils.states.user import PaymentViaBankTransfer
-
 from .ask_support import *
 from .banners import about_us_function, terms_of_use_function
 from .configs_menu import register_configs_menu_handlers
