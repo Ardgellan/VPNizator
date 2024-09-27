@@ -381,6 +381,7 @@ async def download_app_for_connect_to_vpn_keyboard(
         url=url,
     )
     keyboard.insert(button)
+    keyboard = await insert_button_support(keyboard=keyboard, language_code=language_code)
     keyboard = await insert_button_back_to_main_menu(keyboard=keyboard, language_code=language_code)
     return keyboard
 

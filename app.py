@@ -6,7 +6,7 @@ async def set_commands(dp):
 
     await dp.bot.set_my_commands(
         commands=[
-            types.BotCommand(command="/menu", description="Show main menu"),
+            types.BotCommand(command="/menu", description="Show main menu / Вызвать главное меню"),
         ]
     )
 
