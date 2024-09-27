@@ -33,12 +33,12 @@
             "ru": "👤Пользователь: {user_id}\n👤Username: {user_username}\n\n🤕Есть доступ к боту: {is_not_banned}\n\n🗓️Статус подписки: {is_active_subscription}\n🗓️Когда заканчивается подписка: {subscription_end_date}\n🗓️Осталось дней: {subscription_days_left}\n\n📄Активных конфигов: {configs_count}\n📄Всего бонусных конфигов: {bonus_configs_count}\n📄Доступно конфигов для генерации: {unused_configs_count}\n\n📅Дата регистрации: {created_at}"
         },
         "user_configs_list": {
-            "en": "📄Displaying your configs on the buttons below.\n\nBy default, each user has access to 2 configs. If you need more, you can contact the administration.",
-            "ru": "📄Отображаю твои конфигурации на кнопках ниже.\n\nПо умолчанию каждому пользователю доступны 2 конфига. Если тебе необходимо больше - можешь связаться с администрацией."
+            "en": "📄Current list of your VPN connections!\n\nYou can call up the VPN connection configuration data by clicking on it. You can also delete the connection if you want! Generating a new connection costs 3 rubles. Daily subscription - 3 rubles per config. Funds are debited daily at 12.00.\n\n<b>Current Balance:</b> {current_balance}\n\n<b>Current subscription price:</b> {current_subscription} rubles",
+            "ru": "📄Актуальный список Ваших VPN соединений!\n\nВы можете вызвать конфигурационные данные VPN соединения нажав на него. Также вы сможете удалить соединение, если захотите! Генерация нового соединения стоит 3 рубля. Дневная подписка - 3 рубля за конфиг. Средства списываются ежедневно в 12.00.\n\n<b>Текущий Баланс:</b> {current_balance} рублей\n\n<b>Текущая стоимость подписки:</b> {current_subscription}"
         },
         "no_configs_found_create_new_one": {
-            "en": "📄No configs found, let's create a new config 😊",
-            "ru": "📄Конфигурации не найдены, давай создадим новый конфиг 😊"
+            "en": "📄No configs found, let's create a new VPN connection 😊",
+            "ru": "📄Конфигурации не найдены, давайте создадим новое VPN соединение 😊"
         },
         "request_config_name": {
             "en": "📄Enter the name of the new config. It will be displayed on the button in the config menu.\n\n💡Tip: use a short name for the name that will definitely fit on the button. For example: <code>PC</code>, <code>iPhone</code>, <code>Dad</code>, <code>Laptop</code>",
@@ -205,7 +205,7 @@
             "ru": "❌ Недостаточно средств для продления подписки. Пожалуйста, пополните баланс или удалите неиспользуемые конфигурации."
         },
         "subscription_already_renewed_today": {
-            "en": "⏳ Your subscription has already been renewed today. Please try again tomorrow.",
+            "en": "⏳ Your subscription has already been renewed today and is a. Please try again tomorrow.",
             "ru": "⏳ Ваша подписка уже была продлена сегодня. Пожалуйста, попробуйте снова завтра."
         },
         "subscription_renewed_successfully": {

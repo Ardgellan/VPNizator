@@ -10,40 +10,34 @@ from source.keyboard import inline
 
 
 async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext):
-    logger.info("BABASRAKA_1")
+
     # Узнаем есть ли у юзера вообще конфиги чтобы их обновлять
     user_id = call.from_user.id
     configs_to_renew = await db_manager.is_user_have_any_config(user_id)
-    logger.info("BABASRAKA_2")
+
     if not configs_to_renew:
-        await call.message.edit_text(
+        await call.message.answer(
             text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.nothing_to_renew_message,
-            ),
-            reply_markup=await inline.insert_button_back_to_main_menu(
-                language_code=call.from_user.language_code
-            ),
+            )
         )
         await call.answer()
         return
-    logger.info("BABASRAKA_3")
+
     # Проверяем время последнего платежа
     last_payment_time = await db_manager.get_last_subscription_payment(user_id)
 
-    if last_payment_time and (datetime.now() - last_payment_time) >= timedelta(hours=24):
-        await call.message.edit_text(
+    if last_payment_time and (datetime.now() - last_payment_time) < timedelta(hours=24):
+        await call.message.answer(
             text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.subscription_already_renewed_today,
-            ),
-            reply_markup=await inline.insert_button_back_to_main_menu(
-                language_code=call.from_user.language_code
-            ),
+            )
         )
         await call.answer()
         return
-    logger.info("BABASRAKA_4")
+
     # Получаем текущий баланс и стоимость подписки
     current_balance = await db_manager.get_user_balance(user_id)
     subscription_cost = await db_manager.get_current_subscription_cost(user_id)
@@ -54,25 +48,19 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
         await db_manager.update_last_subscription_payment(user_id, datetime.now())
         # Восстанавливаем конфиги пользователя в Xray
         await xray_config.reactivate_user_configs_in_xray([user_id])
-        await call.message.edit_text(
+        await call.message.answer(
             text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.subscription_renewed_successfully,
-            ),
-            reply_markup=await inline.insert_button_back_to_main_menu(
-                language_code=call.from_user.language_code
-            ),
+            )
         )
     else:
         # Недостаточно средств
-        await call.message.edit_text(
+        await call.message.answer(
             text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.insufficient_balance_for_sub_renewal,
-            ),
-            reply_markup=await inline.insert_button_back_to_main_menu(
-                language_code=call.from_user.language_code
-            ),
+            )
         )
-    logger.info("BABASRAKA_5")
+
     await call.answer()
