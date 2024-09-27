@@ -10,11 +10,11 @@ from source.keyboard import inline
 
 
 async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext):
-    
+    logger.info("BABASRAKA_1")
     # Узнаем есть ли у юзера вообще конфиги чтобы их обновлять
     user_id = call.from_user.id
     configs_to_renew = await db_manager.is_user_have_any_config
-
+    logger.info("BABASRAKA_2")
     if not configs_to_renew:
         await call.message.answer(
             text=localizer.get_user_localized_text(
@@ -27,7 +27,7 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
         )
         await call.answer()
         return
-    
+    logger.info("BABASRAKA_3")
     # Проверяем время последнего платежа
     last_payment_time = await db_manager.get_last_subscription_payment(user_id)
 
@@ -43,7 +43,7 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
         )
         await call.answer()
         return
-
+    logger.info("BABASRAKA_4")
     # Получаем текущий баланс и стоимость подписки
     current_balance = await db_manager.get_user_balance(user_id)
     subscription_cost = await db_manager.get_current_subscription_cost(user_id)
@@ -74,5 +74,5 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
                 language_code=call.from_user.language_code
             ),
         )
-
+    logger.info("BABASRAKA_5")
     await call.answer()
