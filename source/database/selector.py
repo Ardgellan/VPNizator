@@ -349,7 +349,7 @@ class Selector(DatabaseConnector):
             logger.error(
                 f"User {user_id} not found or last subscription payment could not be retrieved"
             )
-            return None  # Возвращаем None, если данные не найдены
+            return None
 
     async def get_user_uuids_by_user_id(self, user_id: int) -> list[str]:
         """Получаем все UUID конфигов пользователя по user_id"""
@@ -360,4 +360,14 @@ class Selector(DatabaseConnector):
         """
         result = await self._execute_query(query)
         return [record[0] for record in result] if result else []
+
+    async def get_subscription_status(self, user_id: int) -> bool:
+        query = f"""--sql
+            SELECT subscription_is_active
+            FROM users
+            WHERE user_id = {user_id};
+        """
+        result = await self._execute_query(query)
+        return result[0][0] if result else None
+
 

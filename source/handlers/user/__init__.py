@@ -54,6 +54,13 @@ def register_user_handlers(dp: Dispatcher):
             state="*",
         )
 
+        # 6.7
+        dp.register_callback_query_handler(
+            show_user_configs,
+            lambda call: call.data == "my_configs",
+            state="*",
+        )
+
         # 7
         dp.register_callback_query_handler(
             manual_renew_subscription,

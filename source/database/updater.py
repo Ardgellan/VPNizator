@@ -60,16 +60,6 @@ class Updater(DatabaseConnector):
         logger.debug(f"Set bonus config generations to user {user_id}")
         return True
 
-    async def activate_trial_period(self, user_id: int, trial_start: datetime, trial_end: datetime):
-        query = f"""--sql
-            UPDATE users
-            SET trial_start_date = '{trial_start}', trial_end_date = '{trial_end}'
-            WHERE user_id = {user_id};
-        """
-        await self._execute_query(query)
-        logger.debug(f"Trial period for user {user_id} activated: {trial_start} - {trial_end}")
-        return True
-
     async def mark_trial_as_used(self, user_id: int):
         query = f"""--sql
             UPDATE users
@@ -106,20 +96,11 @@ class Updater(DatabaseConnector):
         logger.debug(f"User {user_id} last subscription payment updated to {payment_time}")
         return True
 
-    # async def deactivate_configs(self, uuids: list[str]) -> bool:
-    #     """Деактивируем конфиги в базе данных вместо их удаления"""
-    #     query = f"""--sql
-    #         UPDATE vpn_configs
-    #         SET is_active = FALSE
-    #         WHERE config_uuid = ANY(ARRAY[{', '.join(f"'{uuid}'" for uuid in uuids)}]);
-    #     """
-    #     return await self._execute_query(query)
-
-    # async def reactivate_configs(self, user_id: int) -> bool:
-    #     """Активируем конфиги в базе данных"""
-    #     query = f"""--sql
-    #         UPDATE vpn_configs
-    #         SET is_active = TRUE
-    #         WHERE user_id = {user_id};
-    #     """
-    #     return await self._execute_query(query)
+    async def update_subscription_status(self, user_id: int, is_active: bool):
+        query = f"""--sql
+            UPDATE users
+            SET subscription_is_active = {is_active}
+            WHERE user_id = {user_id};
+        """
+        await self._execute_query(query)
+        logger.info(f"Статус подписки для пользователя {user_id} обновлен на {is_active}.")
