@@ -16,7 +16,7 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
     configs_to_renew = await db_manager.is_user_have_any_config
 
     if not configs_to_renew:
-        await call.message.edit_text(
+        await call.message.answer(
             text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.nothing_to_renew_message,
