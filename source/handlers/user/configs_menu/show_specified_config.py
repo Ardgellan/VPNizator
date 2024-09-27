@@ -25,7 +25,7 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
         photo=config_qr_code,
         caption=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
-            text_localization=localizer.message.config_generated,
+            text_localization=localizer.message.config_requseted,
         ).format(config_name=config_name, config_data=config_as_link_str),
         parse_mode=types.ParseMode.HTML,
         reply_markup=await inline.delete_specified_config_keyboard(

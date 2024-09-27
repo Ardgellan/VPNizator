@@ -242,4 +242,6 @@ class LocalizedMessageText(BaseLocalizedObject):
     def my_balance_message(self) -> LocalizedText:
         return self._get_entity_text("my_balance_message")
 
-
+    @property
+    def config_requseted(self) -> LocalizedText:
+        return self._get_entity_text("config_requseted")
