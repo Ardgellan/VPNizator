@@ -120,7 +120,7 @@ async def handle_payment(call: types.CallbackQuery):
             title=f"Пополнение баланса на {amount} руб.",
             description=f"Оплата {amount} рублей на баланс.",
             payload=f"payment_{amount}",  # Платёжный идентификатор
-            provider_token="381764678:TEST:95796",  # Тестовый токен Юкассы
+            provider_token="",  # Тестовый токен Юкассы. Не забудь подгрузить для оплаты когда надо будет
             currency="RUB",
             prices=prices,
             start_parameter="pay",
