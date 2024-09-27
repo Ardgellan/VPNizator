@@ -147,6 +147,7 @@ class SubscriptionChecker:
                         user_language_code=user.language_code,
                         text_localization=message_text,
                     ).format(user=user.full_name),
+                    parse_mode=types.ParseMode.HTML,
                 )
             except BotBlocked:
                 logger.error(f"Bot was blocked by user {user_id}")

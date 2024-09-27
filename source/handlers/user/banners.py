@@ -17,6 +17,7 @@ async def terms_of_use_function(call: types.CallbackQuery, state: FSMContext):
             user_language_code=call.from_user.language_code,
             text_localization=localizer.message.terms_of_use_message,
         ),
+        parse_mode=types.ParseMode.HTML,
         reply_markup=await inline.insert_button_back_to_main_menu(
             language_code=call.from_user.language_code,
         ),
@@ -34,6 +35,7 @@ async def about_us_function(call: types.CallbackQuery, state: FSMContext):
             user_language_code=call.from_user.language_code,
             text_localization=localizer.message.about_us_message,
         ),
+        parse_mode=types.ParseMode.HTML,
         reply_markup=await inline.insert_button_back_to_main_menu(
             language_code=call.from_user.language_code,
         ),
