@@ -21,7 +21,6 @@ class Configuration:
         self._yookassa_token: str = self._get_yookassa_token()
         self._admins_ids: list[int] = self._get_admins_ids()
         self._user_config_prefix: str = self._get_user_config_prefix()
-        self._subscription_monthly_price: str = self._get_subscription_monthly_price()
         self._database_connection_parameters: dict[str, str] = (
             self._get_database_connection_parameters()
         )
@@ -56,12 +55,6 @@ class Configuration:
         if not user_config_prefix:
             raise DotEnvVariableNotFound("CONFIGS_PREFIX")
         return user_config_prefix
-
-    def _get_subscription_monthly_price(self) -> str:
-        subscription_monthly_price = getenv("BASE_SUBSCRIPTION_MONTHLY_PRICE")
-        if not subscription_monthly_price:
-            raise DotEnvVariableNotFound("BASE_SUBSCRIPTION_MONTHLY_PRICE")
-        return subscription_monthly_price
 
     def _get_user_default_max_configs_count(self) -> int:
         user_default_max_configs_count = getenv("USER_DEFAULT_MAX_CONFIGS_COUNT")
@@ -136,10 +129,6 @@ class Configuration:
     @property
     def user_config_prefix(self) -> str:
         return self._user_config_prefix
-
-    @property
-    def subscription_monthly_price(self) -> str:
-        return self._subscription_monthly_price
 
     @property
     def database_connection_parameters(self) -> dict[str, str]:

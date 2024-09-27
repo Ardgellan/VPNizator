@@ -106,33 +106,20 @@ echo ""
 echo "Enter config name prefix:"
 echo "Just press ENTER for use default prefix [$Blue VPNizator $White]" | sed 's/\$//g'
 read config_prefix
-
 if [ -z "$config_prefix" ]
 then
       config_prefix="VPNizator"
-fi
-
-#ask user for base subscription monthly price
-echo ""
-echo "Enter base subscription monthly price:"
-echo "Just press ENTER for use default price [$Blue 100₽ $White]" | sed 's/\$//g'
-read base_subscription_monthly_price
-
-if [ -z "$base_subscription_monthly_price" ]
-then
-      base_subscription_monthly_price="100₽"
 fi
 
 #ask user for max configs count for each user
 echo ""
 echo "Enter max configs count for each user:"
 echo "P.S admin can give more configs to any user from admin panel"
-echo "Just press ENTER for use default count [$Blue 10 $White]" | sed 's/\$//g'
+echo "Just press ENTER for use default count [$Blue 1000 $White]" | sed 's/\$//g'
 read max_configs_count
-
 if [ -z "$max_configs_count" ]
 then
-      max_configs_count="10"
+      max_configs_count="1000"
 fi
 
 #ask user for site url to hide reality
@@ -140,7 +127,6 @@ echo ""
 echo "Enter site url to hide reality:"
 echo "Just press ENTER for use default url [$Blue dl.google.com $White]" | sed 's/\$//g'
 read site_url
-
 if [ -z "$site_url" ]
 then
       site_url="dl.google.com"
@@ -154,7 +140,6 @@ echo "$White" | sed 's/\$//g'
 echo "Wanna update system before install? [y/N]"
 echo "$Defaul_color" | sed 's/\$//g'
 read update_system
-
 if [ "$update_system" = "y" ]
 then
       sudo apt update && sudo apt upgrade -y
@@ -290,7 +275,6 @@ TG_BOT_TOKEN = "$bot_token"
 YOOKASSA_TOKEN=$yookassa_token
 ADMINS_IDS = "$admins_ids"
 CONFIGS_PREFIX = "$config_prefix"
-BASE_SUBSCRIPTION_MONTHLY_PRICE = "$base_subscription_monthly_price"
 
 DB_NAME = "$database_name"
 DB_USER = "$database_user"
