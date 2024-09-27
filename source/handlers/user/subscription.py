@@ -13,10 +13,10 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
     logger.info("BABASRAKA_1")
     # Узнаем есть ли у юзера вообще конфиги чтобы их обновлять
     user_id = call.from_user.id
-    configs_to_renew = await db_manager.is_user_have_any_config
+    configs_to_renew = await db_manager.is_user_have_any_config(user_id)
     logger.info("BABASRAKA_2")
     if not configs_to_renew:
-        await call.message.answer(
+        await call.message.edit_text(
             text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.nothing_to_renew_message,
