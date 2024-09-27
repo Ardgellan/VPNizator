@@ -1,48 +1,52 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from loguru import logger
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from loader import db_manager
 from source.utils import localizer
 from source.utils.xray import xray_config
+from source.keyboard import inline
 
 
 async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext):
     
+    # Узнаем есть ли у юзера вообще конфиги чтобы их обновлять
     user_id = call.from_user.id
+    configs_to_renew = await db_manager.is_user_have_any_config
 
-    # Получаем текущий баланс и стоимость подписки
-    current_balance = await db_manager.get_user_balance(user_id)
-    subscription_cost = await db_manager.get_current_subscription_cost(user_id)
-    # Проверяем время последнего платежа
-    last_payment_time = await db_manager.get_last_subscription_payment(user_id)
-
-    if current_balance == subscription_cost == 0.00:
-        await call.message.answer(
-            localizer.get_user_localized_text(
+    if not configs_to_renew:
+        await call.message.edit_text(
+            text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.nothing_to_renew_message,
-            )
-        )
-        logger.info(
-            f"Попытка продления подписки для пользователя {user_id}, но баланс и подписка нулевые."
+            ),
+            reply_markup=await inline.insert_button_back_to_main_menu(
+                language_code=call.from_user.language_code
+            ),
         )
         await call.answer()
         return
     
-    if last_payment_time and last_payment_time.date() == datetime.now().date():
-        await call.message.answer(
-            localizer.get_user_localized_text(
+    # Проверяем время последнего платежа
+    last_payment_time = await db_manager.get_last_subscription_payment(user_id)
+
+    if last_payment_time and (datetime.now() - last_payment_time) >= timedelta(hours=24):
+        await call.message.edit_text(
+            text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.subscription_already_renewed_today,
-            )
-        )
-        logger.info(
-            f"Попытка продления подписки для пользователя {user_id}, но подписка уже была продлена сегодня."
+            ),
+            reply_markup=await inline.insert_button_back_to_main_menu(
+                language_code=call.from_user.language_code
+            ),
         )
         await call.answer()
         return
+
+    # Получаем текущий баланс и стоимость подписки
+    current_balance = await db_manager.get_user_balance(user_id)
+    subscription_cost = await db_manager.get_current_subscription_cost(user_id)
 
     if current_balance >= subscription_cost:
         # Продлеваем подписку
@@ -50,21 +54,25 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
         await db_manager.update_last_subscription_payment(user_id, datetime.now())
         # Восстанавливаем конфиги пользователя в Xray
         await xray_config.reactivate_user_configs_in_xray([user_id])
-        await call.message.answer(
-            localizer.get_user_localized_text(
+        await call.message.edit_text(
+            text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.subscription_renewed_successfully,
-            )
+            ),
+            reply_markup=await inline.insert_button_back_to_main_menu(
+                language_code=call.from_user.language_code
+            ),
         )
-        logger.info(f"Подписка пользователя {user_id} успешно продлена вручную.")
     else:
         # Недостаточно средств
-        await call.message.answer(
-            localizer.get_user_localized_text(
+        await call.message.edit_text(
+            text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.insufficient_balance_for_sub_renewal,
-            )
+            ),
+            reply_markup=await inline.insert_button_back_to_main_menu(
+                language_code=call.from_user.language_code
+            ),
         )
-        logger.info(f"Недостаточно средств для продления подписки у пользователя {user_id}.")
 
     await call.answer()

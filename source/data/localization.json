@@ -215,7 +215,11 @@
         "nothing_to_renew_message": {
             "en": "🤷‍♂️ I am afrad there is nothing to renew!",
             "ru": "🤷‍♂️ Боюсь, что продлевать нечего!"
-        }       
+        },
+        "my_balance_message": {
+            "en": "Your current <b>Balance</b>: {current_balance}",
+            "ru": "Ваш текущий <b>Баланс</b>: {current_balance}"
+        }         
     },
     "button": {
         "pc": {
@@ -361,6 +365,10 @@
         "renew_subscription": {
             "en": "🔄 Renew Subscription",
             "ru": "🔄 Восстановить подписку"
+        },
+        "my_balance": {
+            "en": "💵 My Balance",
+            "ru": "💵 Мой Баланс"
         }
     }
 }

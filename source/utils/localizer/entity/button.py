@@ -149,3 +149,7 @@ class LocalizedButtonText(BaseLocalizedObject):
     @property
     def renew_subscription(self) -> LocalizedText:
         return self._get_entity_text("renew_subscription")
+
+    @property
+    def my_balance(self) -> LocalizedText:
+        return self._get_entity_text("my_balance")

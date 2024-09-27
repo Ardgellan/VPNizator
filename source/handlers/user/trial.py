@@ -17,9 +17,6 @@ from source.utils import localizer
 @rate_limit(limit=1)
 async def trial_period_function(call: types.CallbackQuery, state: FSMContext):
 
-    logger.info(f"User {call.from_user.id} opened trial period menu")
-    # Отправляем пользователю сообщение с предложением начать пробный период
-
     # Получаем текущий баланс пользователя
     current_balance = await db_manager.get_user_balance(user_id=call.from_user.id)
 
@@ -67,7 +64,7 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
     await db_manager.mark_trial_as_used(user_id=user_id)
 
     # Начисляем баланс (100 рублей)
-    await db_manager.update_user_balance(user_id=user_id, amount=9.00)
+    await db_manager.update_user_balance(user_id=user_id, amount=100.00)
 
     # Получаем текущий баланс пользователя
     current_balance = await db_manager.get_user_balance(user_id=user_id)
@@ -75,7 +72,7 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
-            text_localization=localizer.message.trial_period_success,  # Сообщение о пробном периоде
+            text_localization=localizer.message.trial_period_success,
         ).format(current_balance=current_balance),
         parse_mode=types.ParseMode.HTML,
         reply_markup=await inline.trial_period_success_keyboard(

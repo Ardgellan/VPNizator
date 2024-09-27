@@ -1,6 +1,6 @@
 import asyncio
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from aiogram.utils.exceptions import BotBlocked
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from loguru import logger
@@ -37,8 +37,8 @@ class SubscriptionChecker:
             last_payment_time = await db_manager.get_last_subscription_payment(user_id)
 
             # *** Новая проверка: Проверяем время последнего списания ***
-            if last_payment_time and last_payment_time.date() == datetime.now().date():
-                logger.info(f"Списания для пользователя {user_id} уже были сегодня, пропуск.")
+            if last_payment_time and (datetime.now() - last_payment_time) >= timedelta(hours=24):
+                logger.info(f"Списания для пользователя {user_id} были в последние 24 часа, пропуск.")
                 continue
 
             # Проверяем баланс пользователя

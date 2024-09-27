@@ -9,6 +9,7 @@ from .trial import trial_period_function, start_trial_period_function
 from .subscription import manual_renew_subscription
 from .banners import about_us_function, terms_of_use_function
 from .ask_support import *
+from balance import show_balance_function
 
 from .configs_menu import register_configs_menu_handlers
 from .guide import register_show_help_guide_handlers
@@ -44,6 +45,13 @@ def register_user_handlers(dp: Dispatcher):
         # 6
         dp.register_message_handler(
             successful_payment, content_types=types.ContentType.SUCCESSFUL_PAYMENT
+        )
+
+        # 6.5
+        dp.register_callback_query_handler(
+            show_balance_function,
+            lambda call: call.data == "my_balance",
+            state="*",
         )
 
         # 7

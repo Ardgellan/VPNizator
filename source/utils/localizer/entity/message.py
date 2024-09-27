@@ -238,3 +238,8 @@ class LocalizedMessageText(BaseLocalizedObject):
     def nothing_to_renew_message(self) -> LocalizedText:
         return self._get_entity_text("nothing_to_renew_message")
 
+    @property
+    def my_balance_message(self) -> LocalizedText:
+        return self._get_entity_text("my_balance_message")
+
+
