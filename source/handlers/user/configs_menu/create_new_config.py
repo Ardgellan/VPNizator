@@ -7,7 +7,7 @@ from source.middlewares import rate_limit
 from source.utils import localizer, qr_generator
 from source.utils.states.user import GeneratingNewConfig
 from source.utils.xray import xray_config
-from source.keyboard.inline import config_generation_keyboard, insert_button_back_to_main_menu
+from source.keyboard import inline
 
 from ..check_balance import has_sufficient_balance_for_conf_generation
 
