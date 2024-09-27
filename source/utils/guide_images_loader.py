@@ -12,6 +12,9 @@ class GuideImagesLoader:
             f"{self._guide_images_path}/android"
         )
         self._pc_images_paths = self._get_all_files_into_folder(f"{self._guide_images_path}/pc")
+        self._macos_images_paths = self._get_all_files_into_folder(f"{self._guide_images_path}/macos")
+        self._windows_images_paths = self._get_all_files_into_folder(f"{self._guide_images_path}/windows")
+        self._linux_images_paths = self._get_all_files_into_folder(f"{self._guide_images_path}/linux")
 
     def _get_all_files_into_folder(self, folder_path: str) -> list[str]:
         return sorted(
@@ -30,6 +33,15 @@ class GuideImagesLoader:
 
     async def get_pc_guide_images(self) -> list[BytesIO]:
         return await self._get_guide_images(self._pc_images_paths)
+
+    async def get_macos_guide_images(self) -> list[BytesIO]:
+        return await self._get_guide_images(self._macos_images_paths)
+
+    async def get_windows_guide_images(self) -> list[BytesIO]:
+        return await self._get_guide_images(self._windows_images_paths)
+
+    async def get_linux_guide_images(self) -> list[BytesIO]:
+        return await self._get_guide_images(self._linux_images_paths)
 
     async def _get_guide_images(self, images_paths: list[str]) -> list[BytesIO]:
         images = []

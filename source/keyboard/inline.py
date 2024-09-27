@@ -288,6 +288,13 @@ async def delete_specified_config_keyboard(
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
+                text_localization=localizer.button.vpn_installation_manual,
+            ),
+            callback_data="vpn_installation_manual",
+        ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
                 text_localization=localizer.button.delete_config,
             ),
             callback_data=f"delete_config_{config_uuid}",
@@ -356,8 +363,14 @@ async def download_app_for_connect_to_vpn_keyboard(
         case "android":
             url = "https://play.google.com/store/apps/details?id=com.v2ray.ang"
 
-        case "pc":
-            url = "https://github.com/MatsuriDayo/nekoray/releases"
+        case "macos":
+            url = "https://apps.apple.com/us/app/v2box-v2ray-client/id6446814690"
+        
+        case "windows":
+            url = "https://github.com/MatsuriDayo/nekoray/releases/latest/download/NekoRay-Windows.zip"
+        
+        case "linux":
+            url = "https://github.com/MatsuriDayo/nekoray/releases/latest/download/NekoRay-Linux64.tar.gz"
 
     keyboard = InlineKeyboardMarkup(row_width=1)
     button = InlineKeyboardButton(
@@ -505,6 +518,41 @@ async def config_generation_keyboard(language_code: str):
         )
     )
     keyboard = await insert_button_back_to_main_menu(
+        keyboard=keyboard,
+        language_code=language_code,
+    )
+    return keyboard
+
+async def choose_your_os_keyboard(language_code: str):
+    keyboard = InlineKeyboardMarkup(row_width=1)
+    buttons= [
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.show_help_mac,
+            ),
+            callback_data="show_help_mac",
+        ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.show_help_windows,
+            ),
+            callback_data="show_help_windows",
+        ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.show_help_linux,
+            ),
+            callback_data="show_help_linux",
+        )
+    ]
+
+    for button in buttons:
+        keyboard.add(button)
+    
+    keyboard=await insert_button_back_to_main_menu(
         keyboard=keyboard,
         language_code=language_code,
     )

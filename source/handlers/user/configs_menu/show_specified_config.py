@@ -7,8 +7,9 @@ from source.keyboard import inline
 from source.utils import localizer
 from source.utils.qr_generator import create_qr_code_from_config_as_link_str
 from source.utils.xray import xray_config
+from source.middlewares import rate_limit
 
-
+@rate_limit(limit=1)
 async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
 
     config_uuid = call.data.split("_")[-1]

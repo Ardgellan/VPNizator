@@ -153,3 +153,15 @@ class LocalizedButtonText(BaseLocalizedObject):
     @property
     def my_balance(self) -> LocalizedText:
         return self._get_entity_text("my_balance")
+
+    @property
+    def show_help_mac(self) -> LocalizedText:
+        return self._get_entity_text("show_help_mac")
+
+    @property
+    def show_help_windows(self) -> LocalizedText:
+        return self._get_entity_text("show_help_windows")
+
+    @property
+    def show_help_linux(self) -> LocalizedText:
+        return self._get_entity_text("show_help_linux")

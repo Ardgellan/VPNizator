@@ -5,7 +5,7 @@ from loguru import logger
 from .android import show_help_guide_android
 from .guide_menu import show_help_guide_inline #show_help_guide,
 from .ios import show_help_guide_ios
-from .pc import show_help_guide_pc
+from .pc import show_help_guide_pc, show_help_guide_macos, show_help_guide_windows, show_help_guide_linux
 
 
 def register_show_help_guide_handlers(dp: Dispatcher):
@@ -33,6 +33,21 @@ def register_show_help_guide_handlers(dp: Dispatcher):
         dp.register_callback_query_handler(
             show_help_guide_pc,
             lambda call: call.data == "show_help_pc",
+            state="*",
+        )
+        dp.register_callback_query_handler(
+            show_help_guide_macos,
+            lambda call: call.data == "show_help_mac",
+            state="*",
+        )
+        dp.register_callback_query_handler(
+            show_help_guide_windows,
+            lambda call: call.data == "show_help_windows",
+            state="*",
+        )
+        dp.register_callback_query_handler(
+            show_help_guide_linux,
+            lambda call: call.data == "show_help_linux",
             state="*",
         )
 

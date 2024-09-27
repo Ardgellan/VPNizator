@@ -245,3 +245,19 @@ class LocalizedMessageText(BaseLocalizedObject):
     @property
     def config_requseted(self) -> LocalizedText:
         return self._get_entity_text("config_requseted")
+
+    @property
+    def which_os_do_you_have_message(self) -> LocalizedText:
+        return self._get_entity_text("which_os_do_you_have_message")
+
+    @property
+    def help_guide_message_macos(self) -> LocalizedText:
+        return self._get_entity_text("help_guide_message_macos")
+
+    @property
+    def help_guide_message_windows(self) -> LocalizedText:
+        return self._get_entity_text("help_guide_message_windows")
+
+    @property
+    def help_guide_message_linux(self) -> LocalizedText:
+        return self._get_entity_text("help_guide_message_linux")
