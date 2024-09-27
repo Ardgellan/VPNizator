@@ -9,7 +9,7 @@ from .trial import trial_period_function, start_trial_period_function
 from .subscription import manual_renew_subscription
 from .banners import about_us_function, terms_of_use_function
 from .ask_support import *
-from balance import show_balance_function
+from .balance import show_balance_function
 
 from .configs_menu import register_configs_menu_handlers
 from .guide import register_show_help_guide_handlers
