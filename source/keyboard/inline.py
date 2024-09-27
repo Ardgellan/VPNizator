@@ -418,30 +418,6 @@ async def trial_menu_keyboard(language_code: str):
     return keyboard
 
 
-async def config_generated_keyboard(language_code: str) -> InlineKeyboardMarkup:
-    keyboard = InlineKeyboardMarkup(row_width=1)
-    buttons = [
-        InlineKeyboardButton(
-            text=localizer.get_user_localized_text(
-                user_language_code=language_code,
-                text_localization=localizer.button.vpn_installation_manual,
-            ),
-            callback_data="vpn_installation_manual",
-        ),
-        InlineKeyboardButton(
-            text=localizer.get_user_localized_text(
-                user_language_code=language_code,
-                text_localization=localizer.button.back_to_main_menu,
-            ),
-            callback_data="back_to_main_menu",
-        ),
-    ]
-    for button in buttons:
-        keyboard.insert(button)
-
-    return keyboard
-
-
 async def balance_top_up_menu_keyboard(language_code: str):
     keyboard = InlineKeyboardMarkup(row_width=1)
     buttons = [
@@ -508,6 +484,24 @@ async def trial_period_success_keyboard(language_code: str):
                 text_localization=localizer.button.create_new_config,
             ),
             callback_data="create_new_config",
+        )
+    )
+    keyboard = await insert_button_back_to_main_menu(
+        keyboard=keyboard,
+        language_code=language_code,
+    )
+    return keyboard
+
+
+async def config_generation_keyboard(language_code: str):
+    keyboard = InlineKeyboardMarkup(row_width=1)
+    keyboard.add(
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.vpn_installation_manual,
+            ),
+            callback_data="vpn_installation_manual",
         )
     )
     keyboard = await insert_button_back_to_main_menu(

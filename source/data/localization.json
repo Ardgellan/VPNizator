@@ -41,12 +41,12 @@
             "ru": "📄Конфигурации не найдены, давайте создадим новое VPN соединение 😊"
         },
         "request_config_name": {
-            "en": "📄Enter the name of the new config. It will be displayed on the button in the config menu.\n\n💡Tip: use a short name for the name that will definitely fit on the button. For example: <code>PC</code>, <code>iPhone</code>, <code>Dad</code>, <code>Laptop</code>",
-            "ru": "📄Введите название нового конфига. Оно будет отображаться на кнопке в меню конфигов.\n💡Совет: используйте короткое имя для названия, которое точно влезет на кнопку. Например: <code>ПК</code>, <code>Айфон</code>, <code>Папа</code>, <code>Ноутбук</code>"
+            "en": "📄Enter the name of the new config. It will be displayed on the button in the config menu.\n\n💡Tip: use a short name for the name that will definitely fit on the button. For example: <code>PC</code>, <code>iPhone</code>, <code>Mom</code>, <code>Grandma</code>",
+            "ru": "📄Введите название нового конфига. Оно будет отображаться на кнопке в меню конфигов.\n💡Совет: используйте короткое имя для названия, которое точно влезет на кнопку. Например: <code>ПК</code>, <code>Айфон</code>, <code>Мама</code>, <code>Бабушка</code>"
         },
         "got_config_name_start_generating": {
-            "en": "📄Got it! Now I will generate a new config for you. This may take a few seconds, please wait...",
-            "ru": "📄Понял! Теперь я сгенерирую для тебя новый конфиг. Это может занять несколько секунд, пожалуйста, подожди..."
+            "en": "📄Got it! Now I will generate a new config for you! This may take a few seconds, please wait...",
+            "ru": "📄Понял! Теперь я сгенерирую для вас новый конфиг! Это может занять несколько секунд, пожалуйста, подождите..."
         },
         "config_generated": {
             "en": "✅ Config ready to use!\nName: <b>{config_name}</b>\n\n📝 Connection data:\n<code>{config_data}</code>\n\n🔙 To return to the menu, use the /menu command\n❓️To get help on how to connect, use the /help command",
@@ -57,8 +57,8 @@
             "ru": "{user}, у меня плохие новости...😢\nТвоя подписка на VPN <b>истекла</b>. Для продления подписки, пожалуйста, воспользуйся командой /pay"
         },
         "subscription_last_day_left_notification": {
-            "en": "{user}, I have bad news...😢\nYour VPN subscription will expire <b>tomorrow</b>. To renew your subscription, please use the /pay command",
-            "ru": "{user}, у меня плохие новости...😢\nТвоя подписка на VPN истекает <b>завтра</b>. Для продления подписки, пожалуйста, воспользуйся командой /pay"
+            "en": "{user}, I have bad news...😢\nYour VPN subscription <b>will expire tomorrow</b> 😱! Please, top up your balance!",
+            "ru": "{user}, у меня плохие новости...😢\nВаша подписка на VPN <b>истекает уже завтра</b> 😱! Пожалуйста, пополните свой баланс!"
         },
         "subscription_two_days_left_notification": {
             "en": "{user}, I have bad news...😢\nYour VPN subscription will expire <b>in 2 days</b>. To renew your subscription, please use the /pay command",
@@ -217,8 +217,8 @@
             "ru": "🤷‍♂️ Боюсь, что продлевать нечего!"
         },
         "my_balance_message": {
-            "en": "Your current <b>Balance</b>: {current_balance}",
-            "ru": "Ваш текущий <b>Баланс</b>: {current_balance}"
+            "en": "💵 Your current <b>Balance</b>: {current_balance}",
+            "ru": "💵 Ваш текущий <b>Баланс</b>: {current_balance}"
         }         
     },
     "button": {
