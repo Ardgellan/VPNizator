@@ -60,16 +60,6 @@ then
       yookassa_token="test_api_token_example"
 fi
 
-#ask user for payment card
-echo "$White" | sed 's/\$//g'
-echo "Enter payment card number for manual payments:"
-echo "Just press ENTER for use default card [$Blue 4242424242424242 $White]" | sed 's/\$//g'
-read payment_card
-if [ -z "$payment_card" ]
-then
-      payment_card="4242424242424242"
-fi
-
 #ask user for admins ids
 echo ""
 echo "Enter admins ids (separated by comma):"
@@ -298,7 +288,6 @@ cd
 sudo cat <<EOF > ~/VPNizator/source/data/.env
 TG_BOT_TOKEN = "$bot_token"
 YOOKASSA_TOKEN=$yookassa_token
-PAYMENT_CARD = "$payment_card"
 ADMINS_IDS = "$admins_ids"
 CONFIGS_PREFIX = "$config_prefix"
 BASE_SUBSCRIPTION_MONTHLY_PRICE = "$base_subscription_monthly_price"

@@ -36,7 +36,9 @@ def register_user_handlers(dp: Dispatcher):
 
         # Хендлер обработчик платежей
         dp.register_callback_query_handler(
-            handle_payment, lambda call: call.data.startswith("pay_"), state="*"
+            handle_payment,
+            lambda call: call.data.startswith("pay_"),
+            state="*"
         )
 
         # Хендлер для обработки PreCheckoutQuery
@@ -52,21 +54,6 @@ def register_user_handlers(dp: Dispatcher):
             lambda call: call.data == "renew_subscription",
             state="*",
         )
-
-        # Место 3
-        # dp.register_message_handler(
-        #     show_payment_method, commands="pay", state="*"
-        # )
-
-        # Место 4
-        # dp.register_message_handler(
-        #     notify_admin_about_new_payment,
-        #     content_types=[
-        #         ContentType.PHOTO,
-        #         ContentType.DOCUMENT,
-        #     ],
-        #     state=PaymentViaBankTransfer.waiting_for_payment_screenshot_or_receipt,
-        # )
 
         # Место 5
         dp.register_callback_query_handler(

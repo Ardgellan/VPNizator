@@ -20,7 +20,6 @@ class Configuration:
         self._bot_token: str = self._get_bot_token()
         self._yookassa_token: str = self._get_yookassa_token()
         self._admins_ids: list[int] = self._get_admins_ids()
-        self._payment_card: str = self._get_payment_card()
         self._user_config_prefix: str = self._get_user_config_prefix()
         self._subscription_monthly_price: str = self._get_subscription_monthly_price()
         self._database_connection_parameters: dict[str, str] = (
@@ -51,12 +50,6 @@ class Configuration:
         if not admins_ids:
             raise DotEnvVariableNotFound("ADMINS_IDS")
         return [int(admin_id) for admin_id in admins_ids.split(",") if admin_id]
-
-    def _get_payment_card(self) -> str:
-        payment_card = getenv("PAYMENT_CARD")
-        if not payment_card:
-            raise DotEnvVariableNotFound("PAYMENT_CARD")
-        return payment_card
 
     def _get_user_config_prefix(self) -> str:
         user_config_prefix = getenv("CONFIGS_PREFIX")
@@ -139,10 +132,6 @@ class Configuration:
     @property
     def admins_ids(self) -> list[int]:
         return self._admins_ids
-
-    @property
-    def payment_card(self) -> str:
-        return self._payment_card
 
     @property
     def user_config_prefix(self) -> str:
