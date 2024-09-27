@@ -50,6 +50,16 @@ echo "Enter bot token:"
 echo "You can get it from $Blue @BotFather"
 read bot_token
 
+# ask user for Yookassa API token
+echo ""
+echo "Enter Yookassa API token (for test or real payments):"
+echo "Just press ENTER for use default test token [$Blue 000000000:TEST:00000 $White]" | sed 's/\$//g'
+read yookassa_token
+if [ -z "$yookassa_token" ]
+then
+      yookassa_token="test_api_token_example"
+fi
+
 #ask user for payment card
 echo "$White" | sed 's/\$//g'
 echo "Enter payment card number for manual payments:"
@@ -287,6 +297,7 @@ cd
 #configure bot .env file
 sudo cat <<EOF > ~/VPNizator/source/data/.env
 TG_BOT_TOKEN = "$bot_token"
+YOOKASSA_TOKEN=$yookassa_token
 PAYMENT_CARD = "$payment_card"
 ADMINS_IDS = "$admins_ids"
 CONFIGS_PREFIX = "$config_prefix"

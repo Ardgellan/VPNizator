@@ -18,6 +18,7 @@ class Configuration:
     def __init__(self):
         load_dotenv()
         self._bot_token: str = self._get_bot_token()
+        self._yookassa_token: str = self._get_yookassa_token()
         self._admins_ids: list[int] = self._get_admins_ids()
         self._payment_card: str = self._get_payment_card()
         self._user_config_prefix: str = self._get_user_config_prefix()
@@ -38,6 +39,12 @@ class Configuration:
         if not bot_token:
             raise DotEnvVariableNotFound("TG_BOT_TOKEN")
         return bot_token
+    
+    def _get_yookassa_token(self) -> str:
+        yookassa_test_token = getenv("YOOKASSA_TEST_TOKEN")
+        if not yookassa_test_token:
+            raise DotEnvVariableNotFound("YOOKASSA_TEST_TOKEN")
+        return yookassa_test_token
 
     def _get_admins_ids(self) -> list[int]:
         admins_ids = getenv("ADMINS_IDS")
@@ -124,6 +131,10 @@ class Configuration:
     @property
     def bot_token(self) -> str:
         return self._bot_token
+
+    @property
+    def yookassa_token(self) -> str:
+        return self._yookassa_token
 
     @property
     def admins_ids(self) -> list[int]:
