@@ -72,6 +72,7 @@ from loguru import logger
 from loader import dp, db_manager
 from source.keyboard import inline
 from source.utils import localizer
+from source.data import config
 
 
 async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FSMContext):
@@ -120,7 +121,7 @@ async def handle_payment(call: types.CallbackQuery):
             title=f"Пополнение баланса на {amount} руб.",
             description=f"Оплата {amount} рублей на баланс.",
             payload=f"payment_{amount}",  # Платёжный идентификатор
-            provider_token="381764678:TEST:95796",  # Тестовый токен Юкассы
+            provider_token=config.yookassa_token,  # Тестовый токен Юкассы
             currency="RUB",
             prices=prices,
             start_parameter="pay",

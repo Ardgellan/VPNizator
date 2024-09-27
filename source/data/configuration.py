@@ -41,10 +41,10 @@ class Configuration:
         return bot_token
     
     def _get_yookassa_token(self) -> str:
-        yookassa_test_token = getenv("YOOKASSA_TEST_TOKEN")
-        if not yookassa_test_token:
-            raise DotEnvVariableNotFound("YOOKASSA_TEST_TOKEN")
-        return yookassa_test_token
+        yookassa_token = getenv("YOOKASSA_TOKEN")
+        if not yookassa_token:
+            raise DotEnvVariableNotFound("YOOKASSA_TOKEN")
+        return yookassa_token
 
     def _get_admins_ids(self) -> list[int]:
         admins_ids = getenv("ADMINS_IDS")
