@@ -26,10 +26,11 @@ async def request_user_for_config_name(call: types.CallbackQuery, state: FSMCont
 
 
 async def generate_config_for_user(message: types.Message, state: FSMContext):
-
+    # Получаем имя конфигурации от пользователя
     config_name = message.text
     user_id = message.from_user.id
 
+    # Отправляем сообщение, что генерация началась
     await message.answer(
         text=localizer.get_user_localized_text(
             user_language_code=message.from_user.language_code,
@@ -38,27 +39,32 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
         parse_mode=types.ParseMode.HTML,
     )
 
+    # Отправляем действие "загрузка"
     await message.answer_chat_action(action=types.ChatActions.UPLOAD_PHOTO)
 
+    # Генерация конфига
     config = await xray_config.add_new_user(
-        config_name=config_name, user_telegram_id=message.from_user.id
+        config_name=config_name, user_telegram_id=user_id
     )
 
+    # Генерация QR-кода для конфига
     config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(config)
 
-    await call.message.answer_photo(
+    # Отправляем QR-код и данные конфига
+    await message.answer_photo(
         photo=config_qr_code,
         caption=localizer.get_user_localized_text(
-            user_language_code=call.from_user.language_code,
+            user_language_code=message.from_user.language_code,
             text_localization=localizer.message.config_generated,
         ).format(config_name=config_name, config_data=config),
         parse_mode=types.ParseMode.HTML,
         reply_markup=await inline.config_generation_keyboard(
-            language_code=call.from_user.language_code
+            language_code=message.from_user.language_code
         )
     )
 
+    # Обновляем баланс пользователя
     await db_manager.update_user_balance(user_id, -3.00)
-    logger.info(f"Списано 3 рубля за генерацию конфига для пользователя {user_id}")
 
+    # Завершаем состояние
     await state.finish()
