@@ -49,7 +49,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     await call.message.answer_photo(
         photo=config_qr_code,
         caption=localizer.get_user_localized_text(
-            user_language_code=message.from_user.language_code,
+            user_language_code=call.from_user.language_code,
             text_localization=localizer.message.config_generated,
         ).format(config_name=config_name, config_data=config),
         parse_mode=types.ParseMode.HTML,
