@@ -175,10 +175,6 @@ class LocalizedMessageText(BaseLocalizedObject):
         return self._get_entity_text("help_guide_android")
 
     @property
-    def help_guide_pc(self) -> LocalizedText:
-        return self._get_entity_text("help_guide_pc")
-
-    @property
     def create_mailing_message(self) -> LocalizedText:
         return self._get_entity_text("create_mailing_message")
 
