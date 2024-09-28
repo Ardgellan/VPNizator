@@ -16,7 +16,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 00:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=22, minute=22)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=12, minute=0)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -28,6 +28,7 @@ class SubscriptionChecker:
         logger.info(f"Users with active configs: {users_with_active_configs}")
         users_with_sufficient_balance = []
         users_with_insufficient_balance = []
+        users_to_restore=[]
 
         for user_id in users_with_active_configs:
             # Логируем начало работы с каждым пользователем
@@ -61,9 +62,12 @@ class SubscriptionChecker:
         logger.info(f"Users with sufficient balance: {users_with_sufficient_balance}")
         for user_id in users_with_sufficient_balance:
             await self._check_and_renew_subscription(user_id)
+            sub_is_active = await db_manager.get_subscription_status(user_id)
+            if not sub_is_active:
+                users_to_restore.append(user_id)
 
-        if users_with_sufficient_balance:
-            await xray_config.reactivate_user_configs_in_xray(users_with_sufficient_balance)
+        if users_to_restore:
+            await xray_config.reactivate_user_configs_in_xray(users_to_restore)
         logger.info("Reactivated sufficient users")
 
         # Блокировка конфигов для тех, у кого недостаточно средств
@@ -97,6 +101,7 @@ class SubscriptionChecker:
 
         # Собираем UUID конфигов для всех пользователей
         for user_id in users_ids:
+            await db_manager.update_subscription_status(user_id=user_id, is_active=False)
             user_uuids = await db_manager.get_user_uuids_by_user_id(user_id)
             if user_uuids:
                 all_config_uuids.extend(user_uuids)

@@ -323,15 +323,27 @@ class Selector(DatabaseConnector):
         Получаем список пользователей, у которых баланс позволяет оплатить только один день подписки.
         """
         query = """--sql
-            SELECT DISTINCT u.user_id
+            SELECT u.user_id
             FROM users u
-            JOIN vpn_configs vc ON vc.user_id = u.user_id
-            GROUP BY u.user_id, u.balance
-            HAVING u.balance >= COUNT(*) * 3  -- Баланс достаточен для одного дня подписки
-                AND u.balance < COUNT(*) * 3 * 2  -- Баланс меньше, чем для двух дней подписки
+            WHERE EXISTS (
+                SELECT 1
+                FROM vpn_configs vc
+                WHERE vc.user_id = u.user_id
+            )
+            AND u.balance >= (
+                SELECT COUNT(*) * 3  -- Стоимость одного дня подписки
+                FROM vpn_configs vc
+                WHERE vc.user_id = u.user_id
+            )
+            AND u.balance < (
+                SELECT COUNT(*) * 3 * 2  -- Стоимость двух дней подписки
+                FROM vpn_configs vc
+                WHERE vc.user_id = u.user_id
+            );
         """
         result = await self._execute_query(query)
         return [record[0] for record in result] if result else []
+
 
     async def get_last_subscription_payment(self, user_id: int) -> datetime:
         """Получаем время последнего платежа пользователя по его user_id"""
@@ -369,5 +381,3 @@ class Selector(DatabaseConnector):
         """
         result = await self._execute_query(query)
         return result[0][0] if result else None
-
-

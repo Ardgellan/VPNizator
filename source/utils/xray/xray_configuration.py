@@ -192,6 +192,7 @@ class XrayConfiguration:
         all_configs_to_restore = []
 
         for user_id in user_ids:
+            await db_manager.update_subscription_status(user_id=user_id, is_active=True)
             # Получаем только UUID всех конфигов пользователя
             user_uuids = await db_manager.get_user_uuids_by_user_id(user_id=user_id)
             if user_uuids:

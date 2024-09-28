@@ -51,8 +51,12 @@ class LocalizedMessageText(BaseLocalizedObject):
         return self._get_entity_text("user_info")
 
     @property
-    def user_configs_list(self) -> LocalizedText:
-        return self._get_entity_text("user_configs_list")
+    def user_configs_list_active(self) -> LocalizedText:
+        return self._get_entity_text("user_configs_list_active")
+
+    @property
+    def user_configs_list_inactive(self) -> LocalizedText:
+        return self._get_entity_text("user_configs_list_inactive")
 
     @property
     def no_configs_found_create_new_one(self) -> LocalizedText:
@@ -219,16 +223,12 @@ class LocalizedMessageText(BaseLocalizedObject):
         return self._get_entity_text("insufficient_balance_for_sub_renewal")
 
     @property
-    def subscription_already_renewed_today(self) -> LocalizedText:
-        return self._get_entity_text("subscription_already_renewed_today")
+    def subscription_is_active(self) -> LocalizedText:
+        return self._get_entity_text("subscription_is_active")
 
     @property
     def subscription_renewed_successfully(self) -> LocalizedText:
         return self._get_entity_text("subscription_renewed_successfully")
-
-    @property
-    def config_generation_is_cost_prohibitive(self) -> LocalizedText:
-        return self._get_entity_text("config_generation_is_cost_prohibitive")
 
     @property
     def nothing_to_renew_message(self) -> LocalizedText:

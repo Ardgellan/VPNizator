@@ -32,9 +32,13 @@
             "en": "👤User: {user_id}\n👤Username: {user_username}\n\n🤕Has access to the bot: {is_not_banned}\n\n🗓️Subscription status: {is_active_subscription}\n🗓️When the subscription ends: {subscription_end_date}\n🗓️Days left: {subscription_days_left}\n\n📄Active configs: {configs_count}\n📄Total bonus configs: {bonus_configs_count}\n📄Available configs for generation: {unused_configs_count}\n\n📅Registration date: {created_at}",
             "ru": "👤Пользователь: {user_id}\n👤Username: {user_username}\n\n🤕Есть доступ к боту: {is_not_banned}\n\n🗓️Статус подписки: {is_active_subscription}\n🗓️Когда заканчивается подписка: {subscription_end_date}\n🗓️Осталось дней: {subscription_days_left}\n\n📄Активных конфигов: {configs_count}\n📄Всего бонусных конфигов: {bonus_configs_count}\n📄Доступно конфигов для генерации: {unused_configs_count}\n\n📅Дата регистрации: {created_at}"
         },
-        "user_configs_list": {
-            "en": "📄Current list of your VPN connections!\n\nYou can call up the VPN connection configuration data by clicking on it. You can also delete the connection if you want!\nGenerating a new connection costs 3 rubles. Daily subscription - 3 rubles per config. \n\n<b>Funds are debited daily at 12.00</b>\n\n<b>Current Balance:</b> {current_balance}\n\n<b>Current subscription price:</b> {current_subscription} rubles",
-            "ru": "📄Актуальный список Ваших VPN соединений!\n\nВы можете вызвать конфигурационные данные VPN соединения нажав на него. Также вы сможете удалить соединение, если захотите!\nГенерация нового соединения стоит 3 рубля. Дневная подписка - 3 рубля за конфиг.\n\n<b>Средства списываются ежедневно в 12.00</b>\n\n<b>Текущий Баланс:</b> {current_balance} рублей\n\n<b>Текущая стоимость подписки:</b> {current_subscription}"
+        "user_configs_list_active": {
+            "en": "📄Current list of your VPN connections!\n\nYou can call up the VPN connection configuration data by clicking on it. You can also delete the connection if you want!\nGenerating a new connection costs 3 rubles. Daily subscription - 3 rubles per config. \n\n<b>Funds are debited daily at 12.00</b>\n\n<b>Current Balance:</b> {current_balance}\n\n<b>Current subscription price:</b> {current_subscription}\n\n<b>Current subscription status:</b> 🟢 Active",
+            "ru": "📄Актуальный список Ваших VPN соединений!\n\nВы можете вызвать конфигурационные данные VPN соединения нажав на него. Также вы сможете удалить соединение, если захотите!\nГенерация нового соединения стоит 3 рубля. Дневная подписка - 3 рубля за конфиг.\n\n<b>Средства списываются ежедневно в 12.00</b>\n\n<b>Текущий Баланс:</b> {current_balance} рублей\n\n<b>Текущая стоимость подписки:</b> {current_subscription}\n\n<b>Текущий статус подписки:</b> 🟢 Активна"
+        },
+        "user_configs_list_inactive": {
+            "en": "📄Current list of your VPN connections!\n\nYou can call up the VPN connection configuration data by clicking on it. You can also delete the connection if you want!\nGenerating a new connection costs 3 rubles. Daily subscription - 3 rubles per config. \n\n<b>Funds are debited daily at 12.00</b>\n\n<b>Current Balance:</b> {current_balance}\n\n<b>Current subscription price:</b> {current_subscription}\n\n<b>Current subscription status:</b> 🔴 Inactive",
+            "ru": "📄Актуальный список Ваших VPN соединений!\n\nВы можете вызвать конфигурационные данные VPN соединения нажав на него. Также вы сможете удалить соединение, если захотите!\nГенерация нового соединения стоит 3 рубля. Дневная подписка - 3 рубля за конфиг.\n\n<b>Средства списываются ежедневно в 12.00</b>\n\n<b>Текущий Баланс:</b> {current_balance} рублей\n\n<b>Текущая стоимость подписки:</b> {current_subscription}\n\n<b>Текущий статус подписки:</b> 🔴 Не активна"
         },
         "no_configs_found_create_new_one": {
             "en": "📄No configs found, let's create a new VPN connection 😊",
@@ -208,17 +212,13 @@
             "en": "❌Insufficient funds on your balance for new VPN connection generation!",
             "ru": "❌На вашем балансе недостаточно средств для генерации нового VPN соединения!"
         },
-        "config_generation_is_cost_prohibitive": {
-            "en": "❌Generating new connections will make it impossible to renew your subscription!\n\nYour current balance: {current_balance}\n\nSubscription cost after generating new connection: {total_cost_with_new_config}",
-            "ru": "❌Генерация нового соединения приведет к невозможности продления подписки!\n\nВаш текущий баланс: {current_balance}\n\nСтоимость подписки после генерации нового соединения: {total_cost_with_new_config}"
-        },
         "insufficient_balance_for_sub_renewal": {
             "en": "❌ Insufficient funds to renew the subscription. Please top up your balance or delete unused configurations.",
             "ru": "❌ Недостаточно средств для продления подписки. Пожалуйста, пополните баланс или удалите неиспользуемые конфигурации."
         },
-        "subscription_already_renewed_today": {
-            "en": "⏳ Your subscription is active!",
-            "ru": "⏳ Ваша подписка активна!"
+        "subscription_is_active": {
+            "en": "🟢 Your subscription is active! Subscription restoration is not required!",
+            "ru": "🟢 Ваша подписка активна! Восстановление не требуется!"
         },
         "subscription_renewed_successfully": {
             "en": "✅ Your subscription has been successfully renewed! Your VPN configurations are active again. Subscription funds for today will not be debited!",

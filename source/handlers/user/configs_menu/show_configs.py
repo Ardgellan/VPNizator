@@ -18,16 +18,21 @@ async def show_user_configs(call: types.CallbackQuery, state: FSMContext):
     is_user_have_any_configs = await db_manager.is_user_have_any_config(user_id=user_id)
     current_subscription = await db_manager.get_current_subscription_cost(user_id)
     current_balance = await db_manager.get_user_balance(user_id)
-
+    subscription_is_active = await db_manager.get_subscription_status(user_id)
     # Edit the message with the new content or show "no configs" message
+
+
+    if not is_user_have_any_configs:
+        message_text = localizer.message.no_configs_found_create_new_one
+    elif subscription_is_active:
+        message_text = localizer.message.user_configs_list_active
+    else:
+        message_text = localizer.message.user_configs_list_inactive
+
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
-            text_localization=(
-                localizer.message.user_configs_list
-                if is_user_have_any_configs
-                else localizer.message.no_configs_found_create_new_one
-            ),
+            text_localization=message_text,
         ).format(
             current_balance=current_balance,
             current_subscription=current_subscription,
