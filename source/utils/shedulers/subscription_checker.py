@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from aiogram.utils.exceptions import BotBlocked
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from loguru import logger
+from aiogram import types
 
 from loader import bot, db_manager
 from source.utils import localizer
@@ -16,7 +17,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 00:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=2, minute=28)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=2, minute=43)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
