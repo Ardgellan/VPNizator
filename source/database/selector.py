@@ -320,29 +320,20 @@ class Selector(DatabaseConnector):
 
     async def get_users_ids_with_last_day_left_subscription(self) -> list[int]:
         """
-        Получаем список пользователей, у которых баланс позволяет оплатить только один день подписки.
+        Получаем список пользователей, у которых после списания за текущий день
+        подписки баланс не позволяет оплатить следующий день подписки.
         """
         query = """--sql
-            SELECT u.user_id
+            SELECT DISTINCT u.user_id
             FROM users u
-            WHERE EXISTS (
-                SELECT 1
-                FROM vpn_configs vc
-                WHERE vc.user_id = u.user_id
-            )
-            AND u.balance >= (
-                SELECT COUNT(*) * 3  -- Стоимость одного дня подписки
-                FROM vpn_configs vc
-                WHERE vc.user_id = u.user_id
-            )
-            AND u.balance < (
-                SELECT COUNT(*) * 3 * 2  -- Стоимость двух дней подписки
-                FROM vpn_configs vc
-                WHERE vc.user_id = u.user_id
-            );
+            JOIN vpn_configs vc ON vc.user_id = u.user_id
+            WHERE u.subscription_is_active = TRUE  -- Только активные пользователи
+            GROUP BY u.user_id, u.balance
+            HAVING u.balance - (COUNT(vc.config_uuid) * 3) < (COUNT(vc.config_uuid) * 3)
         """
         result = await self._execute_query(query)
         return [record[0] for record in result] if result else []
+
 
 
     async def get_last_subscription_payment(self, user_id: int) -> datetime:
