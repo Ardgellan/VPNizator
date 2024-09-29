@@ -41,3 +41,4 @@ async def show_user_configs(call: types.CallbackQuery, state: FSMContext):
             user_id=user_id, language_code=call.from_user.language_code
         ),
     )
+    await state.finish()
