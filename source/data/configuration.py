@@ -27,7 +27,7 @@ class Configuration:
         self._xray_publickey: str = self._get_xray_publickey()
         self._xray_shortid: str = self._get_xray_shortid()
         self._xray_config_path: str = self._get_xray_config_path()
-        self._default_max_configs_count: int = self._get_user_default_max_configs_count()
+        # self._default_max_configs_count: int = self._get_user_default_max_configs_count()
         self._server_ip: str = self._get_server_ip()
         self._server_country: str = self._get_server_country()
         self._xray_sni: str = self._get_xray_sni()
@@ -56,11 +56,11 @@ class Configuration:
             raise DotEnvVariableNotFound("CONFIGS_PREFIX")
         return user_config_prefix
 
-    def _get_user_default_max_configs_count(self) -> int:
-        user_default_max_configs_count = getenv("USER_DEFAULT_MAX_CONFIGS_COUNT")
-        if not user_default_max_configs_count:
-            raise DotEnvVariableNotFound("USER_DEFAULT_MAX_CONFIGS_COUNT")
-        return int(user_default_max_configs_count)
+    # def _get_user_default_max_configs_count(self) -> int:
+    #     user_default_max_configs_count = getenv("USER_DEFAULT_MAX_CONFIGS_COUNT")
+    #     if not user_default_max_configs_count:
+    #         raise DotEnvVariableNotFound("USER_DEFAULT_MAX_CONFIGS_COUNT")
+    #     return int(user_default_max_configs_count)
 
     def _get_database_connection_parameters(self) -> dict[str, str]:
         for parameter in [
@@ -146,9 +146,9 @@ class Configuration:
     def xray_config_path(self) -> str:
         return self._xray_config_path
 
-    @property
-    def default_max_configs_count(self) -> int:
-        return self._default_max_configs_count
+    # @property
+    # def default_max_configs_count(self) -> int:
+    #     return self._default_max_configs_count
 
     @property
     def server_ip(self) -> str:

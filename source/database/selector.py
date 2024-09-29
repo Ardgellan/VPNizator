@@ -122,14 +122,14 @@ class Selector(DatabaseConnector):
             for record in result
         ]
 
-    async def get_count_of_configs_user_can_create(self, user_id: int) -> int:
-        bonus_configs_count = await self._get_bonus_configs_count_by_user_id(user_id)
-        created_configs_count = await self._get_created_configs_count_by_user_id(user_id)
-        unused_configs_count = (
-            config.default_max_configs_count + bonus_configs_count - created_configs_count
-        )
-        logger.debug(f"User {user_id} can create {unused_configs_count} more configs")
-        return unused_configs_count
+    # async def get_count_of_configs_user_can_create(self, user_id: int) -> int:
+    #     bonus_configs_count = await self._get_bonus_configs_count_by_user_id(user_id)
+    #     created_configs_count = await self._get_created_configs_count_by_user_id(user_id)
+    #     unused_configs_count = (
+    #         config.default_max_configs_count + bonus_configs_count - created_configs_count
+    #     )
+    #     logger.debug(f"User {user_id} can create {unused_configs_count} more configs")
+    #     return unused_configs_count
 
     async def check_for_user_has_active_subscription_by_config_uuid(self, config_uuid: str) -> bool:
         query = f"""--sql

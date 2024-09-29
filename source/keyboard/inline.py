@@ -181,15 +181,13 @@ async def insert_button_back_to_main_menu(
     return keyboard
 
 
-async def user_configs_list_keyboard(
-    user_id: int, language_code: str, show_create_new_config_button: bool = True
-) -> InlineKeyboardMarkup:
+async def user_configs_list_keyboard(user_id: int, language_code: str) -> InlineKeyboardMarkup:
     users_configs = await db_manager.get_user_config_names_and_uuids(user_id=user_id)
     keyboard = InlineKeyboardMarkup(row_width=2, resize_keyboard=True)
-    is_user_can_generate_new_config = (
-        await db_manager.get_count_of_configs_user_can_create(user_id=user_id)
-    ) > 0
-    if is_user_can_generate_new_config and show_create_new_config_button:
+    # is_user_can_generate_new_config = (
+    #     await db_manager.get_count_of_configs_user_can_create(user_id=user_id)
+    # ) > 0
+    # if is_user_can_generate_new_config and show_create_new_config_button:
         create_new_config_button = InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,

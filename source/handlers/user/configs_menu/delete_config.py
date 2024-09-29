@@ -43,7 +43,7 @@ async def delete_config(call: types.CallbackQuery, state: FSMContext):
         reply_markup=await inline.user_configs_list_keyboard(
             user_id=call.from_user.id,
             language_code=call.from_user.language_code,
-            show_create_new_config_button=True,
+            # show_create_new_config_button=True,
         ),
     )
     await state.finish()
