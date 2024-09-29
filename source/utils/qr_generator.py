@@ -28,8 +28,9 @@ def create_qr_code_from_config_as_link_str(config: str) -> BytesIO:
 
     img = qr.make_image(
         image_factory=StyledPilImage,
-        module_drawer=RoundedModuleDrawer(),
-        color_mask=SquareGradiantColorMask(center_color=(220, 0, 220), edge_color=(0, 0, 64)),
+        # module_drawer=RoundedModuleDrawer(),
+        # color_mask=SquareGradiantColorMask(center_color=(220, 0, 220), edge_color=(0, 0, 64)),
+        color_mask=SquareGradiantColorMask(center_color=(173, 216, 230), edge_color=(135, 206, 250)),
         embeded_image_path="source/data/img/logo/logo_circle.png",
     )
 
