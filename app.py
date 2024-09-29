@@ -17,7 +17,7 @@ async def on_startup(dp):
     from loguru import logger
     from source import handlers, middlewares
     from source.utils.shedulers import SubscriptionChecker
-    
+
     logger.add(
         f'logs/{time.strftime("%Y-%m-%d__%H-%M")}.log',
         level="DEBUG",

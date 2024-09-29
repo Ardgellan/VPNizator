@@ -29,7 +29,7 @@ class SubscriptionChecker:
         logger.info(f"Users with active configs: {users_with_active_configs}")
         users_with_sufficient_balance = []
         users_with_insufficient_balance = []
-        users_to_restore=[]
+        users_to_restore = []
 
         for user_id in users_with_active_configs:
             # Логируем начало работы с каждым пользователем
@@ -40,7 +40,9 @@ class SubscriptionChecker:
 
             # *** Новая проверка: Проверяем время последнего списания ***
             if last_payment_time and (datetime.now() - last_payment_time) < timedelta(hours=24):
-                logger.info(f"Списания для пользователя {user_id} были в последние 24 часа, пропуск.")
+                logger.info(
+                    f"Списания для пользователя {user_id} были в последние 24 часа, пропуск."
+                )
                 continue
 
             # Проверяем баланс пользователя
@@ -75,7 +77,7 @@ class SubscriptionChecker:
         logger.info(f"Users with insufficient balance: {users_with_insufficient_balance}")
         if users_with_insufficient_balance:
             await self._disconnect_configs_for_users(users_with_insufficient_balance)
-        
+
         logger.info("Looking for users with last day of subscription...")
         await self._find_and_notify_users_with_last_day_left_subscription()
         self._messages_limits_counter = 0
@@ -84,10 +86,11 @@ class SubscriptionChecker:
 
         # Сразу обновляем баланс, так как проверка уже была в основном цикле
         subscription_cost = await db_manager.get_current_subscription_cost(user_id)
-        logger.info(f"Renewing subscription for user {user_id}: subscription cost = {subscription_cost}")
+        logger.info(
+            f"Renewing subscription for user {user_id}: subscription cost = {subscription_cost}"
+        )
         await db_manager.update_user_balance(user_id, -subscription_cost)
         logger.info(f"Updated balance for user {user_id} after renewal")
-
 
         # *** Новое: обновляем время последнего платежа ***
         await db_manager.update_last_subscription_payment(user_id, datetime.now())
@@ -125,12 +128,16 @@ class SubscriptionChecker:
         users_ids_with_last_day_left_subscription = (
             await db_manager.get_users_ids_with_last_day_left_subscription()
         )
-        logger.info(f"Users with last day of subscription: {users_ids_with_last_day_left_subscription}")
+        logger.info(
+            f"Users with last day of subscription: {users_ids_with_last_day_left_subscription}"
+        )
         await self._notify_users_about_subscription_status(
             users_ids=users_ids_with_last_day_left_subscription,
             status=SubscriptionStatus.last_day_left.value,
         )
-        logger.info(f"Notified users about last day of subscription: {users_ids_with_last_day_left_subscription}")
+        logger.info(
+            f"Notified users about last day of subscription: {users_ids_with_last_day_left_subscription}"
+        )
 
     async def _notify_users_about_subscription_status(self, users_ids: list[int], status: str):
         """Notify users about subscription status"""

@@ -11,9 +11,15 @@ class GuideImagesLoader:
         self._android_images_paths = self._get_all_files_into_folder(
             f"{self._guide_images_path}/android"
         )
-        self._macos_images_paths = self._get_all_files_into_folder(f"{self._guide_images_path}/macos")
-        self._windows_images_paths = self._get_all_files_into_folder(f"{self._guide_images_path}/windows")
-        self._linux_images_paths = self._get_all_files_into_folder(f"{self._guide_images_path}/linux")
+        self._macos_images_paths = self._get_all_files_into_folder(
+            f"{self._guide_images_path}/macos"
+        )
+        self._windows_images_paths = self._get_all_files_into_folder(
+            f"{self._guide_images_path}/windows"
+        )
+        self._linux_images_paths = self._get_all_files_into_folder(
+            f"{self._guide_images_path}/linux"
+        )
 
     def _get_all_files_into_folder(self, folder_path: str) -> list[str]:
         return sorted(

@@ -3,7 +3,12 @@ from aiogram.types import ContentType
 from loguru import logger
 
 from .start import start, main_menu_by_button
-from .pay import show_balance_top_up_menu_function, handle_payment, process_pre_checkout_query, successful_payment
+from .pay import (
+    show_balance_top_up_menu_function,
+    handle_payment,
+    process_pre_checkout_query,
+    successful_payment,
+)
 from .configs_menu.show_configs import show_user_configs
 from .trial import trial_period_function, start_trial_period_function
 from .subscription import manual_renew_subscription
@@ -13,6 +18,7 @@ from .balance import show_balance_function
 
 from .configs_menu import register_configs_menu_handlers
 from .guide import register_show_help_guide_handlers
+
 
 def register_user_handlers(dp: Dispatcher):
     try:
@@ -31,12 +37,10 @@ def register_user_handlers(dp: Dispatcher):
             lambda call: call.data == "balance_top_up",
             state="*",
         )
-        
+
         # 4
         dp.register_callback_query_handler(
-            handle_payment,
-            lambda call: call.data.startswith("pay_"),
-            state="*"
+            handle_payment, lambda call: call.data.startswith("pay_"), state="*"
         )
 
         # 5

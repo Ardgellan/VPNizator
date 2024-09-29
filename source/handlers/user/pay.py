@@ -101,6 +101,4 @@ async def successful_payment(message: types.Message):
     logger.info(f"Баланс пользователя {message.from_user.id} пополнен на {amount} руб.")
 
     # Отправляем сообщение пользователю об успешном пополнении баланса
-    await message.answer(
-        f"Оплата на сумму {amount} руб. прошла успешно! Ваш баланс был пополнен."
-    )
+    await message.answer(f"Оплата на сумму {amount} руб. прошла успешно! Ваш баланс был пополнен.")

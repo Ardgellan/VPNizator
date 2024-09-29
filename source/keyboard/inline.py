@@ -188,14 +188,14 @@ async def user_configs_list_keyboard(user_id: int, language_code: str) -> Inline
     #     await db_manager.get_count_of_configs_user_can_create(user_id=user_id)
     # ) > 0
     # if is_user_can_generate_new_config and show_create_new_config_button:
-        create_new_config_button = InlineKeyboardButton(
-            text=localizer.get_user_localized_text(
-                user_language_code=language_code,
-                text_localization=localizer.button.create_new_config,
-            ),
-            callback_data="create_new_config",
-        )
-        keyboard.insert(create_new_config_button)
+    create_new_config_button = InlineKeyboardButton(
+        text=localizer.get_user_localized_text(
+            user_language_code=language_code,
+            text_localization=localizer.button.create_new_config,
+        ),
+        callback_data="create_new_config",
+    )
+    keyboard.insert(create_new_config_button)
 
     if users_configs:
         exist_configs_buttons = [
@@ -213,7 +213,7 @@ async def user_configs_list_keyboard(user_id: int, language_code: str) -> Inline
                 user_language_code=language_code,
                 text_localization=localizer.button.renew_subscription,
             ),
-            callback_data="renew_subscription"
+            callback_data="renew_subscription",
         )
     )
     keyboard = await insert_button_back_to_main_menu(keyboard=keyboard, language_code=language_code)
@@ -363,10 +363,10 @@ async def download_app_for_connect_to_vpn_keyboard(
 
         case "macos":
             url = "https://apps.apple.com/us/app/v2box-v2ray-client/id6446814690"
-        
+
         case "windows":
             url = "https://github.com/MatsuriDayo/nekoray/releases/download/3.26/nekoray-3.26-2023-12-09-windows64.zip"
-        
+
         case "linux":
             url = "https://github.com/MatsuriDayo/nekoray/releases/download/3.26/nekoray-3.26-2023-12-09-linux64.zip"
 
@@ -522,9 +522,10 @@ async def config_generation_keyboard(language_code: str):
     )
     return keyboard
 
+
 async def choose_your_os_keyboard(language_code: str):
     keyboard = InlineKeyboardMarkup(row_width=1)
-    buttons= [
+    buttons = [
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
@@ -545,13 +546,13 @@ async def choose_your_os_keyboard(language_code: str):
                 text_localization=localizer.button.show_help_linux,
             ),
             callback_data="show_help_linux",
-        )
+        ),
     ]
 
     for button in buttons:
         keyboard.add(button)
-    
-    keyboard=await insert_button_back_to_main_menu(
+
+    keyboard = await insert_button_back_to_main_menu(
         keyboard=keyboard,
         language_code=language_code,
     )

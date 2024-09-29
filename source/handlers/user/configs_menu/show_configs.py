@@ -21,7 +21,6 @@ async def show_user_configs(call: types.CallbackQuery, state: FSMContext):
     subscription_is_active = await db_manager.get_subscription_status(user_id)
     # Edit the message with the new content or show "no configs" message
 
-
     if not is_user_have_any_configs:
         message_text = localizer.message.no_configs_found_create_new_one
     elif subscription_is_active:

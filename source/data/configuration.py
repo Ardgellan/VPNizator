@@ -37,7 +37,7 @@ class Configuration:
         if not bot_token:
             raise DotEnvVariableNotFound("TG_BOT_TOKEN")
         return bot_token
-    
+
     def _get_yookassa_token(self) -> str:
         yookassa_token = getenv("YOOKASSA_TOKEN")
         if not yookassa_token:

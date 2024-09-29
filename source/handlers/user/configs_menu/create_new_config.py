@@ -43,9 +43,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     await message.answer_chat_action(action=types.ChatActions.UPLOAD_PHOTO)
 
     # Генерация конфига
-    config = await xray_config.add_new_user(
-        config_name=config_name, user_telegram_id=user_id
-    )
+    config = await xray_config.add_new_user(config_name=config_name, user_telegram_id=user_id)
 
     # Генерация QR-кода для конфига
     config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(config)
@@ -60,7 +58,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
         parse_mode=types.ParseMode.HTML,
         reply_markup=await inline.config_generation_keyboard(
             language_code=message.from_user.language_code
-        )
+        ),
     )
 
     # Обновляем баланс пользователя

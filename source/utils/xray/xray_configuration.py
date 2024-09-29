@@ -11,7 +11,6 @@ from source.data import config
 from .credentials_generator import CredentialsGenerator
 
 
-
 class XrayConfiguration:
     def __init__(self):
         self._config_path = config.xray_config_path
@@ -182,12 +181,12 @@ class XrayConfiguration:
             await self._save_server_config(config)
             await self._restart_xray()
             return False
-        
+
         return True
 
     async def reactivate_user_configs_in_xray(self, user_ids: list[int]) -> bool:
         """Восстанавливаем конфиги в Xray для всех пользователей с продленной подпиской"""
-    
+
         # Собираем все UUID конфигов пользователей
         all_configs_to_restore = []
 
@@ -213,7 +212,7 @@ class XrayConfiguration:
                 {
                     "id": uuid,
                     "email": f"{uuid}@example.com",  # Здесь можно использовать email-шаблон
-                    "flow": "xtls-rprx-vision",     # Xray flow
+                    "flow": "xtls-rprx-vision",  # Xray flow
                 }
             )
 
@@ -227,4 +226,3 @@ class XrayConfiguration:
 
         logger.info(f"Все конфиги для пользователей {user_ids} успешно восстановлены.")
         return True
-

@@ -334,8 +334,6 @@ class Selector(DatabaseConnector):
         result = await self._execute_query(query)
         return [record[0] for record in result] if result else []
 
-
-
     async def get_last_subscription_payment(self, user_id: int) -> datetime:
         """Получаем время последнего платежа пользователя по его user_id"""
         query = f"""--sql

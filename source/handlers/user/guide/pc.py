@@ -20,6 +20,7 @@ async def show_help_guide_pc(call: types.CallbackQuery):
         ),
     )
 
+
 @rate_limit(limit=1)
 async def show_help_guide_macos(call: types.CallbackQuery):
     guide_images = await GuideImagesLoader().get_macos_guide_images()
@@ -41,6 +42,7 @@ async def show_help_guide_macos(call: types.CallbackQuery):
         ),
     )
 
+
 @rate_limit(limit=1)
 async def show_help_guide_windows(call: types.CallbackQuery):
     guide_images = await GuideImagesLoader().get_windows_guide_images()
@@ -61,6 +63,7 @@ async def show_help_guide_windows(call: types.CallbackQuery):
             platform="windows",
         ),
     )
+
 
 @rate_limit(limit=1)
 async def show_help_guide_linux(call: types.CallbackQuery):

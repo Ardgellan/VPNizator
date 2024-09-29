@@ -3,9 +3,14 @@ from aiogram.types import ContentType
 from loguru import logger
 
 from .android import show_help_guide_android
-from .guide_menu import show_help_guide_inline #show_help_guide,
+from .guide_menu import show_help_guide_inline  # show_help_guide,
 from .ios import show_help_guide_ios
-from .pc import show_help_guide_pc, show_help_guide_macos, show_help_guide_windows, show_help_guide_linux
+from .pc import (
+    show_help_guide_pc,
+    show_help_guide_macos,
+    show_help_guide_windows,
+    show_help_guide_linux,
+)
 
 
 def register_show_help_guide_handlers(dp: Dispatcher):
