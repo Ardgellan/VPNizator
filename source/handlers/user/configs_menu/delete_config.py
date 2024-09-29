@@ -31,8 +31,11 @@ async def delete_config(call: types.CallbackQuery, state: FSMContext):
             text_localization=localizer.message.config_deleted,
         ),
         parse_mode=types.ParseMode.HTML,
+        reply_markup=await inline.back_to_main_menu_keyboard(
+            language_code=call.from_user.language_code
+        ),
     )
-    await call.answer()
+    await call.message.delete()
     await call.message.answer(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
@@ -42,8 +45,6 @@ async def delete_config(call: types.CallbackQuery, state: FSMContext):
         reply_markup=await inline.user_configs_list_keyboard(
             user_id=call.from_user.id,
             language_code=call.from_user.language_code,
-            # show_create_new_config_button=True,
         ),
     )
-    await call.message.delete()
     await state.finish()
