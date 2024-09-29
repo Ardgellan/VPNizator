@@ -16,15 +16,12 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
     configs_to_renew = await db_manager.is_user_have_any_config(user_id)
 
     if not configs_to_renew:
-        await call.message.edit_text(
+        await call.message.answer(
             text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.nothing_to_renew_message,
             ),
             parse_mode=types.ParseMode.HTML,
-            reply_markup=await inline.trial_period_success_keyboard(
-            language_code=call.from_user.language_code
-            ),
         )
         await call.answer()
         return
@@ -33,15 +30,12 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
     subscription_is_active = await db_manager.get_subscription_status(user_id)
 
     if subscription_is_active:
-        await call.message.edit_text(
+        await call.message.answer(
             text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.subscription_is_active,
             ),
             parse_mode=types.ParseMode.HTML,
-            reply_markup=await inline.trial_period_success_keyboard(
-            language_code=call.from_user.language_code
-            ),
         )
         await call.answer()
         return
@@ -56,15 +50,12 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
         await db_manager.update_last_subscription_payment(user_id, datetime.now())
         # Восстанавливаем конфиги пользователя в Xray
         await xray_config.reactivate_user_configs_in_xray([user_id])
-        await call.message.edit_text(
+        await call.message.answer(
             text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.subscription_renewed_successfully,
             ),
             parse_mode=types.ParseMode.HTML,
-            reply_markup=await inline.trial_period_success_keyboard(
-            language_code=call.from_user.language_code
-            ),
         )
     else:
         # Недостаточно средств
@@ -74,9 +65,6 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
                 text_localization=localizer.message.insufficient_balance_for_sub_renewal,
             ),
             parse_mode=types.ParseMode.HTML,
-            reply_markup=await inline.trial_period_success_keyboard(
-            language_code=call.from_user.language_code
-            ),
         )
 
     await call.answer()
