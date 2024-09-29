@@ -23,6 +23,7 @@ async def show_help_guide_pc(call: types.CallbackQuery):
 
 @rate_limit(limit=1)
 async def show_help_guide_macos(call: types.CallbackQuery):
+    await call.message.delete()
     guide_images = await GuideImagesLoader().get_macos_guide_images()
     media_group = [types.InputMediaPhoto(media=photo) for photo in guide_images]
 
@@ -45,6 +46,7 @@ async def show_help_guide_macos(call: types.CallbackQuery):
 
 @rate_limit(limit=1)
 async def show_help_guide_windows(call: types.CallbackQuery):
+    await call.message.delete()
     guide_images = await GuideImagesLoader().get_windows_guide_images()
     media_group = [types.InputMediaPhoto(media=photo) for photo in guide_images]
 
@@ -67,6 +69,7 @@ async def show_help_guide_windows(call: types.CallbackQuery):
 
 @rate_limit(limit=1)
 async def show_help_guide_linux(call: types.CallbackQuery):
+    await call.message.delete()
     guide_images = await GuideImagesLoader().get_linux_guide_images()
     media_group = [types.InputMediaPhoto(media=photo) for photo in guide_images]
 

@@ -8,6 +8,7 @@ from source.utils.guide_images_loader import GuideImagesLoader
 
 @rate_limit(limit=1)
 async def show_help_guide_ios(call: types.CallbackQuery):
+    await call.message.delete()
     guide_images = await GuideImagesLoader().get_ios_guide_images()
     media_group = [types.InputMediaPhoto(media=photo) for photo in guide_images]
 
