@@ -39,7 +39,7 @@ async def delete_config(call: types.CallbackQuery, state: FSMContext):
             language_code=call.from_user.language_code
         ), 
     )
-
+    await call.answer()
     await call.message.delete()
     
     await state.finish()
