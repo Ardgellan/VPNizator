@@ -9,6 +9,7 @@ from source.utils.xray import xray_config
 
 @rate_limit(limit=1)
 async def confirm_delete_config(call: types.CallbackQuery, state: FSMContext):
+    await state.finish()
     config_uuid = call.data.split("_")[-1]
     await call.message.answer(
         text=localizer.get_user_localized_text(
@@ -37,15 +38,15 @@ async def delete_config(call: types.CallbackQuery, state: FSMContext):
     )
     await call.answer()
     await call.message.delete()
-    await call.message.answer(
-        text=localizer.get_user_localized_text(
-            user_language_code=call.from_user.language_code,
-            text_localization=localizer.message.user_configs_list,
-        ),
-        parse_mode=types.ParseMode.HTML,
-        reply_markup=await inline.user_configs_list_keyboard(
-            user_id=call.from_user.id,
-            language_code=call.from_user.language_code,
-        ),
-    )
+    # await call.message.answer(
+    #     text=localizer.get_user_localized_text(
+    #         user_language_code=call.from_user.language_code,
+    #         text_localization=localizer.message.user_configs_list,
+    #     ),
+    #     parse_mode=types.ParseMode.HTML,
+    #     reply_markup=await inline.user_configs_list_keyboard(
+    #         user_id=call.from_user.id,
+    #         language_code=call.from_user.language_code,
+    #     ),
+    # )
     await state.finish()
