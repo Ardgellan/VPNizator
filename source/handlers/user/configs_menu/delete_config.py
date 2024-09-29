@@ -29,7 +29,7 @@ async def delete_config(call: types.CallbackQuery, state: FSMContext):
     await xray_config.disconnect_user_by_uuid(uuid=config_uuid)
     
 
-    await call.message.answer(
+    await call.message.edit_text(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
             text_localization=localizer.message.config_deleted,
