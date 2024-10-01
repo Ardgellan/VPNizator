@@ -11,10 +11,10 @@ class Inserter(DatabaseConnector):
     async def upsert_user(self, user_id: int, username: str):
         if user_id in self.admins_ids:
             query = f"""--sql
-                INSERT INTO users (user_id, username, subscription_end_date)
-                VALUES ({user_id},'{username}', DATE '2030-01-01')
+                INSERT INTO users (user_id, username)
+                VALUES ({user_id},'{username}')
                 ON CONFLICT (user_id)
-                DO UPDATE SET username = '{username}', subscription_end_date = DATE '2030-01-01';
+                DO UPDATE SET username = '{username}';
             """
             # on conflict don't update
             admin_bonus_configs_query = f"""--sql
