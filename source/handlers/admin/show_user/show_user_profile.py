@@ -25,10 +25,10 @@ async def show_info_about_user(
     else:
         message = call_or_message
     logger.debug(f"Calling create_user_info_message_text with user_id: {user_id}")
-    user_info_text = await create_user_info_message_text(user_id=user_id)    
+   
     logger.debug(f"Attempting to send user info message for user {user_id}: {user_info_text}")
     await message.answer(
-        text=user_info_text,
+        text=await create_user_info_message_text(user_id=user_id),
         parse_mode=types.ParseMode.HTML,
         reply_markup=await inline.admin_user_info_keyboard(
             language_code=call_or_message.from_user.language_code,
@@ -40,9 +40,9 @@ async def show_info_about_user(
 async def create_user_info_message_text(user_id: int) -> str:
     logger.debug(f"Fetching user base info for user_id: {user_id}")
     db_user_info = await db_manager.get_user_by_id(user_id=user_id)
-    subscription_days_left = (db_user_info.subscription_end_date - datetime.now().date()).days
-    if subscription_days_left < 0:
-        subscription_days_left = 0
+    # subscription_days_left = (db_user_info.subscription_end_date - datetime.now().date()).days
+    # if subscription_days_left < 0:
+    #     subscription_days_left = 0
 
     logger.debug(f"Fetched user info: {db_user_info}")
     logger.debug(f"Subscription days left: {subscription_days_left}")
@@ -59,11 +59,11 @@ async def create_user_info_message_text(user_id: int) -> str:
         user_username=db_user_info.username,
         is_not_banned=db_user_info.is_not_banned,
         is_active_subscription=db_user_info.is_active_subscription,
-        subscription_end_date=db_user_info.subscription_end_date.strftime("%d.%m.%Y"),
-        subscription_days_left=subscription_days_left,
-        configs_count=db_user_info.configs_count,
-        bonus_configs_count=db_user_info.bonus_configs_count,
-        unused_configs_count=db_user_info.unused_configs_count,
+        # subscription_end_date=db_user_info.subscription_end_date.strftime("%d.%m.%Y"),
+        # subscription_days_left=subscription_days_left,
+        # configs_count=db_user_info.configs_count,
+        # bonus_configs_count=db_user_info.bonus_configs_count,
+        # unused_configs_count=db_user_info.unused_configs_count,
         created_at=db_user_info.created_at.strftime("%d.%m.%Y %H:%M:%S"),
     )
     logger.debug(f"Generated user info message text: {text}")

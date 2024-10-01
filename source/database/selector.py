@@ -17,57 +17,57 @@ class Selector(DatabaseConnector):
         (
             username,
             is_banned,
-            subscription_end_date,
+            # subscription_end_date,
             created_at,
         ) = await self._get_user_base_info_by_id(user_id)
         
-        logger.debug(f"Fetched base info for user {user_id}: "
-                 f"username={username}, "
-                 f"is_banned={is_banned}, "
-                 f"subscription_end_date={subscription_end_date}, "
-                 f"created_at={created_at}")
+        # logger.debug(f"Fetched base info for user {user_id}: "
+        #          f"username={username}, "
+        #          f"is_banned={is_banned}, "
+        #          f"subscription_end_date={subscription_end_date}, "
+        #          f"created_at={created_at}")
         
         if not created_at:
             raise ValueError(f"User {user_id} not found")
 
-        created_configs_count = await self._get_created_configs_count_by_user_id(user_id)
-        logger.debug(f"Fetched created configs count for user {user_id}: {created_configs_count}")
+        # created_configs_count = await self._get_created_configs_count_by_user_id(user_id)
+        # logger.debug(f"Fetched created configs count for user {user_id}: {created_configs_count}")
 
-        bonus_configs_count = await self._get_bonus_configs_count_by_user_id(user_id)
-        logger.debug(f"Fetched bonus configs count for user {user_id}: {bonus_configs_count}")
+        # bonus_configs_count = await self._get_bonus_configs_count_by_user_id(user_id)
+        # logger.debug(f"Fetched bonus configs count for user {user_id}: {bonus_configs_count}")
 
-        unused_configs_count = (
-            config.default_max_configs_count + bonus_configs_count - created_configs_count
-        )
-        logger.debug(f"Calculated unused configs count for user {user_id}: {unused_configs_count}")
+        # unused_configs_count = (
+        #     config.default_max_configs_count + bonus_configs_count - created_configs_count
+        # )
+        # logger.debug(f"Calculated unused configs count for user {user_id}: {unused_configs_count}")
 
-        is_active_subscription: bool = subscription_end_date >= datetime.now().date()
+        is_active_subscription=await self.get_subscription_status(user_id)
         user = UserInfo(
             user_id=user_id,
             username=username,
             is_not_banned="🟢" if not is_banned else "🔴",
             is_active_subscription="🟢" if is_active_subscription else "🔴",
-            subscription_end_date=subscription_end_date,
-            configs_count=created_configs_count,
-            bonus_configs_count=bonus_configs_count,
-            unused_configs_count=unused_configs_count,
+            # subscription_end_date=subscription_end_date,
+            # configs_count=created_configs_count,
+            # bonus_configs_count=bonus_configs_count,
+            # unused_configs_count=unused_configs_count,
             created_at=created_at,
         )
-        logger.debug(f"User info object created: {user}")
+        # logger.debug(f"User info object created: {user}")
         return user
 
     async def _get_user_base_info_by_id(
         self, user_id: int
     ) -> tuple[str, bool, datetime, datetime] | tuple[None, None, None, None]:
         query = f"""--sql
-            SELECT username, is_banned, subscription_end_date, created_at
+            SELECT username, is_banned, created_at
             FROM users
             WHERE user_id = {user_id};
         """
         result = await self._execute_query(query)
         if result == []:
             logger.error(f"User {user_id} not found")
-            return None, None, None, None
+            return None, None, None
         username, is_banned, subscription_end_date, created_at = result[0]
         logger.debug(f"User {user_id} base info was fetched")
         return username, is_banned, subscription_end_date, created_at
