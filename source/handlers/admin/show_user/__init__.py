@@ -21,21 +21,21 @@ def register_admin_show_user_handlers(dp: Dispatcher):
             content_types=types.ContentTypes.TEXT,
             state=GetUserInfo.wait_for_user_id_or_username,
         )
-        dp.register_callback_query_handler(
-            switch_keyboard_to_user_configs,
-            lambda call: call.data.startswith("show_users_configs_"),
-            state="*",
-        )
-        dp.register_callback_query_handler(
-            ask_admin_for_subscription_duration,
-            lambda call: call.data.startswith("give_subscription_"),
-            state="*",
-        )
-        dp.register_message_handler(
-            check_is_duration_digit,
-            content_types=types.ContentTypes.TEXT,
-            state=GiveSubscription.wait_for_subscription_duration,
-        )
+        # dp.register_callback_query_handler(
+        #     switch_keyboard_to_user_configs,
+        #     lambda call: call.data.startswith("show_users_configs_"),
+        #     state="*",
+        # )
+        # dp.register_callback_query_handler(
+        #     ask_admin_for_subscription_duration,
+        #     lambda call: call.data.startswith("give_subscription_"),
+        #     state="*",
+        # )
+        # dp.register_message_handler(
+        #     check_is_duration_digit,
+        #     content_types=types.ContentTypes.TEXT,
+        #     state=GiveSubscription.wait_for_subscription_duration,
+        # )
 
         dp.register_callback_query_handler(
             toggle_ban_for_user,

@@ -25,10 +25,10 @@ async def show_info_about_user(
     else:
         message = call_or_message
     logger.debug(f"Calling create_user_info_message_text with user_id: {user_id}")
-   
+    user_info_text=await create_user_info_message_text(user_id=user_id)
     logger.debug(f"Attempting to send user info message for user {user_id}: {user_info_text}")
     await message.answer(
-        text=await create_user_info_message_text(user_id=user_id),
+        text=await user_info_text,
         parse_mode=types.ParseMode.HTML,
         reply_markup=await inline.admin_user_info_keyboard(
             language_code=call_or_message.from_user.language_code,

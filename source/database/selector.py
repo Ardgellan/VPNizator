@@ -377,11 +377,22 @@ class Selector(DatabaseConnector):
         result = await self._execute_query(query)
         return [record[0] for record in result] if result else []
 
+    # async def get_subscription_status(self, user_id: int) -> bool:
+    #     query = f"""--sql
+    #         SELECT subscription_is_active
+    #         FROM users
+    #         WHERE user_id = {user_id};
+    #     """
+    #     result = await self._execute_query(query)
+    #     return result[0][0] if result else None
+
     async def get_subscription_status(self, user_id: int) -> bool:
-        query = f"""--sql
-            SELECT subscription_is_active
-            FROM users
-            WHERE user_id = {user_id};
-        """
-        result = await self._execute_query(query)
-        return result[0][0] if result else None
+    query = f"""--sql
+        SELECT subscription_is_active
+        FROM users
+        WHERE user_id = {user_id};
+    """
+    result = await self._execute_query(query)
+    subscription_status = result[0][0] if result else False
+    logger.debug(f"Subscription status for user {user_id}: {subscription_status}")
+    return subscription_status
