@@ -9,10 +9,10 @@ class UserInfo:
     username: str
     is_not_banned: str
     is_active_subscription: bool
-    subscription_end_date: datetime
-    configs_count: int
-    bonus_configs_count: int
-    unused_configs_count: int
+    # subscription_end_date: datetime
+    # configs_count: int
+    # bonus_configs_count: int
+    # unused_configs_count: int
     created_at: datetime
 
 
