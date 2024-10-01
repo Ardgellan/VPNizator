@@ -95,6 +95,6 @@ async def check_is_user_exist(message: types.Message, state: FSMContext):
             parse_mode=types.ParseMode.HTML,
         )
         return
-
+    logger.debug(f"User {user_id} exists, calling show_info_about_user")
     await state.finish()
     await show_info_about_user(call_or_message=message, state=state, user_id=user_id)
