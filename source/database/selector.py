@@ -146,57 +146,57 @@ class Selector(DatabaseConnector):
     #     logger.debug(f"User {user_id} can create {unused_configs_count} more configs")
     #     return unused_configs_count
 
-    async def check_for_user_has_active_subscription_by_config_uuid(self, config_uuid: str) -> bool:
-        query = f"""--sql
-            SELECT EXISTS(
-                SELECT 1
-                FROM users
-                WHERE subscription_end_date >= NOW()::date
-                AND user_id = (
-                    SELECT user_id
-                    FROM vpn_configs
-                    WHERE config_uuid = '{config_uuid}'
-                )
-            );
-        """
-        result = await self._execute_query(query)
-        logger.debug(f"User with uuid {config_uuid} have active subscription: {result[0][0]}")
-        return result[0][0]
+    # async def check_for_user_has_active_subscription_by_config_uuid(self, config_uuid: str) -> bool:
+    #     query = f"""--sql
+    #         SELECT EXISTS(
+    #             SELECT 1
+    #             FROM users
+    #             WHERE subscription_end_date >= NOW()::date
+    #             AND user_id = (
+    #                 SELECT user_id
+    #                 FROM vpn_configs
+    #                 WHERE config_uuid = '{config_uuid}'
+    #             )
+    #         );
+    #     """
+    #     result = await self._execute_query(query)
+    #     logger.debug(f"User with uuid {config_uuid} have active subscription: {result[0][0]}")
+    #     return result[0][0]
 
-    async def check_for_user_has_active_subscription_by_user_id(self, user_id: int) -> bool:
-        query = f"""--sql
-            SELECT EXISTS(
-                SELECT 1
-                FROM users
-                WHERE subscription_end_date >= NOW()::date
-                AND user_id = {user_id}
-            );
-        """
-        result = await self._execute_query(query)
-        logger.debug(f"User with id {user_id} have active subscription: {result[0][0]}")
-        return result[0][0]
+    # async def check_for_user_has_active_subscription_by_user_id(self, user_id: int) -> bool:
+    #     query = f"""--sql
+    #         SELECT EXISTS(
+    #             SELECT 1
+    #             FROM users
+    #             WHERE subscription_end_date >= NOW()::date
+    #             AND user_id = {user_id}
+    #         );
+    #     """
+    #     result = await self._execute_query(query)
+    #     logger.debug(f"User with id {user_id} have active subscription: {result[0][0]}")
+    #     return result[0][0]
 
-    async def get_users_ids_by_configs_uuids(self, configs_uuid: list[str]) -> list[int]:
-        """
-        Get users ids by configs uuids
+    # async def get_users_ids_by_configs_uuids(self, configs_uuid: list[str]) -> list[int]:
+    #     """
+    #     Get users ids by configs uuids
 
-            Args:
-                configs_uuid (list[str]): list of configs uuids
-            Returns:
-                list[int]: list of unique users ids
-        """
-        query = f"""--sql
-            SELECT DISTINCT user_id
-            FROM vpn_configs
-            WHERE config_uuid = ANY(ARRAY{configs_uuid});
-        """
-        result = await self._execute_query(query)
-        if result:
-            users_ids = [record[0] for record in result]
-        else:
-            users_ids = []
-        logger.debug(f"Users ids by configs uuids {configs_uuid}: {users_ids}")
-        return users_ids
+    #         Args:
+    #             configs_uuid (list[str]): list of configs uuids
+    #         Returns:
+    #             list[int]: list of unique users ids
+    #     """
+    #     query = f"""--sql
+    #         SELECT DISTINCT user_id
+    #         FROM vpn_configs
+    #         WHERE config_uuid = ANY(ARRAY{configs_uuid});
+    #     """
+    #     result = await self._execute_query(query)
+    #     if result:
+    #         users_ids = [record[0] for record in result]
+    #     else:
+    #         users_ids = []
+    #     logger.debug(f"Users ids by configs uuids {configs_uuid}: {users_ids}")
+    #     return users_ids
 
     # async def get_users_ids_with_last_day_left_subscription(self) -> list[int]:
     #     return await self._get_users_ids_by_subscription_ends_in_days(days=1)
