@@ -58,7 +58,7 @@ class Selector(DatabaseConnector):
 
     async def _get_user_base_info_by_id(
         self, user_id: int
-    ) -> tuple[str, bool, datetime, datetime] | tuple[None, None, None, None]:
+    ) -> tuple[str, bool, datetime] | tuple[None, None, None]:
         query = f"""--sql
             SELECT username, is_banned, created_at
             FROM users
