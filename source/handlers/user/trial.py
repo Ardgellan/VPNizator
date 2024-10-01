@@ -55,7 +55,7 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
         return
 
     await db_manager.mark_trial_as_used(user_id=user_id)
-    await db_manager.update_user_balance(user_id=user_id, amount=100.00)
+    await db_manager.update_user_balance(user_id=user_id, amount=6.00)
     current_balance = await db_manager.get_user_balance(user_id=user_id)
 
     await call.message.edit_text(
