@@ -45,7 +45,7 @@ async def create_user_info_message_text(user_id: int) -> str:
     #     subscription_days_left = 0
 
     logger.debug(f"Fetched user info: {db_user_info}")
-    logger.debug(f"Subscription days left: {subscription_days_left}")
+    # logger.debug(f"Subscription days left: {subscription_days_left}")
 
     language_code = (await bot.get_chat_member(chat_id=user_id, user_id=user_id)).user.language_code
 
