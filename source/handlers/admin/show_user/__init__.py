@@ -43,16 +43,16 @@ def register_admin_show_user_handlers(dp: Dispatcher):
             state="*",
         )
 
-        dp.register_callback_query_handler(
-            ask_admin_for_count_of_bonus_generations_to_give,
-            lambda call: call.data.startswith("give_bonus_configs_"),
-            state="*",
-        )
-        dp.register_message_handler(
-            check_is_count_of_bonus_generations_to_give_digit,
-            content_types=types.ContentTypes.TEXT,
-            state=GiveBonusConfigGenerations.wait_for_bonus_config_generations_count,
-        )
+        # dp.register_callback_query_handler(
+        #     ask_admin_for_count_of_bonus_generations_to_give,
+        #     lambda call: call.data.startswith("give_bonus_configs_"),
+        #     state="*",
+        # )
+        # dp.register_message_handler(
+        #     check_is_count_of_bonus_generations_to_give_digit,
+        #     content_types=types.ContentTypes.TEXT,
+        #     state=GiveBonusConfigGenerations.wait_for_bonus_config_generations_count,
+        # )
 
     except Exception as e:
         logger.error(f"Error while registering admin handlers: {e}")

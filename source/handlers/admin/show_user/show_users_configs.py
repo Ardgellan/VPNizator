@@ -13,12 +13,12 @@ async def switch_keyboard_to_user_configs(call: types.CallbackQuery, state: FSMC
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
-            text_localization=localizer.message.user_configs_list,
+            text_localization=localizer.message.user_configs_list_for_admin,
         ),
         parse_mode=types.ParseMode.HTML,
         reply_markup=await inline.user_configs_list_keyboard(
             user_id=user_id,
             language_code=call.from_user.language_code,
-            show_create_new_config_button=False,
+            # show_create_new_config_button=False,
         ),
     )

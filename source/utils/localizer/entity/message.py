@@ -51,6 +51,10 @@ class LocalizedMessageText(BaseLocalizedObject):
         return self._get_entity_text("user_info")
 
     @property
+    def user_configs_list_for_admin(self) -> LocalizedText:
+        return self._get_entity_text("user_configs_list_for_admin")
+
+    @property
     def user_configs_list_active(self) -> LocalizedText:
         return self._get_entity_text("user_configs_list_active")
 
