@@ -111,16 +111,16 @@ then
       config_prefix="VPNizator"
 fi
 
-#ask user for max configs count for each user
-# echo ""
-# echo "Enter max configs count for each user:"
-# echo "P.S admin can give more configs to any user from admin panel"
-# echo "Just press ENTER for use default count [$Blue 1000 $White]" | sed 's/\$//g'
-# read max_configs_count
-# if [ -z "$max_configs_count" ]
-# then
-#       max_configs_count="1000"
-# fi
+ask user for max configs count for each user
+echo ""
+echo "Enter max configs count for each user:"
+echo "P.S admin can give more configs to any user from admin panel"
+echo "Just press ENTER for use default count [$Blue 1000 $White]" | sed 's/\$//g'
+read max_configs_count
+if [ -z "$max_configs_count" ]
+then
+      max_configs_count="1000"
+fi
 
 #ask user for site url to hide reality
 echo ""
@@ -286,7 +286,7 @@ XRAY_CONFIG_PATH = "/usr/local/etc/xray/config.json"
 XRAY_PUBLICKEY = "$x25519_public_key"
 XRAY_SHORTID = "$short_id"
 XRAY_SNI = "$site_url"
-# USER_DEFAULT_MAX_CONFIGS_COUNT = "$max_configs_count"
+USER_DEFAULT_MAX_CONFIGS_COUNT = "$max_configs_count"
 EOF
 
 #try to run create_database_tables.py if it fails, then give db user superuser privileges
