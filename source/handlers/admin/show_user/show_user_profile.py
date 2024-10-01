@@ -24,7 +24,7 @@ async def show_info_about_user(
         message = call_or_message.message
     else:
         message = call_or_message
-
+    logger.debug(f"Calling create_user_info_message_text with user_id: {user_id}")
     user_info_text = await create_user_info_message_text(user_id=user_id)    
     logger.debug(f"Attempting to send user info message for user {user_id}: {user_info_text}")
     await message.answer(
@@ -38,12 +38,19 @@ async def show_info_about_user(
 
 
 async def create_user_info_message_text(user_id: int) -> str:
+    logger.debug(f"Fetching user base info for user_id: {user_id}")
     db_user_info = await db_manager.get_user_by_id(user_id=user_id)
     subscription_days_left = (db_user_info.subscription_end_date - datetime.now().date()).days
     if subscription_days_left < 0:
         subscription_days_left = 0
 
+    logger.debug(f"Fetched user info: {db_user_info}")
+    logger.debug(f"Subscription days left: {subscription_days_left}")
+
     language_code = (await bot.get_chat_member(chat_id=user_id, user_id=user_id)).user.language_code
+
+    logger.debug(f"Language code for user {user_id}: {language_code}")
+
     text = localizer.get_user_localized_text(
         user_language_code=language_code,
         text_localization=localizer.message.user_info,
@@ -59,6 +66,7 @@ async def create_user_info_message_text(user_id: int) -> str:
         unused_configs_count=db_user_info.unused_configs_count,
         created_at=db_user_info.created_at.strftime("%d.%m.%Y %H:%M:%S"),
     )
+    logger.debug(f"Generated user info message text: {text}")
     return text
 
 
