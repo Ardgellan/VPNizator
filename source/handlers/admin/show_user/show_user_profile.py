@@ -1,4 +1,5 @@
 from datetime import datetime
+from loguru import logger
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
