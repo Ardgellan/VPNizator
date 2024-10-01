@@ -250,10 +250,7 @@ class Selector(DatabaseConnector):
             SELECT
                 (SELECT COUNT(*) FROM users) AS users_registered,
                 (SELECT COUNT(*) FROM users WHERE is_banned) AS users_banned,
-                (SELECT COUNT(*) FROM users WHERE subscription_end_date >= NOW()::date) AS users_with_active_subscription,
-                (SELECT COUNT(*) FROM users WHERE subscription_end_date < NOW()::date) AS users_with_expired_subscription,
-                (SELECT COUNT(*) FROM users WHERE subscription_end_date = NOW()::date + INTERVAL '1 day') AS users_with_last_day_left_subscription,
-                (SELECT COUNT(*) FROM users WHERE subscription_end_date = NOW()::date + INTERVAL '2 days') AS users_with_two_days_left_subscription,
+                (SELECT COUNT(*) FROM users WHERE subscription_is_active = TRUE) AS users_with_active_subscription,
                 (SELECT COUNT(*) FROM vpn_configs) AS active_configs_count
         """
         result = await self._execute_query(query)
@@ -261,10 +258,7 @@ class Selector(DatabaseConnector):
             users_registered=result[0][0],
             users_banned=result[0][1],
             users_with_active_subscription=result[0][2],
-            users_with_expired_subscription=result[0][3],
-            users_with_last_day_left_subscription=result[0][4],
-            users_with_two_days_left_subscription=result[0][5],
-            active_configs_count=result[0][6],
+            active_configs_count=result[0][3],
         )
         logger.debug(f"Global stats: {global_stats}")
         return global_stats
