@@ -40,33 +40,22 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
     trial_used = await db_manager.is_trial_used(user_id=user_id)
 
     if trial_used == True:
-        # Если пробный период уже использован, отправляем сообщение об отказе
-        rejection_text = localizer.get_user_localized_text(
+        await call.message.edit_text(
+            text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
             text_localization=localizer.message.trial_period_rejection,
-        )
-
-        keyboard = await inline.insert_button_back_to_main_menu(
-            keyboard=None, language_code=call.from_user.language_code
-        )
-
-        await call.message.edit_text(
-            text=rejection_text,
+        ),
             parse_mode=types.ParseMode.HTML,
-            reply_markup=keyboard,
+            reply_markup=await inline.insert_button_back_to_main_menu(
+            keyboard=None, language_code=call.from_user.language_code
+        ),
         )
-
         await call.answer()
         await state.finish()
         return
 
-    # Если пробный период не использован, активируем его
     await db_manager.mark_trial_as_used(user_id=user_id)
-
-    # Начисляем баланс (100 рублей)
     await db_manager.update_user_balance(user_id=user_id, amount=100.00)
-
-    # Получаем текущий баланс пользователя
     current_balance = await db_manager.get_user_balance(user_id=user_id)
 
     await call.message.edit_text(
