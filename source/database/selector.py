@@ -20,13 +20,27 @@ class Selector(DatabaseConnector):
             subscription_end_date,
             created_at,
         ) = await self._get_user_base_info_by_id(user_id)
+        
+        logger.debug(f"Fetched base info for user {user_id}: "
+                 f"username={username}, "
+                 f"is_banned={is_banned}, "
+                 f"subscription_end_date={subscription_end_date}, "
+                 f"created_at={created_at}")
+        
         if not created_at:
             raise ValueError(f"User {user_id} not found")
+
         created_configs_count = await self._get_created_configs_count_by_user_id(user_id)
+        logger.debug(f"Fetched created configs count for user {user_id}: {created_configs_count}")
+
         bonus_configs_count = await self._get_bonus_configs_count_by_user_id(user_id)
+        logger.debug(f"Fetched bonus configs count for user {user_id}: {bonus_configs_count}")
+
         unused_configs_count = (
             config.default_max_configs_count + bonus_configs_count - created_configs_count
         )
+        logger.debug(f"Calculated unused configs count for user {user_id}: {unused_configs_count}")
+
         is_active_subscription: bool = subscription_end_date >= datetime.now().date()
         user = UserInfo(
             user_id=user_id,
@@ -39,6 +53,7 @@ class Selector(DatabaseConnector):
             unused_configs_count=unused_configs_count,
             created_at=created_at,
         )
+        logger.debug(f"User info object created: {user}")
         return user
 
     async def _get_user_base_info_by_id(
