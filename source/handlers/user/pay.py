@@ -88,18 +88,13 @@ async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery)
 async def successful_payment(message: types.Message):
     logger.info(f"User {message.from_user.id} made a successful payment")
 
-    # Получаем информацию о платеже из message.successful_payment
     payment_info = message.successful_payment
 
-    # Извлекаем сумму платежа в рублях (сумма в копейках, поэтому делим на 100)
-    amount = payment_info.total_amount / 100  # Например, 50000 копеек -> 500 рублей
+    amount = payment_info.total_amount / 100
 
-    # Логируем успешный платеж
     logger.info(f"Payment of {amount} RUB received from user {message.from_user.id}")
 
-    # Пополняем баланс пользователя
     await db_manager.update_user_balance(user_id=message.from_user.id, amount=amount)
     logger.info(f"Баланс пользователя {message.from_user.id} пополнен на {amount} руб.")
 
-    # Отправляем сообщение пользователю об успешном пополнении баланса
     await message.answer(f"Оплата на сумму {amount} руб. прошла успешно! Ваш баланс был пополнен.")
