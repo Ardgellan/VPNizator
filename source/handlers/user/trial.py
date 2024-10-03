@@ -127,7 +127,7 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
                     text_localization=localizer.message.error_occurred_during_trial_activation,
                 ),
                 parse_mode=types.ParseMode.HTML,
-                reply_markup=await insert_button_back_to_main_menu(
+                reply_markup=await inline.insert_button_back_to_main_menu(
                     keyboard=None, language_code=call.from_user.language_code
                 ),
             )
