@@ -265,3 +265,7 @@ class LocalizedMessageText(BaseLocalizedObject):
     @property
     def error_occurred_during_trial_activation(self) -> LocalizedText:
         return self._get_entity_text("error_occurred_during_trial_activation")
+
+    @property
+    def successfull_payment_message(self) -> LocalizedText:
+        return self._get_entity_text("successfull_payment_message")

@@ -475,6 +475,13 @@ async def balance_top_up_menu_keyboard(language_code: str):
             ),
             callback_data="pay_thousand_rubles",
         ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.pay_three_thousand_rubles,
+            ),
+            callback_data="pay_three_thousand_rubles",
+        ),
     ]
 
     for button in buttons:

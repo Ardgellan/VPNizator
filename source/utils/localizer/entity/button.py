@@ -151,6 +151,10 @@ class LocalizedButtonText(BaseLocalizedObject):
         return self._get_entity_text("pay_thousand_rubles")
 
     @property
+    def pay_three_thousand_rubles(self) -> LocalizedText:
+        return self._get_entity_text("pay_three_thousand_rubles")
+
+    @property
     def renew_subscription(self) -> LocalizedText:
         return self._get_entity_text("renew_subscription")
 

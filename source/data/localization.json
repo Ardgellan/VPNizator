@@ -243,7 +243,11 @@
         "error_occurred_during_trial_activation": {
             "en": "🤒Sorry, it seems there was an error during the activation of the trial period! Please try again 🙏!",
             "ru": "🤒Простите, кажется возникла ошибка во время активации пробного периода! Пожалуйста, попробуйте еще раз 🙏!"
-        }               
+        },
+        "successfull_payment_message": {
+            "en": "✅Payment of {amount} rubles was successful! Your balance has been topped up.",
+            "ru": "✅Оплата на сумму {amount} рублей прошла успешно! Ваш баланс был пополнен."
+        }                         
     },
     "button": {
         "pc": {
@@ -385,6 +389,10 @@
         "pay_thousand_rubles":{
             "en": "🪙 1000 rubles 🪙",
             "ru": "🪙 1000 рублей 🪙"
+        },
+        "pay_three_thousand_rubles":{
+            "en": "🪙 3000 rubles 🪙",
+            "ru": "🪙 3000 рублей 🪙"
         },
         "renew_subscription": {
             "en": "🔄 Renew Subscription",

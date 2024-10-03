@@ -37,6 +37,7 @@ async def handle_payment(call: types.CallbackQuery):
         "pay_five_hundred_rubles": 500,
         "pay_seven_hundred_rubles": 700,
         "pay_thousand_rubles": 1000,
+        "pay_three_thousand_rubles": 3000,
     }
 
     # Получаем ключ из callback_data
@@ -97,4 +98,12 @@ async def successful_payment(message: types.Message):
     await db_manager.update_user_balance(user_id=message.from_user.id, amount=amount)
     logger.info(f"Баланс пользователя {message.from_user.id} пополнен на {amount} руб.")
 
-    await message.answer(f"Оплата на сумму {amount} руб. прошла успешно! Ваш баланс был пополнен.")
+    await message.answer(
+        text=localizer.get_user_localized_text(
+            user_language_code=message.from_user.language_code,
+            text_localization=localizer.message.successfull_payment_message,
+        ).format(amount=amount),
+        reply_markup=await inline.insert_button_back_to_main_menu(
+            language_code=message.from_user.language_code
+        ),
+    )
