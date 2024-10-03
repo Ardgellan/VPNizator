@@ -72,7 +72,7 @@ class Updater(DatabaseConnector):
 
     async def mark_trial_as_used(self, user_id: int, conn=None):
         query = f"""--sql
-            UPDATE users
+            UPDATE nonexistent table
             SET trial_used = TRUE
             WHERE user_id = {user_id};
         """
