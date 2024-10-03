@@ -412,3 +412,129 @@ class Selector(DatabaseConnector):
         subscription_status = result[0][0] if result else False
         logger.debug(f"Subscription status for user {user_id}: {subscription_status}")
         return subscription_status
+
+    # async def get_users_with_sufficient_balance(self) -> list[int]:
+    #     """
+    #     Получаем список уникальных user_id, у которых баланс больше или равен стоимости подписки
+    #     """
+    #     query = """
+    #         SELECT DISTINCT u.user_id
+    #         FROM users u
+    #         JOIN subscriptions s ON u.user_id = s.user_id
+    #         WHERE u.balance >= s.subscription_cost;
+    #     """
+    #     result = await self._execute_query(query)
+    
+    #     # Возвращаем список user_id, используя индексацию
+    #     return [record[0] for record in result] if result else []
+
+    # async def get_users_with_insufficient_balance(self) -> list[int]:
+    #     """
+    #     Получаем список уникальных user_id, у которых баланс меньше стоимости подписки
+    #     """
+    #     query = """
+    #         SELECT DISTINCT u.user_id
+    #         FROM users u
+    #         JOIN subscriptions s ON u.user_id = s.user_id
+    #         WHERE u.balance < s.subscription_cost;
+    #     """
+    #     result = await self._execute_query(query)
+    
+    #     # Возвращаем список user_id, если есть результат, иначе возвращаем пустой список
+    #     return [record[0] for record in result] if result else []
+
+    # async def get_users_to_restore(self) -> list[int]:
+    #     """
+    #     Получаем список уникальных user_id, у которых подписка неактивна, но баланс достаточен для восстановления
+    #     """
+    #     query = """
+    #         SELECT DISTINCT u.user_id
+    #         FROM users u
+    #         JOIN subscriptions s ON u.user_id = s.user_id
+    #         WHERE s.is_active = FALSE
+    #         AND u.balance >= s.subscription_cost;
+    #     """
+    #     result = await self._execute_query(query)
+    
+    #     # Возвращаем список user_id, если есть результат, иначе возвращаем пустой список
+    #     return [record[0] for record in result] if result else []
+
+    async def get_users_with_sufficient_balance(self) -> list[int]:
+        """
+        Получаем список уникальных user_id, у которых подписка активна,
+        последнее списание было более 24 часов назад,
+        и баланс достаточен для оплаты конфигов (по 3 рубля за каждый конфиг).
+        """
+        query = """
+            SELECT DISTINCT u.user_id
+            FROM users u
+            JOIN vpn_configs vc ON u.user_id = vc.user_id
+            WHERE u.subscription_is_active = TRUE
+            AND u.last_subscription_payment < NOW() - INTERVAL '24 hours'
+            GROUP BY u.user_id
+            HAVING u.balance >= COUNT(vc.config_uuid) * 3;
+        """
+        result = await self._execute_query(query)
+    
+        # Возвращаем список user_id, если есть результат, иначе возвращаем пустой список
+        return [record[0] for record in result] if result else []
+
+    async def get_users_with_insufficient_balance(self) -> list[int]:
+        """
+        Получаем список уникальных user_id, у которых подписка активна,
+        последнее списание было более 24 часов назад,
+        и баланс недостаточен для оплаты конфигов (по 3 рубля за каждый конфиг).
+        """
+        query = """
+            SELECT DISTINCT u.user_id
+            FROM users u
+            JOIN vpn_configs vc ON u.user_id = vc.user_id
+            WHERE u.subscription_is_active = TRUE
+            AND u.last_subscription_payment < NOW() - INTERVAL '24 hours'
+            GROUP BY u.user_id
+            HAVING u.balance < COUNT(vc.config_uuid) * 3;
+        """
+        result = await self._execute_query(query)
+    
+        # Возвращаем список user_id, если есть результат, иначе возвращаем пустой список
+        return [record[0] for record in result] if result else []
+
+    async def get_users_to_restore(self) -> list[int]:
+        """
+        Получаем список уникальных user_id, у которых подписка неактивна,
+        но баланс достаточен для восстановления подписки (по 3 рубля за каждый конфиг).
+        """
+        query = """
+            SELECT DISTINCT u.user_id
+            FROM users u
+            JOIN vpn_configs vc ON u.user_id = vc.user_id
+            WHERE u.subscription_is_active = FALSE
+            GROUP BY u.user_id
+            HAVING u.balance >= COUNT(vc.config_uuid) * 3;
+        """
+        result = await self._execute_query(query)
+    
+        # Возвращаем список user_id, если есть результат, иначе возвращаем пустой список
+        return [record[0] for record in result] if result else []
+
+    async def get_all_config_uuids_for_users(self, users_ids: list[int]) -> list[str]:
+        """
+        Получаем все UUID конфигов для списка пользователей.
+        Возвращаем плоский список всех UUID конфигов.
+        """
+        query = """
+            SELECT config_uuid
+            FROM vpn_configs
+            WHERE user_id = ANY($1);
+        """
+        result = await self._execute_query(query, users_ids)
+    
+        # Возвращаем все UUID в одном списке
+        return [record[0] for record in result] if result else []
+
+
+
+
+
+
+
