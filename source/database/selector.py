@@ -284,21 +284,43 @@ class Selector(DatabaseConnector):
         logger.debug(f"Note about used trial was made: {result}")
         return result[0][0] if result else False
 
-    async def get_user_balance(self, user_id: int) -> float:
-        """Получаем текущий баланс пользователя по его user_id"""
+    # async def get_user_balance(self, user_id: int) -> float:
+    #     """Получаем текущий баланс пользователя по его user_id"""
+    #     query = f"""--sql
+    #         SELECT balance
+    #         FROM users
+    #         WHERE user_id = {user_id};
+    #     """
+    #     result = await self._execute_query(query)
+    #     if result:
+    #         balance = result[0][0]
+    #         logger.debug(f"User {user_id} balance fetched: {balance}")
+    #         return balance
+    #     else:
+    #         logger.error(f"User {user_id} not found or balance could not be retrieved")
+    #         return 0.0  # Возвращаем 0.0, если баланс не найден
+
+    async def get_user_balance(self, user_id: int, conn=None) -> float:
         query = f"""--sql
             SELECT balance
             FROM users
             WHERE user_id = {user_id};
         """
-        result = await self._execute_query(query)
+        if conn:
+            # Если передано соединение, выполняем запрос через него
+            result = await conn.fetchrow(query)
+        else:
+            # Если соединение не передано, создаем новое и выполняем запрос
+            result = await self._execute_query_with_returning_one(query)
+    
         if result:
-            balance = result[0][0]
+            balance = result["balance"]
             logger.debug(f"User {user_id} balance fetched: {balance}")
             return balance
         else:
             logger.error(f"User {user_id} not found or balance could not be retrieved")
-            return 0.0  # Возвращаем 0.0, если баланс не найден
+            return 0.0
+
 
     async def get_current_subscription_cost(self, user_id: int) -> float:
         """Получаем текущую стоимость подписки пользователя"""

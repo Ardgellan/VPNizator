@@ -1,5 +1,6 @@
 import os
 
+from contextlib import asynccontextmanager
 import asyncpg
 from loguru import logger
 
@@ -85,3 +86,16 @@ class DatabaseConnector(Configuration):
             await conn.close()
 
         return result
+
+    @asynccontextmanager
+    async def transaction(self):
+        """Управление транзакцией."""
+        conn = await self._create_connection()  # Открываем соединение
+        try:
+            async with conn.transaction():  # Начинаем транзакцию
+                yield conn  # Возвращаем соединение для использования в транзакции
+        except Exception as e:
+            logger.error(f"Transaction failed: {e}")
+            raise
+        finally:
+            await conn.close()  # Закрываем соединение после завершения работы

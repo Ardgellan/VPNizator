@@ -239,7 +239,11 @@
         "which_os_do_you_have_message": {
             "en": "🧑‍💻Which OS do you have?",
             "ru": "🧑‍💻Какая у Вас Операционная Система?"
-        }             
+        },
+        "error_occurred_during_trial_activation": {
+            "en": "🤒Sorry, it seems there was an error during the activation of the trial period! Please try again 🙏!",
+            "ru": "🤒Простите, кажется возникла ошибка во время активации пробного периода! Пожалуйста, попробуйте еще раз 🙏!"
+        }               
     },
     "button": {
         "pc": {

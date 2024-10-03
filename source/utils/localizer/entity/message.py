@@ -261,3 +261,7 @@ class LocalizedMessageText(BaseLocalizedObject):
     @property
     def help_guide_message_linux(self) -> LocalizedText:
         return self._get_entity_text("help_guide_message_linux")
+
+    @property
+    def error_occurred_during_trial_activation(self) -> LocalizedText:
+        return self._get_entity_text("error_occurred_during_trial_activation")

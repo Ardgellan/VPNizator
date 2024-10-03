@@ -60,26 +60,58 @@ class Updater(DatabaseConnector):
     #     logger.debug(f"Set bonus config generations to user {user_id}")
     #     return True
 
-    async def mark_trial_as_used(self, user_id: int):
+    # async def mark_trial_as_used(self, user_id: int):
+    #     query = f"""--sql
+    #         UPDATE users
+    #         SET trial_used = TRUE
+    #         WHERE user_id = {user_id};
+    #     """
+    #     await self._execute_query(query)
+    #     logger.debug(f"User {user_id} marked as having used the trial period")
+    #     return True
+
+    async def mark_trial_as_used(self, user_id: int, conn=None):
         query = f"""--sql
             UPDATE users
             SET trial_used = TRUE
             WHERE user_id = {user_id};
         """
-        await self._execute_query(query)
+        if conn:
+            # Если передано соединение, используем его для выполнения запроса
+            await conn.execute(query)
+        else:
+            # Если соединение не передано, создаем новое и выполняем запрос
+            await self._execute_query(query)
         logger.debug(f"User {user_id} marked as having used the trial period")
         return True
 
-    async def update_user_balance(self, user_id: int, amount: float) -> bool:
-        """Обновляем баланс пользователя, добавляя или вычитая средства"""
+    # async def update_user_balance(self, user_id: int, amount: float) -> bool:
+    #     """Обновляем баланс пользователя, добавляя или вычитая средства"""
+    #     query = f"""--sql
+    #         UPDATE users
+    #         SET balance = balance + {amount}
+    #         WHERE user_id = {user_id};
+    #     """
+    #     if await self._execute_query(query) is False:
+    #         logger.error(f"Error while updating balance for user {user_id}")
+    #         return False
+    #     logger.debug(f"Updated balance for user {user_id} by {amount}")
+    #     return True
+
+    async def update_user_balance(self, user_id: int, amount: float, conn=None) -> bool:
         query = f"""--sql
             UPDATE users
             SET balance = balance + {amount}
             WHERE user_id = {user_id};
         """
-        if await self._execute_query(query) is False:
-            logger.error(f"Error while updating balance for user {user_id}")
-            return False
+        if conn:
+            # Если передано соединение, выполняем запрос через него
+            await conn.execute(query)
+        else:
+            # Если соединение не передано, создаем новое и выполняем запрос
+            if await self._execute_query(query) is False:
+                logger.error(f"Error while updating balance for user {user_id}")
+                return False
         logger.debug(f"Updated balance for user {user_id} by {amount}")
         return True
 
