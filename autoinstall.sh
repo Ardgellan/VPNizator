@@ -143,8 +143,8 @@ sudo apt install -y software-properties-common
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
 sudo apt install -y python3.11 python3.11-dev python3.11-distutils python3.11-venv
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-python3.11 get-pip.py
+sudo curl https://bootstrap.pypa.io/get-pip.py -o /root/get-pip.py
+python3.11 /root/get-pip.py
 
 #install poetry
 pip3.11 install poetry
