@@ -303,7 +303,7 @@ cd
 #enable and start bot service
 systemctl daemon-reload
 systemctl enable vpnizator.service
-systemctl start vpnizator.service
+# systemctl start vpnizator.service
 
 
 echo "$Green Installation completed successfully" | sed 's/\$//g'
