@@ -193,12 +193,12 @@
             "ru": "Конечно! После активации <b>Пробного Периода</b>, 100 рублей будет начисленно на Ваш счет и Вам будет предложено создать новое VPN соединение. Не волнуйтесь! Мы подробно проведем вас через весь процесс, вы увидите что это вовсе не сложно 😊!\n\n<b>Хотите начать пробный период сейчас?</b>\n\nВаш текущий <b>Баланс</b>: {current_balance} рублей" 
         },
         "trial_period_success": {
-            "en": "🎉Perfect! Your Trial Period was successfully activated!\n\nYour current <b>Balance</b>: {current_balance} rubles\n\nNow, let's create your first VPN configuration together. It's easy-peasy, we will guide you!\n\nOr you can do it yourself later, of course, from 'My VPN configurations' menu.",
-            "ru": "🎉Отлично! Ваш Пробный Период был успешно активирован!\n\nВаш текущий <b>Баланс</b>: {current_balance} рублей\n\nТеперь давайте вместе создадим Ваше первое VPN соединение. Это легче легкого, мы покажем!\n\nИли вы можете сделать это сами, потом, из меню 'Мои VPN соединения'."
+            "en": "🎉Perfect! Your Trial Period was successfully activated!\n\nYour current <b>Balance</b>: {current_balance} rubles\n\nNow, let's create your first VPN configuration together. It's easy-peasy, we will guide you!\n\nOr you can do it yourself later, of course, from \"My VPN configurations\" menu.",
+            "ru": "🎉Отлично! Ваш Пробный Период был успешно активирован!\n\nВаш текущий <b>Баланс</b>: {current_balance} рублей\n\nТеперь давайте вместе создадим Ваше первое VPN соединение. Это легче легкого, мы покажем!\n\nИли вы можете сделать это сами, потом, из меню \"Мои VPN соединения\"."
         },
         "trial_period_rejection": {
-            "en": "⌛Unfortunately you already used your trial period.😔\n\nIf you haven't already, try creating new VPN connfiguration in 'My VPN connections' menu. You can access it from Main Menu. Or top up your balance.",
-            "ru": "⌛К сожалению Вы уже использовали свой пробный период.😔\n\nПопробуйте создать новое VPN соединение в меню 'Мои VPN соединения', если Вы еще этого не сделали. Вы можете обратиться к нему из Главного Меню. Или пополните свой баланс." 
+            "en": "⌛Unfortunately you already used your trial period.😔\n\nIf you haven't already, try creating new VPN connfiguration in \"My VPN connections\" menu. You can access it from Main Menu. Or top up your balance.",
+            "ru": "⌛К сожалению Вы уже использовали свой пробный период.😔\n\nПопробуйте создать новое VPN соединение в меню \"Мои VPN соединения\", если Вы еще этого не сделали. Вы можете обратиться к нему из Главного Меню. Или пополните свой баланс." 
         },
         "terms_of_use_message": {
             "en": "☝️ We do not keep logs!\n\nWe could not transfer any significant information about you to third parties even if we wanted to <b>(and we don’t want to🙈🙉🙊)!</b>\n\nWe have no idea what resources you visit and what you do on them, and no way to get this idea!\n\n<b>However! Breaking the law is bad!</b>\n\n<b>Please do not!</b>!",
@@ -259,8 +259,8 @@
             "ru": "🤖Android"
         },
         "ios": {
-            "en": "🍏IOS",
-            "ru": "🍏IOS"
+            "en": "🍏IOS / MacOS M Series",
+            "ru": "🍏IOS / MacOS M Series"
         },
         "my_configs": {
             "en": "📄My VPN connections",
