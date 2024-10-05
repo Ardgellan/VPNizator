@@ -11,7 +11,7 @@ from .connector import DatabaseConnector
 class Selector(DatabaseConnector):
     def __init__(self) -> None:
         super().__init__()
-        # logger.debug("Selector object was initialized")
+        logger.debug("Selector object was initialized")
 
     async def get_user_by_id(self, user_id: int) -> UserInfo:
         (
@@ -31,7 +31,7 @@ class Selector(DatabaseConnector):
             is_active_subscription="🟢" if is_active_subscription else "🔴",
             created_at=created_at,
         )
-        # logger.debug(f"User info object created: {user}")
+        logger.debug(f"User info object created: {user}")
         return user
 
     async def _get_user_base_info_by_id(
@@ -44,10 +44,10 @@ class Selector(DatabaseConnector):
         """
         result = await self._execute_query(query)
         if result == []:
-            # logger.error(f"User {user_id} not found")
+            logger.error(f"User {user_id} not found")
             return None, None, None
         username, is_banned, created_at = result[0]
-        # logger.debug(f"User {user_id} base info was fetched")
+        logger.debug(f"User {user_id} base info was fetched")
         return username, is_banned, created_at
 
     async def _get_created_configs_count_by_user_id(self, user_id: int) -> int:
@@ -57,7 +57,7 @@ class Selector(DatabaseConnector):
             WHERE user_id = {user_id};
         """
         result = await self._execute_query(query)
-        # logger.debug(f"Created configs count for user {user_id} was fetched: {result[0][0]}")
+        logger.debug(f"Created configs count for user {user_id} was fetched: {result[0][0]}")
         return result[0][0]
 
     async def _get_bonus_configs_count_by_user_id(self, user_id: int) -> int:
@@ -68,7 +68,7 @@ class Selector(DatabaseConnector):
         """
         result = await self._execute_query(query)
         bonus_configs_count = result[0][0] if result else 0
-        # logger.debug(f"Bonus configs count for user {user_id} was fetched: {bonus_configs_count}")
+        logger.debug(f"Bonus configs count for user {user_id} was fetched: {bonus_configs_count}")
         return bonus_configs_count
 
     async def is_user_registered(self, user_id: int) -> bool:
@@ -80,7 +80,7 @@ class Selector(DatabaseConnector):
             );
         """
         result = await self._execute_query(query)
-        # logger.debug(f"User {user_id} exist: {result[0][0]}")
+        logger.debug(f"User {user_id} exist: {result[0][0]}")
         return result[0][0]
 
     async def is_user_have_any_config(self, user_id: int) -> bool:
@@ -92,7 +92,7 @@ class Selector(DatabaseConnector):
             );
         """
         result = await self._execute_query(query)
-        # logger.debug(f"User {user_id} have any config: {result[0][0]}")
+        logger.debug(f"User {user_id} have any config: {result[0][0]}")
         return result[0][0]
 
     async def get_user_config_names_and_uuids(self, user_id: int) -> list[VpnConfigDB] | None:
@@ -102,7 +102,7 @@ class Selector(DatabaseConnector):
             WHERE user_id = {user_id};
         """
         result = await self._execute_query(query)
-        # logger.debug(f"User {user_id} configs: {result}")
+        logger.debug(f"User {user_id} configs: {result}")
         if not result:
             return None
         return [
@@ -122,7 +122,7 @@ class Selector(DatabaseConnector):
             WHERE username = '{username}';
         """
         result = await self._execute_query(query)
-        # logger.debug(f"User id by username {username}: {result}")
+        logger.debug(f"User id by username {username}: {result}")
         return result[0][0] if result else None
 
     async def check_is_user_banned(self, user_id: int) -> bool:
@@ -133,7 +133,7 @@ class Selector(DatabaseConnector):
         """
         result = await self._execute_query(query)
         is_banned = result[0][0] if result else False
-        # logger.debug(f"User {user_id} is banned: {is_banned}")
+        logger.debug(f"User {user_id} is banned: {is_banned}")
         return is_banned
 
     async def get_config_name_by_config_uuid(self, config_uuid: str) -> str:
@@ -143,7 +143,7 @@ class Selector(DatabaseConnector):
             WHERE config_uuid = '{config_uuid}';
         """
         result = await self._execute_query(query)
-        # logger.debug(f"Config name by config uuid {config_uuid}: {result[0][0]}")
+        logger.debug(f"Config name by config uuid {config_uuid}: {result[0][0]}")
         return result[0][0]
 
     async def get_global_stats(self) -> GlobalStatistics:
@@ -161,7 +161,7 @@ class Selector(DatabaseConnector):
             users_with_active_subscription=result[0][2],
             active_configs_count=result[0][3],
         )
-        # logger.debug(f"Global stats: {global_stats}")
+        logger.debug(f"Global stats: {global_stats}")
         return global_stats
 
     async def get_unblocked_users_ids(self) -> list[int]:
@@ -171,18 +171,18 @@ class Selector(DatabaseConnector):
             WHERE is_banned = FALSE;
         """
         result = await self._execute_query(query)
-        # logger.debug(f"Unblocked users ids: {result}")
+        logger.debug(f"Unblocked users ids: {result}")
         return [record[0] for record in result]
 
     async def is_trial_used(self, user_id: int) -> bool:
-        # logger.debug(f"Breakpoint in debugging is_trial_used #1")
+        logger.debug(f"Breakpoint in debugging is_trial_used #1")
         query = f"""--sql
             SELECT trial_used
             FROM users
             WHERE user_id = {user_id};
         """
         result = await self._execute_query(query)
-        # logger.debug(f"Note about used trial was made: {result}")
+        logger.debug(f"Note about used trial was made: {result}")
         return result[0][0] if result else False
 
     async def get_user_balance(self, user_id: int, conn=None) -> float:
@@ -200,10 +200,10 @@ class Selector(DatabaseConnector):
     
         if result:
             balance = result["balance"]
-            # logger.debug(f"User {user_id} balance fetched: {balance}")
+            logger.debug(f"User {user_id} balance fetched: {balance}")
             return balance
         else:
-            # logger.error(f"User {user_id} not found or balance could not be retrieved")
+            logger.error(f"User {user_id} not found or balance could not be retrieved")
             return 0.0
 
 
@@ -222,7 +222,7 @@ class Selector(DatabaseConnector):
             subscription_cost = active_configs_count * 3  # Стоимость подписки — 3 рубля за конфиг
             return subscription_cost
         else:
-            # logger.error(f"Не удалось получить активные конфиги для пользователя {user_id}")
+            logger.error(f"Не удалось получить активные конфиги для пользователя {user_id}")
             return 0.0
 
     async def get_users_with_active_configs(self) -> list[int]:
@@ -260,12 +260,12 @@ class Selector(DatabaseConnector):
         result = await self._execute_query(query)
         if result:
             last_payment_time = result[0][0]
-            # logger.debug(f"User {user_id} last subscription payment fetched: {last_payment_time}")
+            logger.debug(f"User {user_id} last subscription payment fetched: {last_payment_time}")
             return last_payment_time
         else:
-            # logger.error(
-            #     f"User {user_id} not found or last subscription payment could not be retrieved"
-            # )
+            logger.error(
+                f"User {user_id} not found or last subscription payment could not be retrieved"
+            )
             return None
 
     async def get_user_uuids_by_user_id(self, user_id: int) -> list[str]:
@@ -286,7 +286,7 @@ class Selector(DatabaseConnector):
         """
         result = await self._execute_query(query)
         subscription_status = result[0][0] if result else False
-        # logger.debug(f"Subscription status for user {user_id}: {subscription_status}")
+        logger.debug(f"Subscription status for user {user_id}: {subscription_status}")
         return subscription_status
 
     async def get_users_with_sufficient_balance(self) -> list[int]:
