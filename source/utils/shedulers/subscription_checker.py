@@ -17,7 +17,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 00:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=21, minute=56)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=22, minute=15)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -32,6 +32,7 @@ class SubscriptionChecker:
             await self._check_and_renew_subscription(users_with_sufficient_balance)
 
         if users_to_restore:
+            await self._check_and_renew_subscription(users_to_restore)
             await xray_config.reactivate_user_configs_in_xray(users_to_restore)
 
         if users_with_insufficient_balance:
