@@ -3,12 +3,15 @@ from aiogram.types import ContentType
 from loguru import logger
 
 from .start import start, main_menu_by_button
-from .pay import (
-    show_balance_top_up_menu_function,
-    handle_payment,
-    process_pre_checkout_query,
-    successful_payment,
-)
+
+# from .pay import (
+#     show_balance_top_up_menu_function,
+#     handle_payment,
+#     process_pre_checkout_query,
+#     successful_payment,
+# )
+from .pay import *
+
 from .configs_menu.show_configs import show_user_configs
 from .trial import trial_period_function, start_trial_period_function
 from .subscription import manual_renew_subscription
@@ -31,21 +34,27 @@ def register_user_handlers(dp: Dispatcher):
             state="*",
         )
 
-        dp.register_callback_query_handler(
-            show_balance_top_up_menu_function,
-            lambda call: call.data == "balance_top_up",
-            state="*",
-        )
+         # Регистрируем хендлер для команды /pay
+        dp.register_message_handler(handle_payment, commands=["pay"], state="*")
 
-        dp.register_callback_query_handler(
-            handle_payment, lambda call: call.data.startswith("pay_"), state="*"
-        )
+         # Регистрируем хендлер для проверки статуса платежа
+        dp.register_message_handler(check_payment_status, commands=["check_payment"], state="*")
 
-        dp.register_pre_checkout_query_handler(process_pre_checkout_query)
+        # dp.register_callback_query_handler(
+        #     show_balance_top_up_menu_function,
+        #     lambda call: call.data == "balance_top_up",
+        #     state="*",
+        # )
 
-        dp.register_message_handler(
-            successful_payment, content_types=types.ContentType.SUCCESSFUL_PAYMENT
-        )
+        # dp.register_callback_query_handler(
+        #     handle_payment, lambda call: call.data.startswith("pay_"), state="*"
+        # )
+
+        # dp.register_pre_checkout_query_handler(process_pre_checkout_query)
+
+        # dp.register_message_handler(
+        #     successful_payment, content_types=types.ContentType.SUCCESSFUL_PAYMENT
+        # )
 
         dp.register_callback_query_handler(
             show_balance_function,
