@@ -180,7 +180,7 @@ def create_payment(amount, description, return_url):
         return payment.confirmation.confirmation_url
     except Exception as e:
         logger.error(f"Ошибка при создании платежа: {e}")
-        return None
+        return None, None
 
 # Хендлер для проверки статуса платежа
 @dp.message_handler(commands=["check_payment"])
