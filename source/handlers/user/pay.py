@@ -207,8 +207,13 @@ Configuration.secret_key = 'test_iQvI0ynCTlfEwvT9qCOGE7R0n2lOylUvq_GsCezwZes'  #
 
 
 async def handle_payment(message: types.Message):
-    payment_url, payment_id = create_payment(100, message.chat.id)
-    await message.answer(f"{payment_url} {payment_id}")
+    logger.info("Пользователь нажал /pay")  # Логируем действие
+    payment_url, payment_id = await create_payment(100, message.chat.id)
+
+    if payment_url:
+        await message.answer(f"Ссылка на оплату: {payment_url}\nID платежа: {payment_id}")
+    else:
+        await message.answer("Произошла ошибка при создании платежа.")
 
 async def create_payment(amount, chat_id):
     id_key = str(uuid.uuid4())
