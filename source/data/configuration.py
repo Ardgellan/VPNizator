@@ -18,7 +18,8 @@ class Configuration:
     def __init__(self):
         load_dotenv()
         self._bot_token: str = self._get_bot_token()
-        self._yookassa_token: str = self._get_yookassa_token()
+        self._yookassa_shop_id: str = self._get_yookassa_shop_id()  # Добавляем shop_id
+        self._yookassa_api_token: str = self._get_yookassa_api_token()
         self._admins_ids: list[int] = self._get_admins_ids()
         self._user_config_prefix: str = self._get_user_config_prefix()
         self._database_connection_parameters: dict[str, str] = (
@@ -37,11 +38,17 @@ class Configuration:
             raise DotEnvVariableNotFound("TG_BOT_TOKEN")
         return bot_token
 
-    def _get_yookassa_token(self) -> str:
-        yookassa_token = getenv("YOOKASSA_TOKEN")
-        if not yookassa_token:
-            raise DotEnvVariableNotFound("YOOKASSA_TOKEN")
-        return yookassa_token
+    def _get_yookassa_shop_id(self) -> str:  # Новый метод для shop_id
+        yookassa_shop_id = getenv("YOOKASSA_SHOP_ID")
+        if not yookassa_shop_id:
+            raise DotEnvVariableNotFound("YOOKASSA_SHOP_ID")
+        return yookassa_shop_id
+
+    def _get_yookassa_api_token(self) -> str:  # новый метод
+        yookassa_api_token = getenv("YOOKASSA_API_TOKEN")
+        if not yookassa_api_token:
+            raise DotEnvVariableNotFound("YOOKASSA_API_TOKEN")
+        return yookassa_api_token
 
     def _get_admins_ids(self) -> list[int]:
         admins_ids = getenv("ADMINS_IDS")
@@ -112,8 +119,12 @@ class Configuration:
         return self._bot_token
 
     @property
-    def yookassa_token(self) -> str:
-        return self._yookassa_token
+    def yookassa_shop_id(self) -> str:  # Добавляем новое свойство
+        return self._yookassa_shop_id
+
+    @property
+    def yookassa_api_token(self) -> str:  # обновленная переменная
+        return self._yookassa_api_token
 
     @property
     def admins_ids(self) -> list[int]:

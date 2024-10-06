@@ -34,12 +34,6 @@ def register_user_handlers(dp: Dispatcher):
             state="*",
         )
 
-         # Регистрируем хендлер для команды /pay
-        # dp.register_message_handler(handle_payment, commands=["pay"], state="*")
-
-         # Регистрируем хендлер для проверки статуса платежа
-        # dp.register_message_handler(check_payment_status, commands=["check_payment"], state="*")
-
         dp.register_callback_query_handler(
             show_balance_top_up_menu_function,
             lambda call: call.data == "balance_top_up",
@@ -49,18 +43,6 @@ def register_user_handlers(dp: Dispatcher):
         dp.register_callback_query_handler(
             handle_payment, lambda call: call.data.startswith("pay_"), state="*"
         )
-
-        # dp.register_callback_query_handler(
-        #     confirm_payment,
-        #     lambda call: call.data == "paybutton",
-        #     state="*",
-        # )
-
-        # dp.register_pre_checkout_query_handler(process_pre_checkout_query)
-
-        # dp.register_message_handler(
-        #     successful_payment, content_types=types.ContentType.SUCCESSFUL_PAYMENT
-        # )
 
         dp.register_callback_query_handler(
             show_balance_function,
