@@ -35,20 +35,20 @@ def register_user_handlers(dp: Dispatcher):
         )
 
          # Регистрируем хендлер для команды /pay
-        dp.register_message_handler(handle_payment, commands=["pay"], state="*")
+        # dp.register_message_handler(handle_payment, commands=["pay"], state="*")
 
          # Регистрируем хендлер для проверки статуса платежа
         # dp.register_message_handler(check_payment_status, commands=["check_payment"], state="*")
 
-        # dp.register_callback_query_handler(
-        #     show_balance_top_up_menu_function,
-        #     lambda call: call.data == "balance_top_up",
-        #     state="*",
-        # )
+        dp.register_callback_query_handler(
+            show_balance_top_up_menu_function,
+            lambda call: call.data == "balance_top_up",
+            state="*",
+        )
 
-        # dp.register_callback_query_handler(
-        #     handle_payment, lambda call: call.data.startswith("pay_"), state="*"
-        # )
+        dp.register_callback_query_handler(
+            handle_payment, lambda call: call.data.startswith("pay_"), state="*"
+        )
 
         # dp.register_pre_checkout_query_handler(process_pre_checkout_query)
 

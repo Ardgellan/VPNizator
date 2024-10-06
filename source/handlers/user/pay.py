@@ -188,6 +188,7 @@
 #         logger.error(f"Ошибка при проверке статуса платежа: {e}")
 #         await message.answer("Не удалось проверить статус платежа.")
 
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
@@ -201,19 +202,55 @@ from source.keyboard import inline
 from source.utils import localizer
 from source.data import config
 
+from source.middlewares import rate_limit
+from .check_is_user_banned import is_user_banned
+
 # Настройка конфигурации для ЮKassa
 Configuration.account_id = '461741'  # Ваш Shop ID
 Configuration.secret_key = 'test_iQvI0ynCTlfEwvT9qCOGE7R0n2lOylUvq_GsCezwZes'  # Ваш Secret Key
 
 
-async def handle_payment(message: types.Message):
-    logger.info("Пользователь нажал /pay")  # Логируем действие
-    payment_url, payment_id = await create_payment(100, message.chat.id)
+@is_user_banned
+async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FSMContext):
+    logger.info(f"Пользователь {call.from_user.id} открыл меню пополнения баланса")
+    await state.finish()
+    await call.message.edit_text(
+        text=localizer.get_user_localized_text(
+            user_language_code=call.from_user.language_code,
+            text_localization=localizer.message.balance_top_up_message,
+        ),
+        reply_markup=await inline.balance_top_up_menu_keyboard(
+            language_code=call.from_user.language_code
+        ),
+    )
+    await call.answer()
 
-    if payment_url:
-        await message.answer(f"Ссылка на оплату: {payment_url}\nID платежа: {payment_id}")
+
+async def handle_payment(call: types.CallbackQuery):
+    # Получаем сумму из callback_data
+    amount_mapping = {
+        "pay_50_rubles": 50,
+        "pay_100_rubles": 100,
+        "pay_300_rubles": 300,
+        "pay_500_rubles": 500,
+        "pay_700_rubles": 700,
+        "pay_1000_rubles": 1000,
+        "pay_3000_rubles": 3000,
+    }
+    amount = amount_mapping.get(call.data)  # Получаем сумму по нажатой кнопке
+    if amount is not None:
+        # Создаем платеж с соответствующей суммой
+        payment_url, payment_id = await create_payment(amount, call.from_user.id)
+        
+        if payment_url:
+            await call.message.answer(f"Ссылка на оплату: {payment_url}\nID платежа: {payment_id}")
+        else:
+            await call.message.answer("Произошла ошибка при создании платежа.")
     else:
-        await message.answer("Произошла ошибка при создании платежа.")
+        await call.message.answer("Неизвестная сумма. Пожалуйста, попробуйте снова.")
+    
+    await call.answer()  # Подтверждаем обработку коллбека
+
 
 async def create_payment(amount, chat_id):
     id_key = str(uuid.uuid4())
