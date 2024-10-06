@@ -192,9 +192,6 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
-from yookassa import Configuration, Payment
-import uuid
-
 from loguru import logger
 
 from loader import dp, db_manager
@@ -204,6 +201,10 @@ from source.data import config
 
 from source.middlewares import rate_limit
 from .check_is_user_banned import is_user_banned
+
+
+from yookassa import Configuration, Payment
+import uuid
 
 # Настройка конфигурации для ЮKassa
 Configuration.account_id = '461741'  # Ваш Shop ID

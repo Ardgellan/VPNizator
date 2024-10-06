@@ -452,21 +452,21 @@ async def balance_top_up_menu_keyboard(language_code: str):
                 user_language_code=language_code,
                 text_localization=localizer.button.pay_three_hundred_rubles,
             ),
-            callback_data="pay_300_hundred_rubles",
+            callback_data="pay_300_rubles",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
                 text_localization=localizer.button.pay_five_hundred_rubles,
             ),
-            callback_data="pay_500_hundred_rubles",
+            callback_data="pay_500_rubles",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
                 text_localization=localizer.button.pay_seven_hundred_rubles,
             ),
-            callback_data="pay_700_hundred_rubles",
+            callback_data="pay_700_rubles",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
@@ -480,7 +480,7 @@ async def balance_top_up_menu_keyboard(language_code: str):
                 user_language_code=language_code,
                 text_localization=localizer.button.pay_three_thousand_rubles,
             ),
-            callback_data="pay_3000_thousand_rubles",
+            callback_data="pay_3000_rubles",
         ),
     ]
 
