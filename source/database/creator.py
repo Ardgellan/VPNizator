@@ -52,7 +52,8 @@ class Creator(DatabaseConnector):
                 trial_used BOOLEAN NOT NULL DEFAULT FALSE,
                 balance NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
                 subscription_is_active BOOLEAN NOT NULL DEFAULT TRUE,
-                last_subscription_payment TIMESTAMP DEFAULT '1970-01-01 00:00:00',     
+                last_subscription_payment TIMESTAMP DEFAULT '1970-01-01 00:00:00',
+                payment_method_id VARCHAR(64) DEFAULT NULL,     
                 created_at TIMESTAMP NOT NULL DEFAULT NOW()
             );
             """

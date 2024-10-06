@@ -38,6 +38,69 @@ async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FS
     await call.answer()
 
 
+# async def handle_payment(call: types.CallbackQuery):
+#     # Получаем сумму из callback_data
+#     amount_mapping = {
+#         "pay_50_rubles": 50,
+#         "pay_100_rubles": 100,
+#         "pay_300_rubles": 300,
+#         "pay_500_rubles": 500,
+#         "pay_700_rubles": 700,
+#         "pay_1000_rubles": 1000,
+#         "pay_3000_rubles": 3000,
+#     }
+#     amount = amount_mapping.get(call.data)  # Получаем сумму по нажатой кнопке
+    
+#     if amount is not None:
+        
+#         # Создаем платеж с соответствующей суммой
+#         payment_url, payment_id = await create_payment(amount, call.from_user.id)
+        
+#         if payment_url:           
+#             await call.message.answer(
+#                 text=localizer.get_user_localized_text(
+#                     user_language_code=call.from_user.language_code,
+#                     text_localization=localizer.message.payment_confirmation_message,
+#                 ),
+#                 parse_mode=types.ParseMode.HTML,
+#                 reply_markup=await inline.payment_confirmation_keyboard(
+#                     language_code=call.from_user.language_code,
+#                     payment_url=payment_url
+#                 ),
+#             )
+
+#             # Запуск проверки статуса платежа
+#             payment_success = await check_payment_status(payment_id, call.from_user.id, amount)
+#             if payment_success:
+#                 await call.message.answer(
+#                     text=localizer.get_user_localized_text(
+#                         user_language_code=call.from_user.language_code,
+#                         text_localization=localizer.message.successfull_payment_message,
+#                     ).format(amount=amount),
+#                     reply_markup=await inline.insert_button_back_to_main_menu(
+#                         language_code=call.from_user.language_code
+#                     ),
+#                 )
+#             else:
+#                 await call.message.answer(f"Ваш платеж был отменен.")
+#         else:
+#             await call.message.answer(
+#                 text=localizer.get_user_localized_text(
+#                 user_language_code=call.from_user.language_code,
+#                 text_localization=localizer.message.payment_assembly_error_message,
+#                 ),
+#                 parse_mode=types.ParseMode.HTML,
+#                 reply_markup=await inline.insert_button_back_to_main_menu(
+#                 language_code=call.from_user.language_code
+#                 ),
+#             )
+#     else:
+#         await call.message.answer("Неизвестная сумма. Пожалуйста, попробуйте снова.")
+    
+#     await call.answer()  # Подтверждаем обработку коллбека
+
+
+@is_user_banned
 async def handle_payment(call: types.CallbackQuery):
     # Получаем сумму из callback_data
     amount_mapping = {
@@ -50,12 +113,18 @@ async def handle_payment(call: types.CallbackQuery):
         "pay_3000_rubles": 3000,
     }
     amount = amount_mapping.get(call.data)  # Получаем сумму по нажатой кнопке
-    
+
     if amount is not None:
+        # Проверяем, есть ли у пользователя сохраненный метод оплаты
+        payment_method_id = await db_manager.get_user_payment_method(call.from_user.id)
         
-        # Создаем платеж с соответствующей суммой
-        payment_url, payment_id = await create_payment(amount, call.from_user.id)
-        
+        if payment_method_id:
+            # Если есть сохраненный метод, создаем платеж с его использованием
+            payment_url, payment_id = await create_payment(amount, call.from_user.id, payment_method_id)
+        else:
+            # Если нет сохраненного метода, создаем обычный платеж
+            payment_url, payment_id = await create_payment(amount, call.from_user.id)
+
         if payment_url:           
             await call.message.answer(
                 text=localizer.get_user_localized_text(
@@ -86,12 +155,12 @@ async def handle_payment(call: types.CallbackQuery):
         else:
             await call.message.answer(
                 text=localizer.get_user_localized_text(
-                user_language_code=call.from_user.language_code,
-                text_localization=localizer.message.payment_assembly_error_message,
+                    user_language_code=call.from_user.language_code,
+                    text_localization=localizer.message.payment_assembly_error_message,
                 ),
                 parse_mode=types.ParseMode.HTML,
                 reply_markup=await inline.insert_button_back_to_main_menu(
-                language_code=call.from_user.language_code
+                    language_code=call.from_user.language_code
                 ),
             )
     else:
@@ -100,40 +169,70 @@ async def handle_payment(call: types.CallbackQuery):
     await call.answer()  # Подтверждаем обработку коллбека
 
 
-async def create_payment(amount, chat_id):
+# async def create_payment(amount, chat_id):
+#     id_key = str(uuid.uuid4())
+#     payment = Payment.create({
+#     "amount": {
+#         "value": amount,
+#         "currency": "RUB"
+#     },
+#     "payment_method_data": {
+#         "type": "bank_card"
+#     },
+#     "confirmation": {
+#         "type": "redirect",
+#         "return_url": "https://t.me/VPNizatorBot"
+#     },
+#     "capture": True,
+#     "metadata": {
+#         "chat_id": chat_id
+#     },  
+#     "description": "Пополнение баланса VPNizator"
+#     }, id_key)
+#     return payment.confirmation.confirmation_url, payment.id
+
+
+async def create_payment(amount, chat_id, payment_method_id=None):
     id_key = str(uuid.uuid4())
-    payment = Payment.create({
-    "amount": {
-        "value": amount,
-        "currency": "RUB"
-    },
-    "payment_method_data": {
-        "type": "bank_card"
-    },
-    "confirmation": {
-        "type": "redirect",
-        "return_url": "https://t.me/VPNizatorBot"
-    },
-    "capture": True,
-    "metadata": {
-        "chat_id": chat_id
-    },  
-    "description": "Пополнение баланса VPNizator"
-    }, id_key)
+    
+    payment_data = {
+        "amount": {
+            "value": amount,
+            "currency": "RUB"
+        },
+        "payment_method_data": {
+            "type": "bank_card"
+        },
+        "confirmation": {
+            "type": "redirect",
+            "return_url": "https://t.me/VPNizatorBot"
+        },
+        "capture": True,
+        "metadata": {
+            "chat_id": chat_id
+        },  
+        "description": "Пополнение баланса VPNizator"
+    }
+
+    # Если у пользователя есть сохраненный метод оплаты, добавляем его в запрос
+    if payment_method_id:
+        payment_data["payment_method_id"] = payment_method_id
+
+    payment = Payment.create(payment_data, id_key)
     return payment.confirmation.confirmation_url, payment.id
 
 
 async def check_payment_status(payment_id, chat_id, amount):
-    max_attempts = 120  # Максимальное количество попыток (например, 10 минут с шагом 5 секунд)
-    attempts = 0
+    # max_attempts = 120  # Максимальное количество попыток (например, 10 минут с шагом 5 секунд)
+    # attempts = 0
     # Опрос API ЮKassa на предмет статуса платежа
     payment = json.loads((Payment.find_one(payment_id)).json())
     
-    while payment['status'] == 'pending' and attempts < max_attempts:
+    while payment['status'] == 'pending':   #and attempts < max_attempts
         logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
         await asyncio.sleep(5)  # Ожидание 5 секунд перед следующим запросом
         payment = json.loads((Payment.find_one(payment_id)).json())
-        attempts += 1
+        # attempts += 1
     if payment['status'] == 'succeeded':
         logger.info(f"Платеж {payment_id} успешно выполнен пользователем {chat_id}.")
         # Обновляем баланс пользователя
