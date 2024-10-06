@@ -253,7 +253,7 @@ async def check_payment_status(payment_id, chat_id, amount):
         logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
         await asyncio.sleep(5)  # Ожидание 5 секунд перед следующим запросом
         payment = json.loads((Payment.find_one(payment_id)).json())
-        attempts += 1
+        # attempts += 1
 
     if payment['status'] == 'succeeded':
         logger.info(f"Платеж {payment_id} успешно выполнен пользователем {chat_id}.")
