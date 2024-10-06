@@ -15,11 +15,6 @@ from .pc import (
 
 def register_show_help_guide_handlers(dp: Dispatcher):
     try:
-        # dp.register_message_handler(
-        #     show_help_guide,
-        #     commands=["help", "guide", "h"],
-        #     state="*",
-        # )
         dp.register_callback_query_handler(
             show_help_guide_inline,
             lambda call: call.data == "vpn_installation_manual",
