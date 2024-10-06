@@ -98,15 +98,15 @@
 #     await db_manager.update_user_balance(user_id=message.from_user.id, amount=amount)
 #     logger.info(f"Баланс пользователя {message.from_user.id} пополнен на {amount} руб.")
 
-#     await message.answer(
-#         text=localizer.get_user_localized_text(
-#             user_language_code=message.from_user.language_code,
-#             text_localization=localizer.message.successfull_payment_message,
-#         ).format(amount=amount),
-#         reply_markup=await inline.insert_button_back_to_main_menu(
-#             language_code=message.from_user.language_code
-#         ),
-#     )
+    # await message.answer(
+    #     text=localizer.get_user_localized_text(
+    #         user_language_code=message.from_user.language_code,
+    #         text_localization=localizer.message.successfull_payment_message,
+    #     ).format(amount=amount),
+    #     reply_markup=await inline.insert_button_back_to_main_menu(
+    #         language_code=message.from_user.language_code
+    #     ),
+    # )
 
 
 
@@ -265,11 +265,11 @@ async def handle_payment(call: types.CallbackQuery):
             if payment_success:
                 await call.message.answer(
                     text=localizer.get_user_localized_text(
-                        user_language_code=message.from_user.language_code,
+                        user_language_code=call.from_user.language_code,
                         text_localization=localizer.message.successfull_payment_message,
                     ).format(amount=amount),
                     reply_markup=await inline.insert_button_back_to_main_menu(
-                        language_code=message.from_user.language_code
+                        language_code=call.from_user.language_code
                     ),
                 )
             else:
@@ -320,7 +320,7 @@ async def check_payment_status(payment_id, chat_id, amount):
     # Опрос API ЮKassa на предмет статуса платежа
     payment = json.loads((Payment.find_one(payment_id)).json())
     
-    while payment['status'] == 'pending':
+    while payment['status'] == 'pending' and attempts < max_attempts:
         logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
         await asyncio.sleep(5)  # Ожидание 5 секунд перед следующим запросом
         payment = json.loads((Payment.find_one(payment_id)).json())
