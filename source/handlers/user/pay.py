@@ -191,6 +191,8 @@
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
+import json
+import asyncio
 
 from loguru import logger
 
@@ -257,6 +259,13 @@ async def handle_payment(call: types.CallbackQuery):
                     payment_url=payment_url
                 ),
             )
+
+            # Запуск проверки статуса платежа
+            payment_success = await check_payment_status(payment_id, call.from_user.id, amount)
+            if payment_success:
+                await call.message.answer(f"Ваш платеж на сумму {amount} руб. успешно завершен.")
+            else:
+                await call.message.answer(f"Ваш платеж был отменен.")
         else:
             await call.message.answer(
                 text=localizer.get_user_localized_text(
@@ -272,35 +281,6 @@ async def handle_payment(call: types.CallbackQuery):
         await call.message.answer("Неизвестная сумма. Пожалуйста, попробуйте снова.")
     
     await call.answer()  # Подтверждаем обработку коллбека
-
-
-# async def confirm_payment(call: types.CallbackQuery, state: FSMContext):
-#     # Получаем данные состояния
-#     data = await state.get_data()
-#     amount = data.get('amount')  # Извлекаем сохраненную сумму
-    
-#     if amount is not None:
-#         # Создаем платеж с соответствующей суммой
-#         payment_url, payment_id = await create_payment(amount, call.from_user.id)
-
-#         if payment_url:
-#             await call.message.answer(f"Ссылка на оплату: {payment_url}\nID платежа: {payment_id}")
-#         else:
-#             await call.message.answer(
-#                 text=localizer.get_user_localized_text(
-#                 user_language_code=call.from_user.language_code,
-#                 text_localization=localizer.message.payment_assembly_error_message,
-#                 ),
-#                 parse_mode=types.ParseMode.HTML,
-#                 reply_markup=await inline.insert_button_back_to_main_menu(
-#                 language_code=call.from_user.language_code
-#                 ),
-#             )
-#     else:
-#         await call.message.answer("Неизвестная сумма. Пожалуйста, попробуйте снова.")
-    
-#     await state.finish()  # Сброс состояния
-#     await call.answer()  # Подтверждаем обработку коллбека
 
 
 async def create_payment(amount, chat_id):
@@ -326,4 +306,20 @@ async def create_payment(amount, chat_id):
     return payment.confirmation.confirmation_url, payment.id
 
 
-
+async def check_payment_status(payment_id, chat_id, amount):
+    # Опрос API ЮKassa на предмет статуса платежа
+    payment = json.loads((Payment.find_one(payment_id)).json())
+    
+    while payment['status'] == 'pending':
+        logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
+        await asyncio.sleep(5)  # Ожидание 5 секунд перед следующим запросом
+        payment = json.loads((Payment.find_one(payment_id)).json())
+    
+    if payment['status'] == 'succeeded':
+        logger.info(f"Платеж {payment_id} успешно выполнен пользователем {chat_id}.")
+        # Обновляем баланс пользователя
+        await db_manager.update_user_balance(chat_id, amount)
+        return True
+    elif payment['status'] == 'canceled':
+        logger.info(f"Платеж {payment_id} был отменен для пользователя {chat_id}.")
+        return False
