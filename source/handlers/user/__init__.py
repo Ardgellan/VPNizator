@@ -38,7 +38,7 @@ def register_user_handlers(dp: Dispatcher):
         dp.register_message_handler(handle_payment, commands=["pay"], state="*")
 
          # Регистрируем хендлер для проверки статуса платежа
-        dp.register_message_handler(check_payment_status, commands=["check_payment"], state="*")
+        # dp.register_message_handler(check_payment_status, commands=["check_payment"], state="*")
 
         # dp.register_callback_query_handler(
         #     show_balance_top_up_menu_function,

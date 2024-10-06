@@ -110,10 +110,89 @@
 
 
 
+# from aiogram import types
+# from aiogram.dispatcher import FSMContext
+
+# from yookassa import Configuration, Payment
+
+# from loguru import logger
+
+# from loader import dp, db_manager
+# from source.keyboard import inline
+# from source.utils import localizer
+# from source.data import config
+
+# # Настройка конфигурации для ЮKassa
+# Configuration.account_id = '461741'  # Ваш Shop ID
+# Configuration.secret_key = 'test_iQvI0ynCTlfEwvT9qCOGE7R0n2lOylUvq_GsCezwZes'  # Ваш Secret Key
+
+# async def handle_payment(message: types.Message):
+#     amount = '100.00'  # Сумма платежа
+#     description = 'Оплата подписки'  # Описание платежа
+#     return_url = 'https://t.me/VPNizatorBot'  # URL для возврата после оплаты
+
+#     try:
+#         # Создаем платеж через ЮKassa
+#         payment_url, payment_id = create_payment(amount, description, return_url)
+#         if payment_url:
+#             # Отправляем ссылку пользователю
+#             await message.answer(f"Перейдите по ссылке для оплаты: {payment_url}")
+#             # Отправляем пользователю идентификатор платежа и инструкцию
+#             await message.answer(f"Ваш payment_id: {payment_id}. Используйте его для проверки статуса платежа.")
+#             await message.answer(f"После завершения оплаты, введите команду /check_payment {payment_id} для проверки статуса платежа.")
+#         else:
+#             await message.answer("Произошла ошибка при создании платежа. Попробуйте снова.")
+#     except Exception as e:
+#         logger.error(f"Ошибка при обработке платежа: {e}")
+#         await message.answer("Произошла ошибка. Попробуйте снова позже.")
+
+# # Функция для создания платежа через ЮKassa
+# def create_payment(amount, description, return_url):
+#     try:
+#         payment = Payment.create({
+#             "amount": {
+#                 "value": amount,  # Сумма платежа в формате "рубли.копейки"
+#                 "currency": "RUB"  # Валюта
+#             },
+#             "confirmation": {
+#                 "type": "redirect",  # Тип подтверждения - редирект на страницу оплаты
+#                 "return_url": return_url  # URL, на который вернется пользователь после оплаты
+#             },
+#             "capture": True,  # Автоматически списать средства после успешной оплаты
+#             "description": description  # Описание платежа
+#         })
+#         return payment.confirmation.confirmation_url
+#     except Exception as e:
+#         logger.error(f"Ошибка при создании платежа: {e}")
+#         return None, None
+
+# # Хендлер для проверки статуса платежа
+# @dp.message_handler(commands=["check_payment"])
+# async def check_payment_status(message: types.Message):
+#     payment_id = message.get_args()  # Получаем ID платежа из аргументов команды
+#     if not payment_id:
+#         await message.answer("Пожалуйста, предоставьте идентификатор платежа.")
+#         return
+
+#     try:
+#         payment = Payment.find_one(payment_id)
+#         status = payment.status
+
+#         if status == 'succeeded':
+#             await message.answer("Оплата прошла успешно!")
+#         elif status == 'pending':
+#             await message.answer("Оплата еще не завершена. Пожалуйста, подождите.")
+#         else:
+#             await message.answer(f"Статус платежа: {status}. Пожалуйста, проверьте детали оплаты.")
+#     except Exception as e:
+#         logger.error(f"Ошибка при проверке статуса платежа: {e}")
+#         await message.answer("Не удалось проверить статус платежа.")
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
 from yookassa import Configuration, Payment
+import uuid
 
 from loguru import logger
 
@@ -126,82 +205,32 @@ from source.data import config
 Configuration.account_id = '461741'  # Ваш Shop ID
 Configuration.secret_key = 'test_iQvI0ynCTlfEwvT9qCOGE7R0n2lOylUvq_GsCezwZes'  # Ваш Secret Key
 
-from aiogram import types
-from aiogram.dispatcher import FSMContext
-
-from yookassa import Configuration, Payment
-
-from loguru import logger
-
-from loader import dp, db_manager
-from source.keyboard import inline
-from source.utils import localizer
-from source.data import config
-
-# Настройка конфигурации для ЮKassa
-Configuration.account_id = '461741'  # Ваш Shop ID
-Configuration.secret_key = 'test_iQvI0ynCTlfEwvT9qCOGE7R0n2lOylUvq_GsCezwZes'  # Ваш Secret Key
 
 async def handle_payment(message: types.Message):
-    amount = '100.00'  # Сумма платежа
-    description = 'Оплата подписки'  # Описание платежа
-    return_url = 'https://t.me/VPNizatorBot'  # URL для возврата после оплаты
+    payment_url, payment_id = create_payment(100, message.chat.id)
+    await message.answer(f"{payment_url} {payment_id}")
 
-    try:
-        # Создаем платеж через ЮKassa
-        payment_url, payment_id = create_payment(amount, description, return_url)
-        if payment_url:
-            # Отправляем ссылку пользователю
-            await message.answer(f"Перейдите по ссылке для оплаты: {payment_url}")
-            # Отправляем пользователю идентификатор платежа и инструкцию
-            await message.answer(f"Ваш payment_id: {payment_id}. Используйте его для проверки статуса платежа.")
-            await message.answer(f"После завершения оплаты, введите команду /check_payment {payment_id} для проверки статуса платежа.")
-        else:
-            await message.answer("Произошла ошибка при создании платежа. Попробуйте снова.")
-    except Exception as e:
-        logger.error(f"Ошибка при обработке платежа: {e}")
-        await message.answer("Произошла ошибка. Попробуйте снова позже.")
+async def create_payment(amount, chat_id):
+    id_key = str(uuid.uuid4())
+    payment = Payment.create({
+    "amount": {
+        "value": amount,
+        "currency": "RUB"
+    },
+    "payment_method_data": {
+        "type": "bank_card"
+    },
+    "confirmation": {
+        "type": "redirect",
+        "return_url": "https://t.me/VPNizatorBot"
+    },
+    "capture": True,
+    "metadata": {
+        "chat_id": chat_id
+    },  
+    "description": "Гони Дзенги!"
+    }, id_key)
+    return payment.confirmation.confirmation_url, payment.id
 
-# Функция для создания платежа через ЮKassa
-def create_payment(amount, description, return_url):
-    try:
-        payment = Payment.create({
-            "amount": {
-                "value": amount,  # Сумма платежа в формате "рубли.копейки"
-                "currency": "RUB"  # Валюта
-            },
-            "confirmation": {
-                "type": "redirect",  # Тип подтверждения - редирект на страницу оплаты
-                "return_url": return_url  # URL, на который вернется пользователь после оплаты
-            },
-            "capture": True,  # Автоматически списать средства после успешной оплаты
-            "description": description  # Описание платежа
-        })
-        return payment.confirmation.confirmation_url
-    except Exception as e:
-        logger.error(f"Ошибка при создании платежа: {e}")
-        return None, None
-
-# Хендлер для проверки статуса платежа
-@dp.message_handler(commands=["check_payment"])
-async def check_payment_status(message: types.Message):
-    payment_id = message.get_args()  # Получаем ID платежа из аргументов команды
-    if not payment_id:
-        await message.answer("Пожалуйста, предоставьте идентификатор платежа.")
-        return
-
-    try:
-        payment = Payment.find_one(payment_id)
-        status = payment.status
-
-        if status == 'succeeded':
-            await message.answer("Оплата прошла успешно!")
-        elif status == 'pending':
-            await message.answer("Оплата еще не завершена. Пожалуйста, подождите.")
-        else:
-            await message.answer(f"Статус платежа: {status}. Пожалуйста, проверьте детали оплаты.")
-    except Exception as e:
-        logger.error(f"Ошибка при проверке статуса платежа: {e}")
-        await message.answer("Не удалось проверить статус платежа.")
 
 
