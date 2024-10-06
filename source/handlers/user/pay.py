@@ -222,19 +222,45 @@ async def create_payment(amount, chat_id, payment_method_id=None):
     return payment.confirmation.confirmation_url, payment.id
 
 
+# async def check_payment_status(payment_id, chat_id, amount):
+#     # max_attempts = 120  # Максимальное количество попыток (например, 10 минут с шагом 5 секунд)
+#     # attempts = 0
+#     # Опрос API ЮKassa на предмет статуса платежа
+#     payment = json.loads((Payment.find_one(payment_id)).json())
+    
+#     while payment['status'] == 'pending':   #and attempts < max_attempts
+#         logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
+#         await asyncio.sleep(5)  # Ожидание 5 секунд перед следующим запросом
+#         payment = json.loads((Payment.find_one(payment_id)).json())
+#         # attempts += 1
+#     if payment['status'] == 'succeeded':
+#         logger.info(f"Платеж {payment_id} успешно выполнен пользователем {chat_id}.")
+#         # Обновляем баланс пользователя
+#         await db_manager.update_user_balance(chat_id, amount)
+#         return True
+#     elif payment['status'] == 'canceled':
+#         logger.info(f"Платеж {payment_id} был отменен для пользователя {chat_id}.")
+#         return False
+
+
 async def check_payment_status(payment_id, chat_id, amount):
     # max_attempts = 120  # Максимальное количество попыток (например, 10 минут с шагом 5 секунд)
     # attempts = 0
     # Опрос API ЮKassa на предмет статуса платежа
     payment = json.loads((Payment.find_one(payment_id)).json())
-    
-    while payment['status'] == 'pending':   #and attempts < max_attempts
+
+    while payment['status'] == 'pending':  # and attempts < max_attempts
         logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
         await asyncio.sleep(5)  # Ожидание 5 секунд перед следующим запросом
         payment = json.loads((Payment.find_one(payment_id)).json())
-        # attempts += 1
+        attempts += 1
+
     if payment['status'] == 'succeeded':
         logger.info(f"Платеж {payment_id} успешно выполнен пользователем {chat_id}.")
+        # Сохраняем payment_method_id, если он есть
+        if 'payment_method_id' in payment:
+            await db_manager.save_user_payment_method(chat_id, payment['payment_method']['id'])
+        
         # Обновляем баланс пользователя
         await db_manager.update_user_balance(chat_id, amount)
         return True
