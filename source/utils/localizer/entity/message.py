@@ -269,3 +269,11 @@ class LocalizedMessageText(BaseLocalizedObject):
     @property
     def successfull_payment_message(self) -> LocalizedText:
         return self._get_entity_text("successfull_payment_message")
+
+    @property
+    def payment_confirmation_message(self) -> LocalizedText:
+        return self._get_entity_text("payment_confirmation_message")
+
+    @property
+    def payment_assembly_error_message(self) -> LocalizedText:
+        return self._get_entity_text("payment_assembly_error_message")

@@ -564,3 +564,26 @@ async def choose_your_os_keyboard(language_code: str):
         language_code=language_code,
     )
     return keyboard
+
+    
+async def payment_confirmation_keyboard(language_code: str, payment_url: str):
+    keyboard = InlineKeyboardMarkup(row_width=1)  # Одна кнопка в ряду
+
+    # Кнопка "Оплатить"
+    pay_button = InlineKeyboardButton(
+        text=localizer.get_user_localized_text(
+            user_language_code=language_code,
+            text_localization=localizer.button.pay_button  # Замените на вашу локализацию
+        ),
+        url=payment_url,  # URL для перехода на сайт платежной системы
+    )
+
+    # Добавляем кнопки на клавиатуру
+    keyboard.add(pay_button)
+
+    keyboard = await insert_button_back_to_main_menu(
+        keyboard=keyboard,
+        language_code=language_code,
+    )
+
+    return keyboard

@@ -171,5 +171,7 @@ class LocalizedButtonText(BaseLocalizedObject):
         return self._get_entity_text("show_help_windows")
 
     @property
-    def show_help_linux(self) -> LocalizedText:
-        return self._get_entity_text("show_help_linux")
+    def pay_button(self) -> LocalizedText:
+        return self._get_entity_text("pay_button")
+
+    

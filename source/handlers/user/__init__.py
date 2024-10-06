@@ -50,6 +50,12 @@ def register_user_handlers(dp: Dispatcher):
             handle_payment, lambda call: call.data.startswith("pay_"), state="*"
         )
 
+        # dp.register_callback_query_handler(
+        #     confirm_payment,
+        #     lambda call: call.data == "paybutton",
+        #     state="*",
+        # )
+
         # dp.register_pre_checkout_query_handler(process_pre_checkout_query)
 
         # dp.register_message_handler(

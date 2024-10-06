@@ -247,7 +247,15 @@
         "successfull_payment_message": {
             "en": "✅Payment of {amount} rubles was successful! Your balance has been topped up.",
             "ru": "✅Оплата на сумму {amount} рублей прошла успешно! Ваш баланс был пополнен."
-        }                         
+        },
+        "payment_confirmation_message": {
+            "en": "🟢 Please click on the \"Pay\" button to go to the payment system website.",
+            "ru": "🟢 Пожалуйста, нажмите на кнопку \"Оплатить\", чтобы перейти на сайт платежной системы."
+        },
+        "payment_assembly_error_message": {
+            "en": "🔴 An error occurred when generating the payment! Please try again! 🙏",
+            "ru": "🔴 При формировании платежа возникла ошибка! Пожалуйста, попробуйте еще раз! 🙏."
+        }                              
     },
     "button": {
         "pc": {
@@ -413,6 +421,10 @@
         "show_help_linux": {
             "en": "🖥️ Linux",
             "ru": "🖥️ Linux"
+        },
+        "pay_button": {
+            "en": "💳 Pay",
+            "ru": "💳 Оплатить"
         }
     }
 }

@@ -239,18 +239,68 @@ async def handle_payment(call: types.CallbackQuery):
         "pay_3000_rubles": 3000,
     }
     amount = amount_mapping.get(call.data)  # Получаем сумму по нажатой кнопке
+    
     if amount is not None:
+        
         # Создаем платеж с соответствующей суммой
         payment_url, payment_id = await create_payment(amount, call.from_user.id)
         
-        if payment_url:
-            await call.message.answer(f"Ссылка на оплату: {payment_url}\nID платежа: {payment_id}")
+        if payment_url:           
+            await call.message.answer(
+                text=localizer.get_user_localized_text(
+                    user_language_code=call.from_user.language_code,
+                    text_localization=localizer.message.payment_confirmation_message,
+                ),
+                parse_mode=types.ParseMode.HTML,
+                reply_markup=await inline.payment_confirmation_keyboard(
+                    language_code=call.from_user.language_code,
+                    payment_url=payment_url
+                ),
+            )
         else:
-            await call.message.answer("Произошла ошибка при создании платежа.")
+            await call.message.answer(
+                text=localizer.get_user_localized_text(
+                user_language_code=call.from_user.language_code,
+                text_localization=localizer.message.payment_assembly_error_message,
+                ),
+                parse_mode=types.ParseMode.HTML,
+                reply_markup=await inline.insert_button_back_to_main_menu(
+                language_code=call.from_user.language_code
+                ),
+            )
     else:
         await call.message.answer("Неизвестная сумма. Пожалуйста, попробуйте снова.")
     
     await call.answer()  # Подтверждаем обработку коллбека
+
+
+# async def confirm_payment(call: types.CallbackQuery, state: FSMContext):
+#     # Получаем данные состояния
+#     data = await state.get_data()
+#     amount = data.get('amount')  # Извлекаем сохраненную сумму
+    
+#     if amount is not None:
+#         # Создаем платеж с соответствующей суммой
+#         payment_url, payment_id = await create_payment(amount, call.from_user.id)
+
+#         if payment_url:
+#             await call.message.answer(f"Ссылка на оплату: {payment_url}\nID платежа: {payment_id}")
+#         else:
+#             await call.message.answer(
+#                 text=localizer.get_user_localized_text(
+#                 user_language_code=call.from_user.language_code,
+#                 text_localization=localizer.message.payment_assembly_error_message,
+#                 ),
+#                 parse_mode=types.ParseMode.HTML,
+#                 reply_markup=await inline.insert_button_back_to_main_menu(
+#                 language_code=call.from_user.language_code
+#                 ),
+#             )
+#     else:
+#         await call.message.answer("Неизвестная сумма. Пожалуйста, попробуйте снова.")
+    
+#     await state.finish()  # Сброс состояния
+#     await call.answer()  # Подтверждаем обработку коллбека
 
 
 async def create_payment(amount, chat_id):
