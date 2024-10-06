@@ -71,6 +71,7 @@ async def trial_period_function(call: types.CallbackQuery, state: FSMContext):
 
 #     await call.answer()
 
+
 @rate_limit(limit=1)
 async def start_trial_period_function(call: types.CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
@@ -98,10 +99,10 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
         try:
             # Помечаем, что пользователь использовал пробный период
             await db_manager.mark_trial_as_used(user_id=user_id, conn=conn)
-            
+
             # Обновляем баланс пользователя
             await db_manager.update_user_balance(user_id=user_id, amount=6.00, conn=conn)
-            
+
             # Получаем обновленный баланс
             current_balance = await db_manager.get_user_balance(user_id=user_id, conn=conn)
 

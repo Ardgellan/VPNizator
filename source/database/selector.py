@@ -19,11 +19,11 @@ class Selector(DatabaseConnector):
             is_banned,
             created_at,
         ) = await self._get_user_base_info_by_id(user_id)
-        
+
         if not created_at:
             raise ValueError(f"User {user_id} not found")
 
-        is_active_subscription=await self.get_subscription_status(user_id)
+        is_active_subscription = await self.get_subscription_status(user_id)
         user = UserInfo(
             user_id=user_id,
             username=username,
@@ -197,7 +197,7 @@ class Selector(DatabaseConnector):
         else:
             # Если соединение не передано, создаем новое и выполняем запрос
             result = await self._execute_query_with_returning_one(query)
-    
+
         if result:
             balance = result["balance"]
             logger.debug(f"User {user_id} balance fetched: {balance}")
@@ -205,7 +205,6 @@ class Selector(DatabaseConnector):
         else:
             logger.error(f"User {user_id} not found or balance could not be retrieved")
             return 0.0
-
 
     async def get_current_subscription_cost(self, user_id: int) -> float:
         """Получаем текущую стоимость подписки пользователя"""
@@ -358,10 +357,9 @@ class Selector(DatabaseConnector):
             WHERE user_id = ANY($1);
         """
         result = await self._execute_query(query, users_ids)
-    
+
         # Возвращаем все UUID в одном списке
         return [record[0] for record in result] if result else []
-
 
     async def get_user_payment_method(self, user_id: int) -> str | None:
         query = f"""--sql

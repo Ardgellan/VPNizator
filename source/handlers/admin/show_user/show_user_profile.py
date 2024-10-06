@@ -25,7 +25,7 @@ async def show_info_about_user(
     else:
         message = call_or_message
     logger.debug(f"Calling create_user_info_message_text with user_id: {user_id}")
-    user_info_text=await create_user_info_message_text(user_id=user_id)
+    user_info_text = await create_user_info_message_text(user_id=user_id)
     logger.debug(f"Attempting to send user info message for user {user_id}: {user_info_text}")
     await message.answer(
         text=user_info_text,

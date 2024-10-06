@@ -34,7 +34,7 @@ async def delete_config(call: types.CallbackQuery, state: FSMContext):
         parse_mode=types.ParseMode.HTML,
         reply_markup=await inline.insert_button_back_to_main_menu(
             language_code=call.from_user.language_code
-        )
+        ),
     )
     await call.answer()
     await call.message.delete()

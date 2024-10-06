@@ -177,5 +177,3 @@ class LocalizedButtonText(BaseLocalizedObject):
     @property
     def pay_button(self) -> LocalizedText:
         return self._get_entity_text("pay_button")
-
-    

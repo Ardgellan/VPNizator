@@ -157,4 +157,3 @@ class Updater(DatabaseConnector):
         """
         await self._execute_query(query)
         logger.debug(f"Payment method ID for user {user_id} saved: {payment_method_id}")
-
