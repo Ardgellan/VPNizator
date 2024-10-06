@@ -263,7 +263,15 @@ async def handle_payment(call: types.CallbackQuery):
             # Запуск проверки статуса платежа
             payment_success = await check_payment_status(payment_id, call.from_user.id, amount)
             if payment_success:
-                await call.message.answer(f"Ваш платеж на сумму {amount} руб. успешно завершен.")
+                await call.message.answer(
+                    text=localizer.get_user_localized_text(
+                        user_language_code=message.from_user.language_code,
+                        text_localization=localizer.message.successfull_payment_message,
+                    ).format(amount=amount),
+                    reply_markup=await inline.insert_button_back_to_main_menu(
+                        language_code=message.from_user.language_code
+                    ),
+                )
             else:
                 await call.message.answer(f"Ваш платеж был отменен.")
         else:
@@ -307,6 +315,8 @@ async def create_payment(amount, chat_id):
 
 
 async def check_payment_status(payment_id, chat_id, amount):
+    max_attempts = 120  # Максимальное количество попыток (например, 10 минут с шагом 5 секунд)
+    attempts = 0
     # Опрос API ЮKassa на предмет статуса платежа
     payment = json.loads((Payment.find_one(payment_id)).json())
     
@@ -314,7 +324,7 @@ async def check_payment_status(payment_id, chat_id, amount):
         logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
         await asyncio.sleep(5)  # Ожидание 5 секунд перед следующим запросом
         payment = json.loads((Payment.find_one(payment_id)).json())
-    
+        attempts += 1
     if payment['status'] == 'succeeded':
         logger.info(f"Платеж {payment_id} успешно выполнен пользователем {chat_id}.")
         # Обновляем баланс пользователя
