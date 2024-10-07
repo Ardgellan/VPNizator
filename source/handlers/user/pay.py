@@ -224,8 +224,9 @@ async def create_payment(amount, chat_id, payment_method_id=None):
         "id": payment_method_id
         }
         logger.debug(f"Creating payment with payment_method_id={payment_method_id} for user {chat_id}")
-
+    logger.debug(f"ULTRABABASRAKA! Full payment data before sending: {payment_data}")
     payment = Payment.create(payment_data, id_key)
+    logger.debug(f"ULTRABABASRAKA! Payment created: {payment.json()}")
     logger.debug(f"Payment created: {payment.json()}")
     return payment.confirmation.confirmation_url, payment.id
 
