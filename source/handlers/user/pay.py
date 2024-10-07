@@ -179,7 +179,7 @@ async def create_payment(amount, chat_id):
         "currency": "RUB"
     },
     "payment_method_data": {
-        "type": "spb"
+        "type": "sberbank"
     },
     "confirmation": {
         "type": "redirect",
