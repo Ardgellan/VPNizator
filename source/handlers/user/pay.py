@@ -24,6 +24,8 @@ Configuration.secret_key = config.yookassa_api_token
 
 @is_user_banned
 async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FSMContext):
+    available_methods = Payment.get_available_payment_methods()
+    logger.info(f"Доступные методы оплаты {available_methods} вот же они")
     logger.info(f"Пользователь {call.from_user.id} открыл меню пополнения баланса")
     await state.finish()
     await call.message.edit_text(
@@ -179,7 +181,8 @@ async def create_payment(amount, chat_id):
         "currency": "RUB"
     },
     "payment_method_data": {
-        "type": "bank_card"
+        "type": "bank_card",
+        "type": "spb"
     },
     "confirmation": {
         "type": "redirect",
