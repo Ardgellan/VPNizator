@@ -361,13 +361,13 @@ class Selector(DatabaseConnector):
         # Возвращаем все UUID в одном списке
         return [record[0] for record in result] if result else []
 
-    # async def get_user_payment_method(self, user_id: int) -> str | None:
-    #     query = f"""--sql
-    #         SELECT payment_method_id
-    #         FROM users
-    #         WHERE user_id = {user_id};
-    #     """
-    #     result = await self._execute_query(query)
-    #     payment_method_id = result[0][0] if result and result[0][0] else None
-    #     logger.debug(f"Payment method ID for user {user_id}: {payment_method_id}")
-    #     return payment_method_id
+    async def get_user_payment_method(self, user_id: int) -> str | None:
+        query = f"""--sql
+            SELECT payment_method_id
+            FROM users
+            WHERE user_id = {user_id};
+        """
+        result = await self._execute_query(query)
+        payment_method_id = result[0][0] if result and result[0][0] else None
+        logger.debug(f"Payment method ID for user {user_id}: {payment_method_id}")
+        return payment_method_id

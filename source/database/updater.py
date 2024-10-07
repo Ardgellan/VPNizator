@@ -149,11 +149,11 @@ class Updater(DatabaseConnector):
         await self._execute_query(query, users_ids, is_active)
         logger.info(f"Статус подписки для пользователей {users_ids} обновлен на {is_active}.")
 
-    # async def save_user_payment_method(self, user_id: int, payment_method_id: str):
-    #     query = f"""--sql
-    #         UPDATE users
-    #         SET payment_method_id = '{payment_method_id}'
-    #         WHERE user_id = {user_id};
-    #     """
-    #     await self._execute_query(query)
-    #     logger.debug(f"Payment method ID for user {user_id} saved: {payment_method_id}")
+    async def save_user_payment_method(self, user_id: int, payment_method_id: str):
+        query = f"""--sql
+            UPDATE users
+            SET payment_method_id = '{payment_method_id}'
+            WHERE user_id = {user_id};
+        """
+        await self._execute_query(query)
+        logger.debug(f"Payment method ID for user {user_id} saved: {payment_method_id}")
