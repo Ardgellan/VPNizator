@@ -220,7 +220,9 @@ async def create_payment(amount, chat_id, payment_method_id=None):
         payment_data["save_payment_method"] = True
         logger.debug(f"Creating payment with save_payment_method=True for user {chat_id}")
     else:
-        payment_data["payment_method_id"] = payment_method_id
+        payment_data["payment_method"] = {
+        "id": payment_method_id
+        }
         logger.debug(f"Creating payment with payment_method_id={payment_method_id} for user {chat_id}")
 
     payment = Payment.create(payment_data, id_key)
