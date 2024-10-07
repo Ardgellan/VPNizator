@@ -189,7 +189,23 @@ async def create_payment(amount, chat_id):
     "metadata": {
         "chat_id": chat_id
     },
-    "description": "Пополнение баланса VPNizator"
+    "description": "Пополнение баланса VPNizator",
+    "receipt": {
+        "customer": {
+            "email": "user@example.com"  # Или номер телефона, если нет email
+        },
+        "items": [
+            {
+                "description": "Оплата Подписки",
+                "quantity": 1,
+                "amount": {
+                    "value": amount,
+                    "currency": "RUB"
+                },
+                "vat_code": 1
+            }
+        ]
+    }
     }, id_key)
     logger.debug("ПРОВЕРКА_2")
     return payment.confirmation.confirmation_url, payment.id
