@@ -218,10 +218,13 @@ async def create_payment(amount, chat_id, payment_method_id=None):
     # Если у пользователя нет сохраненного метода оплаты, добавляем параметр save_payment_method
     if payment_method_id is None:
         payment_data["save_payment_method"] = True
+        logger.debug(f"Creating payment with save_payment_method=True for user {chat_id}")
     else:
         payment_data["payment_method_id"] = payment_method_id
+        logger.debug(f"Creating payment with payment_method_id={payment_method_id} for user {chat_id}")
 
     payment = Payment.create(payment_data, id_key)
+    logger.debug(f"Payment created: {payment.json()}")
     return payment.confirmation.confirmation_url, payment.id
 
 
@@ -251,17 +254,21 @@ async def check_payment_status(payment_id, chat_id, amount):
     # attempts = 0
     # Опрос API ЮKassa на предмет статуса платежа
     payment = json.loads((Payment.find_one(payment_id)).json())
+    # Логируем ответ на первый запрос к ЮKassa
+    logger.debug(f"Initial payment status for payment_id={payment_id}: {payment}")
 
     while payment["status"] == "pending":  # and attempts < max_attempts
         logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
         await asyncio.sleep(5)  # Ожидание 5 секунд перед следующим запросом
         payment = json.loads((Payment.find_one(payment_id)).json())
         # attempts += 1
+        logger.debug(f"Updated payment status for payment_id={payment_id}: {payment}")
 
     if payment["status"] == "succeeded":
         logger.info(f"Платеж {payment_id} успешно выполнен пользователем {chat_id}.")
         # Сохраняем payment_method_id, если он есть
-        if "payment_method_id" in payment:
+        if "payment_method" in payment:
+            logger.debug(f"Saving payment_method_id={payment['payment_method']['id']} for user {chat_id}")
             await db_manager.save_user_payment_method(chat_id, payment["payment_method"]["id"])
 
         # Обновляем баланс пользователя
