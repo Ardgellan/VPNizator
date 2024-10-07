@@ -195,7 +195,7 @@ async def handle_payment(call: types.CallbackQuery):
 
 async def create_payment(amount, chat_id, payment_method_id=None):
     id_key = str(uuid.uuid4())
-
+    logger.debug("ПРОВЕРКА_1")
     payment_data = {
         "amount": {
             "value": amount,
@@ -214,7 +214,7 @@ async def create_payment(amount, chat_id, payment_method_id=None):
             },
         "description": "Пополнение баланса VPNizator",
     }
-
+    logger.debug("ПРОВЕРКА_2")
     # Если у пользователя нет сохраненного метода оплаты, добавляем параметр save_payment_method
     if payment_method_id is None:
         payment_data["save_payment_method"] = True
