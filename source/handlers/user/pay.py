@@ -81,8 +81,6 @@ async def handle_payment(call: types.CallbackQuery):
                         language_code=call.from_user.language_code
                     ),
                 )
-            else:
-                await call.message.answer(f"Ваш платеж был отменен.")
         else:
             await call.message.answer(
                 text=localizer.get_user_localized_text(
