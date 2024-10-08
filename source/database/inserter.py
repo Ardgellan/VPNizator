@@ -37,13 +37,28 @@ class Inserter(DatabaseConnector):
 
         logger.debug(f"User {user_id} was upserted")
 
-    async def insert_new_vpn_config(self, user_id: int, config_name: str, config_uuid: str):
+    # async def insert_new_vpn_config(self, user_id: int, config_name: str, config_uuid: str):
+    #     query = f"""--sql
+    #         INSERT INTO vpn_configs (user_id, config_name, config_uuid)
+    #         VALUES ({user_id}, '{config_name}','{config_uuid}');
+    #     """
+    #     await self._execute_query(query)
+    #     logger.debug(f"VPN config {config_uuid} was inserted")
+
+    async def insert_new_vpn_config(self, user_id: int, config_name: str, config_uuid: str, conn=None):
         query = f"""--sql
             INSERT INTO vpn_configs (user_id, config_name, config_uuid)
-            VALUES ({user_id}, '{config_name}','{config_uuid}');
+            VALUES ({user_id}, '{config_name}', '{config_uuid}');
         """
-        await self._execute_query(query)
-        logger.debug(f"VPN config {config_uuid} was inserted")
+    
+        if conn:
+            # Если передано соединение, используем его для выполнения запроса
+            await conn.execute(query)
+        else:
+            # Если соединение не передано, выполняем обычный запрос
+            await self._execute_query(query)
+    
+        logger.debug(f"VPN config {config_uuid} was inserted for user {user_id}")
 
     async def upsert_new_bonus_config_count_for_user(self, user_id: int, count: int):
         query = f"""--sql
