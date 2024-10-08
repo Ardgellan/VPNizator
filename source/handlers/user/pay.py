@@ -100,6 +100,64 @@ async def handle_payment(call: types.CallbackQuery):
     await call.answer()  # Подтверждаем обработку коллбека
 
 
+async def create_payment(amount, chat_id):
+    id_key = str(uuid.uuid4())
+    logger.debug("ПРОВЕРКА_1")
+    payment = Payment.create({
+    "amount": {
+        "value": amount,
+        "currency": "RUB"
+    },
+    "confirmation": {
+        "type": "redirect",
+        "return_url": "https://t.me/VPNizatorBot"
+    },
+    "capture": True,
+    "metadata": {
+        "chat_id": chat_id
+    },
+    "description": "Пополнение баланса VPNizator",
+    "receipt": {
+        "customer": {
+            "email": "user@example.com"  # Или номер телефона, если нет email
+        },
+        "items": [
+            {
+                "description": "Оплата Подписки",
+                "quantity": 1,
+                "amount": {
+                    "value": amount,
+                    "currency": "RUB"
+                },
+                "vat_code": 1
+            }
+        ]
+    }
+    }, id_key)
+    logger.debug("ПРОВЕРКА_2")
+    return payment.confirmation.confirmation_url, payment.id
+
+
+async def check_payment_status(payment_id, chat_id, amount):
+    # max_attempts = 120  # Максимальное количество попыток (например, 10 минут с шагом 5 секунд)
+    # attempts = 0
+    # Опрос API ЮKassa на предмет статуса платежа
+    payment = json.loads((Payment.find_one(payment_id)).json())
+
+    while payment['status'] == 'pending':   #and attempts < max_attempts
+        logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
+        await asyncio.sleep(5)  # Ожидание 5 секунд перед следующим запросом
+        payment = json.loads((Payment.find_one(payment_id)).json())
+        # attempts += 1
+    if payment['status'] == 'succeeded':
+        logger.info(f"Платеж {payment_id} успешно выполнен пользователем {chat_id}.")
+        # Обновляем баланс пользователя
+        await db_manager.update_user_balance(chat_id, amount)
+        return True
+    elif payment['status'] == 'canceled':
+        logger.info(f"Платеж {payment_id} был отменен для пользователя {chat_id}.")
+        return False
+
 
 # async def handle_payment(call: types.CallbackQuery):
 #     # Получаем сумму из callback_data
@@ -170,44 +228,6 @@ async def handle_payment(call: types.CallbackQuery):
 #     await call.answer()  # Подтверждаем обработку коллбека
 
 
-async def create_payment(amount, chat_id):
-    id_key = str(uuid.uuid4())
-    logger.debug("ПРОВЕРКА_1")
-    payment = Payment.create({
-    "amount": {
-        "value": amount,
-        "currency": "RUB"
-    },
-    "confirmation": {
-        "type": "redirect",
-        "return_url": "https://t.me/VPNizatorBot"
-    },
-    "capture": True,
-    "metadata": {
-        "chat_id": chat_id
-    },
-    "description": "Пополнение баланса VPNizator",
-    "receipt": {
-        "customer": {
-            "email": "user@example.com"  # Или номер телефона, если нет email
-        },
-        "items": [
-            {
-                "description": "Оплата Подписки",
-                "quantity": 1,
-                "amount": {
-                    "value": amount,
-                    "currency": "RUB"
-                },
-                "vat_code": 1
-            }
-        ]
-    }
-    }, id_key)
-    logger.debug("ПРОВЕРКА_2")
-    return payment.confirmation.confirmation_url, payment.id
-
-
 # async def create_payment(amount, chat_id, payment_method_id=None):
 #     id_key = str(uuid.uuid4())
 #     logger.debug("ПРОВЕРКА_1")
@@ -242,27 +262,6 @@ async def create_payment(amount, chat_id):
 #     logger.debug(f"ULTRABABASRAKA! Payment created: {payment.json()}")
 #     logger.debug(f"Payment created: {payment.json()}")
 #     return payment.confirmation.confirmation_url, payment.id
-
-
-async def check_payment_status(payment_id, chat_id, amount):
-    # max_attempts = 120  # Максимальное количество попыток (например, 10 минут с шагом 5 секунд)
-    # attempts = 0
-    # Опрос API ЮKassa на предмет статуса платежа
-    payment = json.loads((Payment.find_one(payment_id)).json())
-
-    while payment['status'] == 'pending':   #and attempts < max_attempts
-        logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
-        await asyncio.sleep(5)  # Ожидание 5 секунд перед следующим запросом
-        payment = json.loads((Payment.find_one(payment_id)).json())
-        # attempts += 1
-    if payment['status'] == 'succeeded':
-        logger.info(f"Платеж {payment_id} успешно выполнен пользователем {chat_id}.")
-        # Обновляем баланс пользователя
-        await db_manager.update_user_balance(chat_id, amount)
-        return True
-    elif payment['status'] == 'canceled':
-        logger.info(f"Платеж {payment_id} был отменен для пользователя {chat_id}.")
-        return False
 
 
 # async def check_payment_status(payment_id, chat_id, amount):
