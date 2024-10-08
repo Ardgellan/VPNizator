@@ -31,47 +31,6 @@ async def trial_period_function(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
 
 
-# # Функция для проверки и инициализации пробного периода
-# @rate_limit(limit=1)
-# async def start_trial_period_function(call: types.CallbackQuery, state: FSMContext):
-#     user_id = call.from_user.id
-
-#     # Проверяем, использовал ли пользователь пробный период
-#     trial_used = await db_manager.is_trial_used(user_id=user_id)
-
-#     if trial_used == True:
-#         await call.message.edit_text(
-#             text=localizer.get_user_localized_text(
-#             user_language_code=call.from_user.language_code,
-#             text_localization=localizer.message.trial_period_rejection,
-#         ),
-#             parse_mode=types.ParseMode.HTML,
-#             reply_markup=await inline.insert_button_back_to_main_menu(
-#             keyboard=None, language_code=call.from_user.language_code
-#         ),
-#         )
-#         await call.answer()
-#         await state.finish()
-#         return
-
-#     await db_manager.mark_trial_as_used(user_id=user_id)
-#     await db_manager.update_user_balance(user_id=user_id, amount=6.00)
-#     current_balance = await db_manager.get_user_balance(user_id=user_id)
-
-#     await call.message.edit_text(
-#         text=localizer.get_user_localized_text(
-#             user_language_code=call.from_user.language_code,
-#             text_localization=localizer.message.trial_period_success,
-#         ).format(current_balance=current_balance),
-#         parse_mode=types.ParseMode.HTML,
-#         reply_markup=await inline.trial_period_success_keyboard(
-#             language_code=call.from_user.language_code
-#         ),
-#     )
-
-#     await call.answer()
-
-
 @rate_limit(limit=1)
 async def start_trial_period_function(call: types.CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
@@ -134,3 +93,45 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
             )
             await call.answer()
             await state.finish()
+
+
+
+# # Функция для проверки и инициализации пробного периода
+# @rate_limit(limit=1)
+# async def start_trial_period_function(call: types.CallbackQuery, state: FSMContext):
+#     user_id = call.from_user.id
+
+#     # Проверяем, использовал ли пользователь пробный период
+#     trial_used = await db_manager.is_trial_used(user_id=user_id)
+
+#     if trial_used == True:
+#         await call.message.edit_text(
+#             text=localizer.get_user_localized_text(
+#             user_language_code=call.from_user.language_code,
+#             text_localization=localizer.message.trial_period_rejection,
+#         ),
+#             parse_mode=types.ParseMode.HTML,
+#             reply_markup=await inline.insert_button_back_to_main_menu(
+#             keyboard=None, language_code=call.from_user.language_code
+#         ),
+#         )
+#         await call.answer()
+#         await state.finish()
+#         return
+
+#     await db_manager.mark_trial_as_used(user_id=user_id)
+#     await db_manager.update_user_balance(user_id=user_id, amount=6.00)
+#     current_balance = await db_manager.get_user_balance(user_id=user_id)
+
+#     await call.message.edit_text(
+#         text=localizer.get_user_localized_text(
+#             user_language_code=call.from_user.language_code,
+#             text_localization=localizer.message.trial_period_success,
+#         ).format(current_balance=current_balance),
+#         parse_mode=types.ParseMode.HTML,
+#         reply_markup=await inline.trial_period_success_keyboard(
+#             language_code=call.from_user.language_code
+#         ),
+#     )
+
+#     await call.answer()

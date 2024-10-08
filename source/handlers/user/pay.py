@@ -137,21 +137,39 @@ async def create_payment(amount, chat_id):
 
 
 async def check_payment_status(payment_id, chat_id, amount):
-    # max_attempts = 120  # Максимальное количество попыток (например, 10 минут с шагом 5 секунд)
-    # attempts = 0
-    # Опрос API ЮKassa на предмет статуса платежа
     payment = json.loads((Payment.find_one(payment_id)).json())
 
-    while payment['status'] == 'pending':   #and attempts < max_attempts
+    while payment['status'] == 'pending':
         logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
-        await asyncio.sleep(5)  # Ожидание 5 секунд перед следующим запросом
+        await asyncio.sleep(5)
         payment = json.loads((Payment.find_one(payment_id)).json())
-        # attempts += 1
+
     if payment['status'] == 'succeeded':
         logger.info(f"Платеж {payment_id} успешно выполнен пользователем {chat_id}.")
-        # Обновляем баланс пользователя
-        await db_manager.update_user_balance(chat_id, amount)
-        return True
+
+        # Попробуем трижды обновить баланс
+        attempts = 3
+        success = False
+        for attempt in range(attempts):
+            try:
+                # Используем транзакцию для обновления баланса
+                async with db_manager.transaction() as conn:
+                    await db_manager.update_user_balance(chat_id, amount, conn=conn)
+                logger.info(f"Баланс пользователя {chat_id} был успешно обновлен на {amount} рублей (попытка {attempt + 1}).")
+                success = True
+                break  # Если обновление прошло успешно, выходим из цикла
+            except Exception as e:
+                logger.error(f"Ошибка при обновлении баланса пользователя {chat_id} (попытка {attempt + 1}): {str(e)}")
+                await asyncio.sleep(2)  # Ожидание между попытками
+
+        if success:
+            return True
+        else:
+            # Если все попытки не удались, отправляем сообщение в лог и пользователю
+            logger.critical(f"Не удалось пополнить баланс пользователя {chat_id} после успешного платежа. Пожалуйста, проверьте вручную.")
+            await notify_user_about_payment_issue(chat_id)
+            return False
+    
     elif payment['status'] == 'canceled':
         logger.info(f"Платеж {payment_id} был отменен для пользователя {chat_id}.")
         return False
