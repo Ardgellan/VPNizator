@@ -64,8 +64,7 @@ async def handle_payment(call: types.CallbackQuery):
                 ),
                 parse_mode=types.ParseMode.HTML,
                 reply_markup=await inline.payment_confirmation_keyboard(
-                    language_code=call.from_user.language_code,
-                    payment_url=payment_url
+                    language_code=call.from_user.language_code, payment_url=payment_url
                 ),
             )
 
@@ -84,12 +83,12 @@ async def handle_payment(call: types.CallbackQuery):
         else:
             await call.message.answer(
                 text=localizer.get_user_localized_text(
-                user_language_code=call.from_user.language_code,
-                text_localization=localizer.message.payment_assembly_error_message,
+                    user_language_code=call.from_user.language_code,
+                    text_localization=localizer.message.payment_assembly_error_message,
                 ),
                 parse_mode=types.ParseMode.HTML,
                 reply_markup=await inline.insert_button_back_to_main_menu(
-                language_code=call.from_user.language_code
+                    language_code=call.from_user.language_code
                 ),
             )
     else:
@@ -101,37 +100,27 @@ async def handle_payment(call: types.CallbackQuery):
 async def create_payment(amount, chat_id):
     id_key = str(uuid.uuid4())
     logger.debug("ПРОВЕРКА_1")
-    payment = Payment.create({
-    "amount": {
-        "value": amount,
-        "currency": "RUB"
-    },
-    "confirmation": {
-        "type": "redirect",
-        "return_url": "https://t.me/VPNizatorBot"
-    },
-    "capture": True,
-    "metadata": {
-        "chat_id": chat_id
-    },
-    "description": "Пополнение баланса VPNizator",
-    "receipt": {
-        "customer": {
-            "email": "user@example.com"  # Или номер телефона, если нет email
+    payment = Payment.create(
+        {
+            "amount": {"value": amount, "currency": "RUB"},
+            "confirmation": {"type": "redirect", "return_url": "https://t.me/VPNizatorBot"},
+            "capture": True,
+            "metadata": {"chat_id": chat_id},
+            "description": "Пополнение баланса VPNizator",
+            "receipt": {
+                "customer": {"email": "user@example.com"},  # Или номер телефона, если нет email
+                "items": [
+                    {
+                        "description": "Оплата Подписки",
+                        "quantity": 1,
+                        "amount": {"value": amount, "currency": "RUB"},
+                        "vat_code": 1,
+                    }
+                ],
+            },
         },
-        "items": [
-            {
-                "description": "Оплата Подписки",
-                "quantity": 1,
-                "amount": {
-                    "value": amount,
-                    "currency": "RUB"
-                },
-                "vat_code": 1
-            }
-        ]
-    }
-    }, id_key)
+        id_key,
+    )
     logger.debug("ПРОВЕРКА_2")
     return payment.confirmation.confirmation_url, payment.id
 
@@ -139,12 +128,12 @@ async def create_payment(amount, chat_id):
 async def check_payment_status(payment_id, chat_id, amount):
     payment = json.loads((Payment.find_one(payment_id)).json())
 
-    while payment['status'] == 'pending':
+    while payment["status"] == "pending":
         logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
         await asyncio.sleep(5)
         payment = json.loads((Payment.find_one(payment_id)).json())
 
-    if payment['status'] == 'succeeded':
+    if payment["status"] == "succeeded":
         logger.info(f"Платеж {payment_id} успешно выполнен пользователем {chat_id}.")
 
         # Попробуем трижды обновить баланс
@@ -155,26 +144,32 @@ async def check_payment_status(payment_id, chat_id, amount):
                 # Используем транзакцию для обновления баланса
                 async with db_manager.transaction() as conn:
                     await db_manager.update_user_balance(chat_id, amount, conn=conn)
-                logger.info(f"Баланс пользователя {chat_id} был успешно обновлен на {amount} рублей (попытка {attempt + 1}).")
+                logger.info(
+                    f"Баланс пользователя {chat_id} был успешно обновлен на {amount} рублей (попытка {attempt + 1})."
+                )
                 success = True
                 break  # Если обновление прошло успешно, выходим из цикла
             except Exception as e:
-                logger.error(f"Ошибка при обновлении баланса пользователя {chat_id} (попытка {attempt + 1}): {str(e)}")
+                logger.error(
+                    f"Ошибка при обновлении баланса пользователя {chat_id} (попытка {attempt + 1}): {str(e)}"
+                )
                 await asyncio.sleep(2)  # Ожидание между попытками
 
         if success:
             return True
         else:
             # Если все попытки не удались, отправляем сообщение в лог и пользователю
-            logger.critical(f"Не удалось пополнить баланс пользователя {chat_id} после успешного платежа. Пожалуйста, проверьте вручную.")
+            logger.critical(
+                f"Не удалось пополнить баланс пользователя {chat_id} после успешного платежа. Пожалуйста, проверьте вручную."
+            )
             await dp.bot.send_message(
                 chat_id=chat_id,
                 text="⚠️<b>Критическая ошибка в процессе пополнения баланса. Если вы оплатили счет но баланс не был пополнен, пожалуйста, обратитесь в поддержку с указанием точной суммы и времени перевода!</b>\n\n⚠️<b>Critical error during balance replenishment. If you paid the invoice but the balance was not credited, please contact support with the exact amount and time of the transfer!</b>",
-                parse_mode=types.ParseMode.HTML
+                parse_mode=types.ParseMode.HTML,
             )
             return False
-    
-    elif payment['status'] == 'canceled':
+
+    elif payment["status"] == "canceled":
         logger.info(f"Платеж {payment_id} был отменен для пользователя {chat_id}.")
         return False
 
@@ -260,7 +255,7 @@ async def check_payment_status(payment_id, chat_id, amount):
 #             "type": "bank_card"
 #             },
 #         "confirmation": {
-#             "type": "redirect", 
+#             "type": "redirect",
 #             "return_url": "https://t.me/VPNizatorBot"
 #             },
 #         "capture": True,

@@ -70,12 +70,14 @@ class XrayConfiguration:
                             user_id=user_telegram_id,
                             config_name=config_name,
                             config_uuid=credentials["id"],
-                            conn=conn  # Передаем транзакцию для консистентности
+                            conn=conn,  # Передаем транзакцию для консистентности
                         )
                     success = True
                     break  # Если вставка успешна, выходим из цикла
                 except Exception as e:
-                    logger.error(f"Ошибка при добавлении конфигурации VPN для пользователя {user_telegram_id} (попытка {attempt + 1}): {str(e)}")
+                    logger.error(
+                        f"Ошибка при добавлении конфигурации VPN для пользователя {user_telegram_id} (попытка {attempt + 1}): {str(e)}"
+                    )
                     await asyncio.sleep(2)  # Задержка перед повторной попыткой
 
             if success:
@@ -85,8 +87,24 @@ class XrayConfiguration:
                 )
             else:
                 # Если все попытки не удались, логируем ошибку
-                logger.critical(f"Не удалось добавить конфигурацию для пользователя {user_telegram_id} после {attempts} попыток.")
-                raise Exception("Не удалось добавить конфигурацию VPN в базу данных. Пожалуйста, проверьте вручную.")
+                logger.critical(
+                    f"Не удалось добавить конфигурацию для пользователя {user_telegram_id} после {attempts} попыток."
+                )
+
+                # Отправляем сообщение пользователю на русском и английском языках
+                error_message = (
+                    "⚠️ Упс, похоже возникла ошибка при генерации VPN-конфига. Попробуйте еще раз, в меню 'Мои VPN соединения!'\n\n"
+                    "⚠️ Oops, it looks like there was an error generating the VPN config. Please try again in the 'My VPN Connections' menu!"
+                )
+
+                await dp.bot.send_message(
+                    chat_id=user_telegram_id,
+                    text=error_message,
+                )
+
+                raise Exception(
+                    "Не удалось добавить конфигурацию VPN в базу данных. Пожалуйста, проверьте вручную."
+                )
 
     async def create_user_config_as_link_string(self, uuid: str, config_name: str) -> str:
         link = (

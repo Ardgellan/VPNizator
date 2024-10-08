@@ -95,7 +95,6 @@ async def start_trial_period_function(call: types.CallbackQuery, state: FSMConte
             await state.finish()
 
 
-
 # # Функция для проверки и инициализации пробного периода
 # @rate_limit(limit=1)
 # async def start_trial_period_function(call: types.CallbackQuery, state: FSMContext):

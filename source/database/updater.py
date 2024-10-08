@@ -128,8 +128,9 @@ class Updater(DatabaseConnector):
     #     logger.debug(f"User {user_id} last subscription payment updated to {payment_time}")
     #     return True
 
-
-    async def update_last_subscription_payment(self, user_id: int, payment_time: datetime, conn=None) -> bool:
+    async def update_last_subscription_payment(
+        self, user_id: int, payment_time: datetime, conn=None
+    ) -> bool:
         """Обновляем время последнего платежа для пользователя по его user_id"""
         query = f"""--sql
             UPDATE users
@@ -146,7 +147,6 @@ class Updater(DatabaseConnector):
                 return False
         logger.debug(f"User {user_id} last subscription payment updated to {payment_time}")
         return True
-
 
     async def update_subscription_status(self, user_id: int, is_active: bool):
         query = f"""--sql

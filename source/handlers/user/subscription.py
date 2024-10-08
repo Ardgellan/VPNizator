@@ -50,10 +50,10 @@ from source.keyboard import inline
 #             # Продлеваем подписку: обновляем баланс и время последнего платежа
 #             await db_manager.update_user_balance(user_id, -subscription_cost, conn=conn)
 #             await db_manager.update_last_subscription_payment(user_id, datetime.now(), conn=conn)
-            
+
 #             # Если оба обновления прошли успешно, восстанавливаем конфиги пользователя в Xray
 #             await xray_config.reactivate_user_configs_in_xray([user_id])
-            
+
 #             await call.message.answer(
 #                 text=localizer.get_user_localized_text(
 #                     user_language_code=call.from_user.language_code,
@@ -124,11 +124,13 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
             try:
                 # Продлеваем подписку: обновляем баланс и время последнего платежа
                 await db_manager.update_user_balance(user_id, -subscription_cost, conn=conn)
-                await db_manager.update_last_subscription_payment(user_id, datetime.now(), conn=conn)
-                
+                await db_manager.update_last_subscription_payment(
+                    user_id, datetime.now(), conn=conn
+                )
+
                 # Если оба обновления прошли успешно, восстанавливаем конфиги пользователя в Xray
                 await xray_config.reactivate_user_configs_in_xray([user_id])
-                
+
                 await call.message.answer(
                     text=localizer.get_user_localized_text(
                         user_language_code=call.from_user.language_code,
