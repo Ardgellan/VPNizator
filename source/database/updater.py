@@ -130,7 +130,7 @@ class Updater(DatabaseConnector):
 
     async def update_last_subscription_payment(
         self, user_id: int, payment_time: datetime, conn=None
-    ) -> bool:
+        ) -> bool:
         """Обновляем время последнего платежа для пользователя по его user_id"""
         query = f"""--sql
             UPDATE users
