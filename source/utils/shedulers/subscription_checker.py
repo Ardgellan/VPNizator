@@ -17,7 +17,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 00:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=0, minute=6)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=0, minute=15)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -97,7 +97,6 @@ class SubscriptionChecker:
     #     )
     #     logger.info(f"Notified users with expired subscription: {users_ids}")
 
-
     async def _disconnect_configs_for_users(self, users_ids: list[int]):
         """
         Отключаем конфиги для пользователей с недостаточным балансом и обновляем статус подписки,
@@ -117,7 +116,9 @@ class SubscriptionChecker:
                 for attempt in range(attempts):
                     try:
                         # Массово обновляем статус подписки для всех пользователей
-                        await db_manager.update_subscription_status_for_users(users_ids, is_active=False)
+                        await db_manager.update_subscription_status_for_users(
+                            users_ids, is_active=False
+                        )
                         logger.info(f"Updated subscription status for users: {users_ids}")
                         break  # Если обновление прошло успешно, выходим из цикла
                     except Exception as e:
@@ -127,12 +128,16 @@ class SubscriptionChecker:
                         if attempt < attempts - 1:
                             await asyncio.sleep(2)  # Задержка перед повторной попыткой
                         else:
-                            logger.critical(f"Не удалось обновить статус подписки для пользователей {users_ids} после {attempts} попыток.")
+                            logger.critical(
+                                f"Не удалось обновить статус подписки для пользователей {users_ids} после {attempts} попыток."
+                            )
                             return  # Прекращаем выполнение, если все попытки не удались
 
             except Exception as e:
                 # Логируем ошибку, если деактивация не удалась
-                logger.error(f"Ошибка при деактивации конфигов для пользователей {users_ids}: {str(e)}")
+                logger.error(
+                    f"Ошибка при деактивации конфигов для пользователей {users_ids}: {str(e)}"
+                )
                 # Здесь можно отправить уведомление администратору или обработать ошибку иначе
                 return
 
@@ -142,7 +147,6 @@ class SubscriptionChecker:
             status=SubscriptionStatus.expired.value,
         )
         logger.info(f"Notified users with expired subscription: {users_ids}")
-
 
     async def _find_and_notify_users_with_last_day_left_subscription(self):
         """Find and notify users with last day left subscription"""

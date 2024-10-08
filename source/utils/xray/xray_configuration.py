@@ -267,7 +267,6 @@ class XrayConfiguration:
         logger.info(f"Все конфиги для пользователей {user_ids} успешно восстановлены.")
         return True
 
-
     # async def reactivate_user_configs_in_xray(self, user_ids: list[int]) -> bool:
     #     """Восстанавливаем конфиги в Xray для всех пользователей с продленной подпиской"""
 
@@ -318,7 +317,6 @@ class XrayConfiguration:
 
     #     return True
 
-
     # async def _process_user_reactivation(self, user_id: int, all_configs_to_restore: list) -> bool:
     #     """Обрабатывает реактивацию для одного пользователя и восстанавливает конфиги только при успешном обновлении статуса подписки"""
     #     try:
@@ -337,6 +335,7 @@ class XrayConfiguration:
     #         # Логируем ошибку в случае сбоя
     #         logger.error(f"Ошибка при обновлении статуса подписки или сборе конфигов для пользователя {user_id}: {str(e)}")
     #         return False  # В случае ошибки функция возвращает False
+
 
 # async def reactivate_user_configs_in_xray(self, user_ids: list[int]) -> bool:
 #         """Восстанавливаем конфиги в Xray для всех пользователей с продленной подпиской"""

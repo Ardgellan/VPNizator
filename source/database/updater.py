@@ -130,7 +130,7 @@ class Updater(DatabaseConnector):
 
     async def update_last_subscription_payment(
         self, user_id: int, payment_time: datetime, conn=None
-        ) -> bool:
+    ) -> bool:
         """Обновляем время последнего платежа для пользователя по его user_id"""
         query = f"""--sql
             UPDATE users
@@ -168,9 +168,10 @@ class Updater(DatabaseConnector):
             logger.info(f"Статус подписки для пользователя {user_id} обновлен на {is_active}.")
         except Exception as e:
             # Логируем ошибку и пробрасываем исключение дальше
-            logger.error(f"Ошибка при обновлении статуса подписки для пользователя {user_id}: {str(e)}")
+            logger.error(
+                f"Ошибка при обновлении статуса подписки для пользователя {user_id}: {str(e)}"
+            )
             raise  # Пробрасываем исключение дальше для обработки в вызывающей функции
-
 
     # async def update_subscription_status_for_users(self, users_ids: list[int], is_active: bool):
     #     """
@@ -198,7 +199,9 @@ class Updater(DatabaseConnector):
             logger.info(f"Статус подписки для пользователей {users_ids} обновлен на {is_active}.")
         except Exception as e:
             # Логируем ошибку и пробрасываем исключение дальше
-            logger.error(f"Ошибка при массовом обновлении статуса подписки для пользователей {users_ids}: {str(e)}")
+            logger.error(
+                f"Ошибка при массовом обновлении статуса подписки для пользователей {users_ids}: {str(e)}"
+            )
             raise  # Пробрасываем исключение для обработки в вызывающей функции
 
     async def save_user_payment_method(self, user_id: int, payment_method_id: str):
