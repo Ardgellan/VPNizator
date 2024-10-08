@@ -17,7 +17,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 00:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=23, minute=35)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=18, minute=30)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -73,28 +73,76 @@ class SubscriptionChecker:
         except Exception as e:
             logger.error(f"Error renewing subscription for user {user_id}: {e}")
 
+    # async def _disconnect_configs_for_users(self, users_ids: list[int]):
+    #     """
+    #     Отключаем конфиги для пользователей с недостаточным балансом и обновляем статус подписки.
+    #     """
+    #     # Шаг 1: Массово обновляем статус подписки для всех пользователей
+    #     # await db_manager.update_subscription_status_for_users(users_ids, is_active=False)
+    #     logger.info(f"Updated subscription status for users: {users_ids}")
+
+    #     # Шаг 2: Получаем все UUID конфигов для отключения за один раз
+    #     all_config_uuids = await db_manager.get_all_config_uuids_for_users(users_ids)
+
+    #     if all_config_uuids:
+    #         # Отключаем все конфиги за один вызов
+    #         await xray_config.deactivate_user_configs_in_xray(uuids=all_config_uuids)
+    #         await db_manager.update_subscription_status_for_users(users_ids, is_active=False)
+    #         logger.info(f"Deactivated configs for users: {users_ids}")
+
+    #     # Шаг 3: Уведомляем всех пользователей о статусе подписки
+    #     await self._notify_users_about_subscription_status(
+    #         users_ids=users_ids,
+    #         status=SubscriptionStatus.expired.value,
+    #     )
+    #     logger.info(f"Notified users with expired subscription: {users_ids}")
+
+
     async def _disconnect_configs_for_users(self, users_ids: list[int]):
         """
-        Отключаем конфиги для пользователей с недостаточным балансом и обновляем статус подписки.
+        Отключаем конфиги для пользователей с недостаточным балансом и обновляем статус подписки,
+        только если деактивация конфигов прошла успешно. Обновление статуса подписки повторяется до 3 раз в случае неудачи.
         """
-        # Шаг 1: Массово обновляем статус подписки для всех пользователей
-        await db_manager.update_subscription_status_for_users(users_ids, is_active=False)
-        logger.info(f"Updated subscription status for users: {users_ids}")
-
-        # Шаг 2: Получаем все UUID конфигов для отключения за один раз
+        # Шаг 1: Получаем все UUID конфигов для отключения за один раз
         all_config_uuids = await db_manager.get_all_config_uuids_for_users(users_ids)
 
         if all_config_uuids:
-            # Отключаем все конфиги за один вызов
-            await xray_config.deactivate_user_configs_in_xray(uuids=all_config_uuids)
-            logger.info(f"Deactivated configs for users: {users_ids}")
+            try:
+                # Отключаем все конфиги за один вызов
+                await xray_config.deactivate_user_configs_in_xray(uuids=all_config_uuids)
+                logger.info(f"Deactivated configs for users: {users_ids}")
 
-        # Шаг 3: Уведомляем всех пользователей о статусе подписки
+                # Шаг 2: Попытки обновить статус подписки
+                attempts = 3  # Количество попыток
+                for attempt in range(attempts):
+                    try:
+                        # Массово обновляем статус подписки для всех пользователей
+                        await db_manager.update_subscription_status_for_users(users_ids, is_active=False)
+                        logger.info(f"Updated subscription status for users: {users_ids}")
+                        break  # Если обновление прошло успешно, выходим из цикла
+                    except Exception as e:
+                        logger.error(
+                            f"Попытка {attempt + 1} обновления статуса подписки для пользователей {users_ids} не удалась: {str(e)}"
+                        )
+                        if attempt < attempts - 1:
+                            await asyncio.sleep(2)  # Задержка перед повторной попыткой
+                        else:
+                            logger.critical(f"Не удалось обновить статус подписки для пользователей {users_ids} после {attempts} попыток.")
+                            return  # Прекращаем выполнение, если все попытки не удались
+
+            except Exception as e:
+                # Логируем ошибку, если деактивация не удалась
+                logger.error(f"Ошибка при деактивации конфигов для пользователей {users_ids}: {str(e)}")
+                # Здесь можно отправить уведомление администратору или обработать ошибку иначе
+                return
+
+        # Шаг 3: Уведомляем всех пользователей о статусе подписки только после успешной деактивации и обновления статуса
         await self._notify_users_about_subscription_status(
             users_ids=users_ids,
             status=SubscriptionStatus.expired.value,
         )
         logger.info(f"Notified users with expired subscription: {users_ids}")
+
 
     async def _find_and_notify_users_with_last_day_left_subscription(self):
         """Find and notify users with last day left subscription"""
