@@ -122,14 +122,16 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
     if current_balance >= subscription_cost:
         async with db_manager.transaction() as conn:
             try:
+                logger.debug("Step_1")
                 # Продлеваем подписку: обновляем баланс и время последнего платежа
                 await db_manager.update_user_balance(user_id, -subscription_cost, conn=conn)
+                logger.debug("Step_2")
                 await db_manager.update_last_subscription_payment(
                     user_id, datetime.now(), conn=conn
                 )
-
+                logger.debug("Step_3")
                 await xray_config.reactivate_user_configs_in_xray([user_id])
-
+                logger.debug("Step_4")
                 await call.message.answer(
                     text=localizer.get_user_localized_text(
                         user_language_code=call.from_user.language_code,
