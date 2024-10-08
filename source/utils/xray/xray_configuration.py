@@ -268,28 +268,93 @@ class XrayConfiguration:
     #     return True
 
 
-    async def reactivate_user_configs_in_xray(self, user_ids: list[int]) -> bool:
+    # async def reactivate_user_configs_in_xray(self, user_ids: list[int]) -> bool:
+    #     """Восстанавливаем конфиги в Xray для всех пользователей с продленной подпиской"""
+
+    #     all_configs_to_restore = []  # Собираем все UUID конфигов пользователей
+
+    #     # Группируем пользователей для параллельного выполнения
+    #     tasks = []
+    #     for user_id in user_ids:
+    #         tasks.append(self._process_user_reactivation(user_id))
+
+    #     # Выполняем задачи параллельно
+    #     results = await asyncio.gather(*tasks)
+
+    #     # Проверяем, если ни один конфиг не был восстановлен
+    #     if not any(results):
+    #         logger.info("Нет конфигов для восстановления.")
+    #         return False
+
+    #     # Загружаем текущий конфиг сервера
+    #     server_config = await self._load_server_config()
+    #     updated_config = deepcopy(server_config)
+
+    #     # Добавляем обратно конфиги по UUID
+    #     for uuid in all_configs_to_restore:
+    #         updated_config["inbounds"][0]["settings"]["clients"].append(
+    #             {
+    #                 "id": uuid,
+    #                 "email": f"{uuid}@example.com",  # Здесь можно использовать email-шаблон
+    #                 "flow": "xtls-rprx-vision",  # Xray flow
+    #             }
+    #         )
+
+    #     # Повторные попытки сохранения конфигов и перезапуска Xray
+    #     attempts = 3
+    #     for attempt in range(attempts):
+    #         try:
+    #             await self._save_server_config(updated_config)
+    #             await self._restart_xray()
+    #             logger.info(f"Все конфиги для пользователей {user_ids} успешно восстановлены.")
+    #             return True
+    #         except Exception as e:
+    #             logger.error(f"Ошибка при восстановлении конфигов (попытка {attempt + 1}): {str(e)}")
+    #             if attempt < attempts - 1:
+    #                 await asyncio.sleep(2)
+    #             else:
+    #                 logger.critical(f"Не удалось восстановить конфиги для пользователей {user_ids} после {attempts} попыток.")
+    #                 return False
+
+    #     return True
+
+
+    # async def _process_user_reactivation(self, user_id: int, all_configs_to_restore: list) -> bool:
+    #     """Обрабатывает реактивацию для одного пользователя и восстанавливает конфиги только при успешном обновлении статуса подписки"""
+    #     try:
+    #         # Попытка обновления статуса подписки для пользователя
+    #         await db_manager.update_subscription_status(user_id=user_id, is_active=True)
+    #         logger.info(f"Статус подписки для пользователя {user_id} успешно обновлён")
+
+    #         # Если статус подписки успешно обновлён, получаем UUID конфигов пользователя
+    #         user_uuids = await db_manager.get_user_uuids_by_user_id(user_id=user_id)
+    #         if user_uuids:
+    #             all_configs_to_restore.extend(user_uuids)
+    #             logger.info(f"Конфиги для пользователя {user_id} успешно добавлены в список восстановления")
+    #         return True
+
+    #     except Exception as e:
+    #         # Логируем ошибку в случае сбоя
+    #         logger.error(f"Ошибка при обновлении статуса подписки или сборе конфигов для пользователя {user_id}: {str(e)}")
+    #         return False  # В случае ошибки функция возвращает False
+
+async def reactivate_user_configs_in_xray(self, user_ids: list[int]) -> bool:
         """Восстанавливаем конфиги в Xray для всех пользователей с продленной подпиской"""
-
-        all_configs_to_restore = []  # Собираем все UUID конфигов пользователей
-
-        # Группируем пользователей для параллельного выполнения
-        tasks = []
+        # Собираем все UUID конфигов пользователей
+        all_configs_to_restore = []
         for user_id in user_ids:
-            tasks.append(self._process_user_reactivation(user_id))
-
-        # Выполняем задачи параллельно
-        results = await asyncio.gather(*tasks)
-
-        # Проверяем, если ни один конфиг не был восстановлен
-        if not any(results):
+            await db_manager.update_subscription_status(user_id=user_id, is_active=True)
+            # Получаем только UUID всех конфигов пользователя
+            user_uuids = await db_manager.get_user_uuids_by_user_id(user_id=user_id)
+            if user_uuids:
+                all_configs_to_restore.extend(user_uuids)
+        # Проверяем, если нет конфигов для восстановления
+        if not all_configs_to_restore:
             logger.info("Нет конфигов для восстановления.")
             return False
-
         # Загружаем текущий конфиг сервера
         server_config = await self._load_server_config()
         updated_config = deepcopy(server_config)
-
         # Добавляем обратно конфиги по UUID
         for uuid in all_configs_to_restore:
             updated_config["inbounds"][0]["settings"]["clients"].append(
@@ -299,42 +364,12 @@ class XrayConfiguration:
                     "flow": "xtls-rprx-vision",  # Xray flow
                 }
             )
-
-        # Повторные попытки сохранения конфигов и перезапуска Xray
-        attempts = 3
-        for attempt in range(attempts):
-            try:
-                await self._save_server_config(updated_config)
-                await self._restart_xray()
-                logger.info(f"Все конфиги для пользователей {user_ids} успешно восстановлены.")
-                return True
-            except Exception as e:
-                logger.error(f"Ошибка при восстановлении конфигов (попытка {attempt + 1}): {str(e)}")
-                if attempt < attempts - 1:
-                    await asyncio.sleep(2)
-                else:
-                    logger.critical(f"Не удалось восстановить конфиги для пользователей {user_ids} после {attempts} попыток.")
-                    return False
-
-        return True
-
-
-    async def _process_user_reactivation(self, user_id: int, all_configs_to_restore: list) -> bool:
-        """Обрабатывает реактивацию для одного пользователя и восстанавливает конфиги только при успешном обновлении статуса подписки"""
         try:
-            # Попытка обновления статуса подписки для пользователя
-            await db_manager.update_subscription_status(user_id=user_id, is_active=True)
-            logger.info(f"Статус подписки для пользователя {user_id} успешно обновлён")
-
-            # Если статус подписки успешно обновлён, получаем UUID конфигов пользователя
-            user_uuids = await db_manager.get_user_uuids_by_user_id(user_id=user_id)
-            if user_uuids:
-                all_configs_to_restore.extend(user_uuids)
-                logger.info(f"Конфиги для пользователя {user_id} успешно добавлены в список восстановления")
-            return True
-
+            # Сохраняем обновленный конфиг и перезагружаем Xray
+            await self._save_server_config(updated_config)
+            await self._restart_xray()
         except Exception as e:
-            # Логируем ошибку в случае сбоя
-            logger.error(f"Ошибка при обновлении статуса подписки или сборе конфигов для пользователя {user_id}: {str(e)}")
-            return False  # В случае ошибки функция возвращает False
-
+            logger.error(f"Ошибка при восстановлении конфигов: {e}")
+            return False
+        logger.info(f"Все конфиги для пользователей {user_ids} успешно восстановлены.")
+        return True
