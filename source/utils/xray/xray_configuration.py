@@ -224,48 +224,48 @@ class XrayConfiguration:
 
         return True
 
-    # async def reactivate_user_configs_in_xray(self, user_ids: list[int]) -> bool:
-    #     """Восстанавливаем конфиги в Xray для всех пользователей с продленной подпиской"""
+    async def reactivate_user_configs_in_xray(self, user_ids: list[int]) -> bool:
+        """Восстанавливаем конфиги в Xray для всех пользователей с продленной подпиской"""
 
-    #     # Собираем все UUID конфигов пользователей
-    #     all_configs_to_restore = []
+        # Собираем все UUID конфигов пользователей
+        all_configs_to_restore = []
 
-    #     for user_id in user_ids:
-    #         await db_manager.update_subscription_status(user_id=user_id, is_active=True)
-    #         # Получаем только UUID всех конфигов пользователя
-    #         user_uuids = await db_manager.get_user_uuids_by_user_id(user_id=user_id)
-    #         if user_uuids:
-    #             all_configs_to_restore.extend(user_uuids)
+        for user_id in user_ids:
+            await db_manager.update_subscription_status(user_id=user_id, is_active=True)
+            # Получаем только UUID всех конфигов пользователя
+            user_uuids = await db_manager.get_user_uuids_by_user_id(user_id=user_id)
+            if user_uuids:
+                all_configs_to_restore.extend(user_uuids)
 
-    #     # Проверяем, если нет конфигов для восстановления
-    #     if not all_configs_to_restore:
-    #         logger.info("Нет конфигов для восстановления.")
-    #         return False
+        # Проверяем, если нет конфигов для восстановления
+        if not all_configs_to_restore:
+            logger.info("Нет конфигов для восстановления.")
+            return False
 
-    #     # Загружаем текущий конфиг сервера
-    #     server_config = await self._load_server_config()
-    #     updated_config = deepcopy(server_config)
+        # Загружаем текущий конфиг сервера
+        server_config = await self._load_server_config()
+        updated_config = deepcopy(server_config)
 
-    #     # Добавляем обратно конфиги по UUID
-    #     for uuid in all_configs_to_restore:
-    #         updated_config["inbounds"][0]["settings"]["clients"].append(
-    #             {
-    #                 "id": uuid,
-    #                 "email": f"{uuid}@example.com",  # Здесь можно использовать email-шаблон
-    #                 "flow": "xtls-rprx-vision",  # Xray flow
-    #             }
-    #         )
+        # Добавляем обратно конфиги по UUID
+        for uuid in all_configs_to_restore:
+            updated_config["inbounds"][0]["settings"]["clients"].append(
+                {
+                    "id": uuid,
+                    "email": f"{uuid}@example.com",  # Здесь можно использовать email-шаблон
+                    "flow": "xtls-rprx-vision",  # Xray flow
+                }
+            )
 
-    #     try:
-    #         # Сохраняем обновленный конфиг и перезагружаем Xray
-    #         await self._save_server_config(updated_config)
-    #         await self._restart_xray()
-    #     except Exception as e:
-    #         logger.error(f"Ошибка при восстановлении конфигов: {e}")
-    #         return False
+        try:
+            # Сохраняем обновленный конфиг и перезагружаем Xray
+            await self._save_server_config(updated_config)
+            await self._restart_xray()
+        except Exception as e:
+            logger.error(f"Ошибка при восстановлении конфигов: {e}")
+            return False
 
-    #     logger.info(f"Все конфиги для пользователей {user_ids} успешно восстановлены.")
-    #     return True
+        logger.info(f"Все конфиги для пользователей {user_ids} успешно восстановлены.")
+        return True
 
 
     # async def reactivate_user_configs_in_xray(self, user_ids: list[int]) -> bool:
@@ -338,48 +338,48 @@ class XrayConfiguration:
     #         logger.error(f"Ошибка при обновлении статуса подписки или сборе конфигов для пользователя {user_id}: {str(e)}")
     #         return False  # В случае ошибки функция возвращает False
 
-async def reactivate_user_configs_in_xray(self, user_ids: list[int]) -> bool:
-        """Восстанавливаем конфиги в Xray для всех пользователей с продленной подпиской"""
-        # Собираем все UUID конфигов пользователей
-        logger.debug("Babasraka_1")
-        all_configs_to_restore = []
-        logger.debug("Babasraka_2")
-        for user_id in user_ids:
-            logger.debug("Babasraka_3")
-            await db_manager.update_subscription_status(user_id=user_id, is_active=True)
-            logger.debug("Babasraka_4")
-            # Получаем только UUID всех конфигов пользователя
-            user_uuids = await db_manager.get_user_uuids_by_user_id(user_id=user_id)
-            logger.debug("Babasraka_5")
-            if user_uuids:
-                all_configs_to_restore.extend(user_uuids)
-                logger.debug("Babasraka_6")
-        # Проверяем, если нет конфигов для восстановления
-        if not all_configs_to_restore:
-            logger.info("Нет конфигов для восстановления.")
-            return False
-        # Загружаем текущий конфиг сервера
-        logger.debug("Babasraka_7")
-        server_config = await self._load_server_config()
-        logger.debug("Babasraka_8")
-        updated_config = deepcopy(server_config)
-        # Добавляем обратно конфиги по UUID
-        for uuid in all_configs_to_restore:
-            updated_config["inbounds"][0]["settings"]["clients"].append(
-                {
-                    "id": uuid,
-                    "email": f"{uuid}@example.com",  # Здесь можно использовать email-шаблон
-                    "flow": "xtls-rprx-vision",  # Xray flow
-                }
-            )
-        try:
-            logger.debug("Babasraka_9")
-            # Сохраняем обновленный конфиг и перезагружаем Xray
-            await self._save_server_config(updated_config)
-            await self._restart_xray()
-        except Exception as e:
-            logger.debug("Babasraka_10")
-            logger.error(f"Ошибка при восстановлении конфигов: {e}")
-            return False
-        logger.info(f"Все конфиги для пользователей {user_ids} успешно восстановлены.")
-        return True
+# async def reactivate_user_configs_in_xray(self, user_ids: list[int]) -> bool:
+#         """Восстанавливаем конфиги в Xray для всех пользователей с продленной подпиской"""
+#         # Собираем все UUID конфигов пользователей
+#         logger.debug("Babasraka_1")
+#         all_configs_to_restore = []
+#         logger.debug("Babasraka_2")
+#         for user_id in user_ids:
+#             logger.debug("Babasraka_3")
+#             await db_manager.update_subscription_status(user_id=user_id, is_active=True)
+#             logger.debug("Babasraka_4")
+#             # Получаем только UUID всех конфигов пользователя
+#             user_uuids = await db_manager.get_user_uuids_by_user_id(user_id=user_id)
+#             logger.debug("Babasraka_5")
+#             if user_uuids:
+#                 all_configs_to_restore.extend(user_uuids)
+#                 logger.debug("Babasraka_6")
+#         # Проверяем, если нет конфигов для восстановления
+#         if not all_configs_to_restore:
+#             logger.info("Нет конфигов для восстановления.")
+#             return False
+#         # Загружаем текущий конфиг сервера
+#         logger.debug("Babasraka_7")
+#         server_config = await self._load_server_config()
+#         logger.debug("Babasraka_8")
+#         updated_config = deepcopy(server_config)
+#         # Добавляем обратно конфиги по UUID
+#         for uuid in all_configs_to_restore:
+#             updated_config["inbounds"][0]["settings"]["clients"].append(
+#                 {
+#                     "id": uuid,
+#                     "email": f"{uuid}@example.com",  # Здесь можно использовать email-шаблон
+#                     "flow": "xtls-rprx-vision",  # Xray flow
+#                 }
+#             )
+#         try:
+#             logger.debug("Babasraka_9")
+#             # Сохраняем обновленный конфиг и перезагружаем Xray
+#             await self._save_server_config(updated_config)
+#             await self._restart_xray()
+#         except Exception as e:
+#             logger.debug("Babasraka_10")
+#             logger.error(f"Ошибка при восстановлении конфигов: {e}")
+#             return False
+#         logger.info(f"Все конфиги для пользователей {user_ids} успешно восстановлены.")
+#         return True
