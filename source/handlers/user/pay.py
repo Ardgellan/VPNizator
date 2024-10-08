@@ -178,9 +178,6 @@ async def create_payment(amount, chat_id):
         "value": amount,
         "currency": "RUB"
     },
-    "payment_method_data": {
-        "type": "bank_card"
-    },
     "confirmation": {
         "type": "redirect",
         "return_url": "https://t.me/VPNizatorBot"
