@@ -130,22 +130,22 @@ class Updater(DatabaseConnector):
 
 
     async def update_last_subscription_payment(self, user_id: int, payment_time: datetime, conn=None) -> bool:
-    """Обновляем время последнего платежа для пользователя по его user_id"""
-    query = f"""--sql
-        UPDATE users
-        SET last_subscription_payment = '{payment_time}'
-        WHERE user_id = {user_id};
-    """
-    if conn:
-        # Если передано соединение, выполняем запрос через него
-        await conn.execute(query)
-    else:
-        # Если соединение не передано, создаем новое и выполняем запрос
-        if await self._execute_query(query) is False:
-            logger.error(f"Error while updating last subscription payment for user {user_id}")
-            return False
-    logger.debug(f"User {user_id} last subscription payment updated to {payment_time}")
-    return True
+        """Обновляем время последнего платежа для пользователя по его user_id"""
+        query = f"""--sql
+            UPDATE users
+            SET last_subscription_payment = '{payment_time}'
+            WHERE user_id = {user_id};
+        """
+        if conn:
+            # Если передано соединение, выполняем запрос через него
+            await conn.execute(query)
+        else:
+            # Если соединение не передано, создаем новое и выполняем запрос
+            if await self._execute_query(query) is False:
+                logger.error(f"Error while updating last subscription payment for user {user_id}")
+                return False
+        logger.debug(f"User {user_id} last subscription payment updated to {payment_time}")
+        return True
 
 
     async def update_subscription_status(self, user_id: int, is_active: bool):
