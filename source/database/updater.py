@@ -115,47 +115,38 @@ class Updater(DatabaseConnector):
         logger.debug(f"Updated balance for user {user_id} by {amount}")
         return True
 
-    # async def update_last_subscription_payment(self, user_id: int, payment_time: datetime) -> bool:
-    #     """Обновляем время последнего платежа для пользователя по его user_id"""
-    #     query = f"""--sql
-    #         UPDATE users
-    #         SET last_subscription_payment = '{payment_time}'
-    #         WHERE user_id = {user_id};
-    #     """
-    #     if await self._execute_query(query) is False:
-    #         logger.error(f"Error while updating last subscription payment for user {user_id}")
-    #         return False
-    #     logger.debug(f"User {user_id} last subscription payment updated to {payment_time}")
-    #     return True
-
-    async def update_last_subscription_payment(
-        self, user_id: int, payment_time: datetime, conn=None
-    ) -> bool:
+    async def update_last_subscription_payment(self, user_id: int, payment_time: datetime) -> bool:
         """Обновляем время последнего платежа для пользователя по его user_id"""
         query = f"""--sql
             UPDATE users
             SET last_subscription_payment = '{payment_time}'
             WHERE user_id = {user_id};
         """
-        if conn:
-            # Если передано соединение, выполняем запрос через него
-            await conn.execute(query)
-        else:
-            # Если соединение не передано, создаем новое и выполняем запрос
-            if await self._execute_query(query) is False:
-                logger.error(f"Error while updating last subscription payment for user {user_id}")
-                return False
+        if await self._execute_query(query) is False:
+            logger.error(f"Error while updating last subscription payment for user {user_id}")
+            return False
         logger.debug(f"User {user_id} last subscription payment updated to {payment_time}")
         return True
 
-    # async def update_subscription_status(self, user_id: int, is_active: bool):
+    # async def update_last_subscription_payment(
+    #     self, user_id: int, payment_time: datetime, conn=None
+    # ) -> bool:
+    #     """Обновляем время последнего платежа для пользователя по его user_id"""
     #     query = f"""--sql
     #         UPDATE users
-    #         SET subscription_is_active = {is_active}
+    #         SET last_subscription_payment = '{payment_time}'
     #         WHERE user_id = {user_id};
     #     """
-    #     await self._execute_query(query)
-    #     logger.info(f"Статус подписки для пользователя {user_id} обновлен на {is_active}.")
+    #     if conn:
+    #         # Если передано соединение, выполняем запрос через него
+    #         await conn.execute(query)
+    #     else:
+    #         # Если соединение не передано, создаем новое и выполняем запрос
+    #         if await self._execute_query(query) is False:
+    #             logger.error(f"Error while updating last subscription payment for user {user_id}")
+    #             return False
+    #     logger.debug(f"User {user_id} last subscription payment updated to {payment_time}")
+    #     return True
 
     async def update_subscription_status(self, user_id: int, is_active: bool):
         query = f"""--sql
@@ -163,27 +154,24 @@ class Updater(DatabaseConnector):
             SET subscription_is_active = {is_active}
             WHERE user_id = {user_id};
         """
-        try:
-            await self._execute_query(query)  # Выполняем запрос
-            logger.info(f"Статус подписки для пользователя {user_id} обновлен на {is_active}.")
-        except Exception as e:
-            # Логируем ошибку и пробрасываем исключение дальше
-            logger.error(
-                f"Ошибка при обновлении статуса подписки для пользователя {user_id}: {str(e)}"
-            )
-            raise  # Пробрасываем исключение дальше для обработки в вызывающей функции
+        await self._execute_query(query)
+        logger.info(f"Статус подписки для пользователя {user_id} обновлен на {is_active}.")
 
-    # async def update_subscription_status_for_users(self, users_ids: list[int], is_active: bool):
-    #     """
-    #     Массово обновляем статус подписки для списка пользователей.
-    #     """
-    #     query = """
+    # async def update_subscription_status(self, user_id: int, is_active: bool):
+    #     query = f"""--sql
     #         UPDATE users
-    #         SET subscription_is_active = $2
-    #         WHERE user_id = ANY($1);
+    #         SET subscription_is_active = {is_active}
+    #         WHERE user_id = {user_id};
     #     """
-    #     await self._execute_query(query, users_ids, is_active)
-    #     logger.info(f"Статус подписки для пользователей {users_ids} обновлен на {is_active}.")
+    #     try:
+    #         await self._execute_query(query)  # Выполняем запрос
+    #         logger.info(f"Статус подписки для пользователя {user_id} обновлен на {is_active}.")
+    #     except Exception as e:
+    #         # Логируем ошибку и пробрасываем исключение дальше
+    #         logger.error(
+    #             f"Ошибка при обновлении статуса подписки для пользователя {user_id}: {str(e)}"
+    #         )
+    #         raise  # Пробрасываем исключение дальше для обработки в вызывающей функции
 
     async def update_subscription_status_for_users(self, users_ids: list[int], is_active: bool):
         """
@@ -194,15 +182,27 @@ class Updater(DatabaseConnector):
             SET subscription_is_active = $2
             WHERE user_id = ANY($1);
         """
-        try:
-            await self._execute_query(query, users_ids, is_active)  # Выполняем запрос
-            logger.info(f"Статус подписки для пользователей {users_ids} обновлен на {is_active}.")
-        except Exception as e:
-            # Логируем ошибку и пробрасываем исключение дальше
-            logger.error(
-                f"Ошибка при массовом обновлении статуса подписки для пользователей {users_ids}: {str(e)}"
-            )
-            raise  # Пробрасываем исключение для обработки в вызывающей функции
+        await self._execute_query(query, users_ids, is_active)
+        logger.info(f"Статус подписки для пользователей {users_ids} обновлен на {is_active}.")
+
+    # async def update_subscription_status_for_users(self, users_ids: list[int], is_active: bool):
+    #     """
+    #     Массово обновляем статус подписки для списка пользователей.
+    #     """
+    #     query = """
+    #         UPDATE users
+    #         SET subscription_is_active = $2
+    #         WHERE user_id = ANY($1);
+    #     """
+    #     try:
+    #         await self._execute_query(query, users_ids, is_active)  # Выполняем запрос
+    #         logger.info(f"Статус подписки для пользователей {users_ids} обновлен на {is_active}.")
+    #     except Exception as e:
+    #         # Логируем ошибку и пробрасываем исключение дальше
+    #         logger.error(
+    #             f"Ошибка при массовом обновлении статуса подписки для пользователей {users_ids}: {str(e)}"
+    #         )
+    #         raise  # Пробрасываем исключение для обработки в вызывающей функции
 
     async def save_user_payment_method(self, user_id: int, payment_method_id: str):
         query = f"""--sql
