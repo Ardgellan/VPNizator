@@ -59,14 +59,34 @@ class XrayConfiguration:
             await self._save_server_config(config)
             await self._restart_xray()
         else:
-            await db_manager.insert_new_vpn_config(
-                user_id=user_telegram_id,
-                config_name=config_name,
-                config_uuid=credentials["id"],
-            )
-            return await self.create_user_config_as_link_string(
-                credentials["id"], config_name=config_name
-            )
+            # Добавляем транзакцию и механизм повторных попыток для вставки в базу данных
+            attempts = 3  # Количество попыток
+            success = False
+            for attempt in range(attempts):
+                try:
+                    # Открываем транзакцию и пытаемся добавить новый конфиг
+                    async with db_manager.transaction() as conn:
+                        await db_manager.insert_new_vpn_config(
+                            user_id=user_telegram_id,
+                            config_name=config_name,
+                            config_uuid=credentials["id"],
+                            conn=conn  # Передаем транзакцию для консистентности
+                        )
+                    success = True
+                    break  # Если вставка успешна, выходим из цикла
+                except Exception as e:
+                    logger.error(f"Ошибка при добавлении конфигурации VPN для пользователя {user_telegram_id} (попытка {attempt + 1}): {str(e)}")
+                    await asyncio.sleep(2)  # Задержка перед повторной попыткой
+
+            if success:
+                # Возвращаем ссылку на конфиг после успешной вставки
+                return await self.create_user_config_as_link_string(
+                    credentials["id"], config_name=config_name
+                )
+            else:
+                # Если все попытки не удались, логируем ошибку
+                logger.critical(f"Не удалось добавить конфигурацию для пользователя {user_telegram_id} после {attempts} попыток.")
+                raise Exception("Не удалось добавить конфигурацию VPN в базу данных. Пожалуйста, проверьте вручную.")
 
     async def create_user_config_as_link_string(self, uuid: str, config_name: str) -> str:
         link = (

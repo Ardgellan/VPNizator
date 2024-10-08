@@ -167,7 +167,11 @@ async def check_payment_status(payment_id, chat_id, amount):
         else:
             # Если все попытки не удались, отправляем сообщение в лог и пользователю
             logger.critical(f"Не удалось пополнить баланс пользователя {chat_id} после успешного платежа. Пожалуйста, проверьте вручную.")
-            await notify_user_about_payment_issue(chat_id)
+            await dp.bot.send_message(
+                chat_id=chat_id,
+                text="⚠️<b>Критическая ошибка в процессе пополнения баланса. Если вы оплатили счет но баланс не был пополнен, пожалуйста, обратитесь в поддержку с указанием точной суммы и времени перевода!</b>\n\n⚠️<b>Critical error during balance replenishment. If you paid the invoice but the balance was not credited, please contact support with the exact amount and time of the transfer!</b>",
+                parse_mode=types.ParseMode.HTML
+            )
             return False
     
     elif payment['status'] == 'canceled':
