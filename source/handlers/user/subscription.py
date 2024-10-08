@@ -128,11 +128,7 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
                     user_id, datetime.now(), conn=conn
                 )
 
-                # Если оба обновления прошли успешно, восстанавливаем конфиги пользователя в Xray
-                all_configs_to_restore = []  # Создаём список для конфигов
-                success = await xray_config._process_user_reactivation(user_id, all_configs_to_restore)  # Передаем список конфигов
-                if success:
-                    await xray_config.reactivate_user_configs_in_xray([user_id])
+                await xray_config.reactivate_user_configs_in_xray([user_id])
 
                 await call.message.answer(
                     text=localizer.get_user_localized_text(
