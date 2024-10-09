@@ -16,8 +16,8 @@ class SubscriptionChecker:
     def __init__(self):
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
-        # start checking subscriptions every day at 00:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=1, minute=50)
+        # start checking subscriptions every day at 12:00
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=11, minute=30)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
