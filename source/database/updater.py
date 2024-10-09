@@ -22,7 +22,7 @@ class Updater(DatabaseConnector):
         if await self._execute_query(query) is False:
             logger.error(f"Error while toggling user {user_id} banned status")
             return False
-        logger.debug(f"Toggled user {user_id} banned status")
+        # logger.debug(f"Toggled user {user_id} banned status")
         return True
 
     async def mark_trial_as_used(self, user_id: int, conn=None):
@@ -37,7 +37,7 @@ class Updater(DatabaseConnector):
         else:
             # Если соединение не передано, создаем новое и выполняем запрос
             await self._execute_query(query)
-        logger.debug(f"User {user_id} marked as having used the trial period")
+        # logger.debug(f"User {user_id} marked as having used the trial period")
         return True
 
     async def update_user_balance(self, user_id: int, amount: float, conn=None) -> bool:
@@ -54,7 +54,7 @@ class Updater(DatabaseConnector):
             if await self._execute_query(query) is False:
                 logger.error(f"Error while updating balance for user {user_id}")
                 return False
-        logger.debug(f"Updated balance for user {user_id} by {amount}")
+        # logger.debug(f"Updated balance for user {user_id} by {amount}")
         return True
 
     async def update_last_subscription_payment(self, user_id: int, payment_time: datetime) -> bool:
@@ -67,7 +67,7 @@ class Updater(DatabaseConnector):
         if await self._execute_query(query) is False:
             logger.error(f"Error while updating last subscription payment for user {user_id}")
             return False
-        logger.debug(f"User {user_id} last subscription payment updated to {payment_time}")
+        # logger.debug(f"User {user_id} last subscription payment updated to {payment_time}")
         return True
 
     async def update_subscription_status(self, user_id: int, is_active: bool):
@@ -77,7 +77,7 @@ class Updater(DatabaseConnector):
             WHERE user_id = {user_id};
         """
         await self._execute_query(query)
-        logger.info(f"Статус подписки для пользователя {user_id} обновлен на {is_active}.")
+        # logger.info(f"Статус подписки для пользователя {user_id} обновлен на {is_active}.")
 
     # async def update_subscription_status_for_users(self, users_ids: list[int], is_active: bool):
     #     """
@@ -102,7 +102,7 @@ class Updater(DatabaseConnector):
         """
         try:
             await self._execute_query(query, users_ids, is_active)  # Выполняем запрос
-            logger.info(f"Статус подписки для пользователей {users_ids} обновлен на {is_active}.")
+            # logger.info(f"Статус подписки для пользователей {users_ids} обновлен на {is_active}.")
         except Exception as e:
             # Логируем ошибку и пробрасываем исключение дальше
             logger.error(f"Ошибка при массовом обновлении статуса подписки для пользователей {users_ids}: {str(e)}")

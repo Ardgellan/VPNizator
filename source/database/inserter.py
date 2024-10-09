@@ -35,7 +35,7 @@ class Inserter(DatabaseConnector):
         if admin_bonus_configs_query:
             await self._execute_query(admin_bonus_configs_query)
 
-        logger.debug(f"User {user_id} was upserted")
+        # logger.debug(f"User {user_id} was upserted")
 
     # async def insert_new_vpn_config(self, user_id: int, config_name: str, config_uuid: str):
     #     query = f"""--sql
@@ -60,7 +60,7 @@ class Inserter(DatabaseConnector):
             # Если соединение не передано, выполняем обычный запрос
             await self._execute_query(query)
 
-        logger.debug(f"VPN config {config_uuid} was inserted for user {user_id}")
+        # logger.debug(f"VPN config {config_uuid} was inserted for user {user_id}")
 
     async def upsert_new_bonus_config_count_for_user(self, user_id: int, count: int):
         query = f"""--sql
@@ -70,4 +70,4 @@ class Inserter(DatabaseConnector):
             DO UPDATE SET count = {count};
         """
         await self._execute_query(query)
-        logger.debug(f"Bonus config count for user {user_id} was upserted: {count}")
+        # logger.debug(f"Bonus config count for user {user_id} was upserted: {count}")

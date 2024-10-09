@@ -24,7 +24,7 @@ Configuration.secret_key = config.yookassa_api_token
 
 @is_user_banned
 async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FSMContext):
-    logger.info(f"Пользователь {call.from_user.id} открыл меню пополнения баланса")
+    # logger.info(f"Пользователь {call.from_user.id} открыл меню пополнения баланса")
     await state.finish()
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
@@ -127,7 +127,7 @@ async def check_payment_status(payment_id, chat_id, amount):
     payment = json.loads((Payment.find_one(payment_id)).json())
 
     while payment["status"] == "pending":
-        logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
+        # logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
         await asyncio.sleep(5)
         payment = json.loads((Payment.find_one(payment_id)).json())
 

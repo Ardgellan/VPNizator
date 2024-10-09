@@ -239,7 +239,7 @@ class XrayConfiguration:
 
         # Проверяем, если нет конфигов для восстановления
         if not all_configs_to_restore:
-            logger.info("Нет конфигов для восстановления.")
+            # logger.info("Нет конфигов для восстановления.")
             return False
 
         # Загружаем текущий конфиг сервера
@@ -264,5 +264,5 @@ class XrayConfiguration:
             logger.error(f"Ошибка при восстановлении конфигов: {e}")
             return False
 
-        logger.info(f"Все конфиги для пользователей {user_ids} успешно восстановлены.")
+        # logger.info(f"Все конфиги для пользователей {user_ids} успешно восстановлены.")
         return True

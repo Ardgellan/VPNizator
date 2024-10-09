@@ -15,7 +15,7 @@ from .check_is_user_banned import is_user_banned
 @rate_limit(limit=1)
 @is_user_banned
 async def start(message: types.Message, state: FSMContext):
-    logger.info(f"User {message.from_user.id} started bot")
+    # logger.info(f"User {message.from_user.id} started bot")
     await state.finish()
 
     if not await db_manager.is_user_registered(user_id=message.from_user.id):

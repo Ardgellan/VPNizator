@@ -21,9 +21,9 @@ class DatabaseConnector(Configuration):
             )
             self._create_database()
             conn = await asyncpg.connect(**self.database_connection_parameters)
-        logger.debug(
-            f"Connection to {self.database_connection_parameters.get('database')} database established"
-        )
+        # logger.debug(
+        #     f"Connection to {self.database_connection_parameters.get('database')} database established"
+        # )
         return conn
 
     def _create_database(self):
@@ -33,12 +33,12 @@ class DatabaseConnector(Configuration):
         os.system(
             f"sudo -u postgres psql -c 'CREATE DATABASE {self.database_connection_parameters.get('database')}'"
         )
-        logger.debug(f"Database {db_name} was created")
+        # logger.debug(f"Database {db_name} was created")
         # grant all privileges on database {db_name} to {db_user};
         os.system(
             f"sudo -u postgres psql -c 'GRANT ALL PRIVILEGES ON DATABASE {db_name} TO {db_user}'"
         )
-        logger.debug(f"Privileges on database {db_name} were granted")
+        # logger.debug(f"Privileges on database {db_name} were granted")
 
     async def _execute_query(self, query: str, *args) -> list[asyncpg.Record] | bool:
         """Executes query and returns result or None if error occurred
