@@ -299,7 +299,7 @@ class Selector(DatabaseConnector):
             FROM users u
             JOIN vpn_configs vc ON u.user_id = vc.user_id
             WHERE u.subscription_is_active = TRUE
-            AND u.last_subscription_payment < NOW() - INTERVAL '20 hours'
+            AND u.last_subscription_payment::date < CURRENT_DATE
             GROUP BY u.user_id
             HAVING u.balance >= COUNT(vc.config_uuid) * 3;
         """
@@ -319,7 +319,7 @@ class Selector(DatabaseConnector):
             FROM users u
             JOIN vpn_configs vc ON u.user_id = vc.user_id
             WHERE u.subscription_is_active = TRUE
-            AND u.last_subscription_payment < NOW() - INTERVAL '20 hours'
+            AND u.last_subscription_payment::date < CURRENT_DATE
             GROUP BY u.user_id
             HAVING u.balance < COUNT(vc.config_uuid) * 3;
         """
