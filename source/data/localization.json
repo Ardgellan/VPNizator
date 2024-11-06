@@ -213,8 +213,8 @@
             "ru": "💳Пожалуйста, выберите сумму, на которую хотите пополнить свой баланс.\n\n💸 Деньги с него будут списываться ежедневно в 12:00, из расчета 3 рубля в день за каждое активное соединение!"
         },
         "insufficient_balance_for_conf_gen_message": {
-            "en": "❌Insufficient funds on your balance for new VPN connection generation!",
-            "ru": "❌На вашем балансе недостаточно средств для генерации нового VPN соединения!"
+            "en": "❌Insufficient funds on your balance for new VPN connection generation or subscription is not activated!",
+            "ru": "❌На вашем балансе недостаточно средств для генерации нового VPN соединения или подписка не активирована!"
         },
         "insufficient_balance_for_sub_renewal": {
             "en": "❌ Insufficient funds to renew the subscription. Please top up your balance or delete unused configurations.",
