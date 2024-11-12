@@ -49,7 +49,8 @@ async def restore_user_configs_for_subscription(self, user_ids: list[int]) -> bo
                         # Если статус не 200, продолжаем с следующим доменом
                         if response.status != 200:
                             return False  # Если хотя бы один запрос не успешен, возвращаем False
-
+                except:
+                    pass
             # Если все запросы прошли успешно, возвращаем True
             return True
 
