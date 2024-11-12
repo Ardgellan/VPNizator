@@ -155,6 +155,10 @@ su - postgres -c "psql -c \"CREATE DATABASE $database_name;\""
 su - postgres -c "psql -c \"GRANT ALL PRIVILEGES ON SCHEMA public TO $database_user;\""
 su - postgres -c "psql -c \"GRANT ALL PRIVILEGES ON DATABASE $database_name TO $database_user;\""
 
+# Установка часового пояса на Москву
+echo "Настраиваем часовой пояс на Москву..."
+sudo timedatectl set-timezone Europe/Moscow
+
 #clone bot repo
 cd ~
 git clone https://github.com/Ardgellan/VPNizator.git
@@ -209,7 +213,6 @@ cd
 systemctl daemon-reload
 systemctl enable vpnizator.service
 # systemctl start vpnizator.service
-
 
 echo "$Green Installation completed successfully" | sed 's/\$//g'
 echo "$Defaul_color" | sed 's/\$//g'
