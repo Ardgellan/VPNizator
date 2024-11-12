@@ -50,7 +50,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 f"http://nginxtest.vpnizator.online/add_user/{country}/",  # Указываем правильный URL API
-                params={"user_id": user_id, "config_name": config_name}
+                json={"user_id": user_id, "config_name": config_name}  # Передаем параметры в теле запроса
             ) as response:
                 
                 # Проверяем статус ответа
