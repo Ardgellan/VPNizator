@@ -47,7 +47,7 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
     # Отправляем запрос к API для получения сгенерированной ссылки
     async with aiohttp.ClientSession() as session:
         async with session.get(
-            f"http://nginxtest.vpnizator.online/show_specified_config/",
+            f"https://nginxtest.vpnizator.online/show_specified_config/",
             params={"config_uuid": config_uuid, "config_name": config_name}
         ) as response:
             if response.status == 200:
