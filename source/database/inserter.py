@@ -46,11 +46,11 @@ class Inserter(DatabaseConnector):
     #     logger.debug(f"VPN config {config_uuid} was inserted")
 
     async def insert_new_vpn_config(
-        self, user_id: int, config_name: str, config_uuid: str, conn=None
+        self, user_id: int, config_name: str, config_uuid: str, server_domain: str, conn=None
     ):
         query = f"""--sql
-            INSERT INTO vpn_configs (user_id, config_name, config_uuid)
-            VALUES ({user_id}, '{config_name}', '{config_uuid}');
+            INSERT INTO vpn_configs (user_id, config_name, config_uuid, server_domain)
+            VALUES ({user_id}, '{config_name}', '{config_uuid}', '{server_domain}');
         """
 
         if conn:

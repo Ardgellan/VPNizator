@@ -69,6 +69,7 @@ class Creator(DatabaseConnector):
                 user_id BIGINT NOT NULL REFERENCES users(user_id),
                 config_name VARCHAR(32) NOT NULL,
                 config_uuid VARCHAR(64) NOT NULL,
+                server_domain VARCHAR(255) NOT NULL,
                 is_active BOOLEAN NOT NULL DEFAULT TRUE,
                 created_at TIMESTAMP NOT NULL DEFAULT NOW()
             );

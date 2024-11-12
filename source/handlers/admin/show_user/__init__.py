@@ -1,7 +1,7 @@
 from aiogram import Dispatcher
 from loguru import logger
 
-from .ban_toggle import toggle_ban_for_user
+# from .ban_toggle import toggle_ban_for_user
 
 # from .give_bonus_configs import *
 # from .give_subscription import *
@@ -39,11 +39,11 @@ def register_admin_show_user_handlers(dp: Dispatcher):
         #     state=GiveSubscription.wait_for_subscription_duration,
         # )
 
-        dp.register_callback_query_handler(
-            toggle_ban_for_user,
-            lambda call: call.data.startswith("ban_user_"),
-            state="*",
-        )
+        # dp.register_callback_query_handler(
+        #     toggle_ban_for_user,
+        #     lambda call: call.data.startswith("ban_user_"),
+        #     state="*",
+        # )
 
         # dp.register_callback_query_handler(
         #     ask_admin_for_count_of_bonus_generations_to_give,

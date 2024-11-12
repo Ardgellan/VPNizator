@@ -371,3 +371,28 @@ class Selector(DatabaseConnector):
         payment_method_id = result[0][0] if result and result[0][0] else None
         # logger.debug(f"Payment method ID for user {user_id}: {payment_method_id}")
         return payment_method_id
+
+    async def get_config_uuids_grouped_by_domain(self, users_ids: list[int]) -> dict[str, list[str]]:
+        """
+        Получаем все конфиги для отключения, сгруппированные по доменам, для списка user_ids.
+        Возвращаем словарь, где ключи — домены, а значения — списки UUID конфигов.
+        """
+        query = """
+            SELECT vc.domain, vc.config_uuid
+            FROM vpn_configs vc
+            WHERE vc.user_id = ANY($1::int[])
+            ORDER BY vc.domain;
+        """
+        result = await self._execute_query(query, [users_ids])
+
+        domain_to_uuids = {}
+        for record in result:
+            domain = record[0]
+            uuid = record[1]
+
+            if domain not in domain_to_uuids:
+                domain_to_uuids[domain] = []
+            
+            domain_to_uuids[domain].append(uuid)
+
+        return domain_to_uuids

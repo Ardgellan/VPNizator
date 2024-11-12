@@ -25,12 +25,9 @@ class Configuration:
         self._database_connection_parameters: dict[str, str] = (
             self._get_database_connection_parameters()
         )
-        self._xray_publickey: str = self._get_xray_publickey()
-        self._xray_shortid: str = self._get_xray_shortid()
         self._xray_config_path: str = self._get_xray_config_path()
         self._server_ip: str = self._get_server_ip()
         self._server_country: str = self._get_server_country()
-        self._xray_sni: str = self._get_xray_sni()
 
     def _get_bot_token(self) -> str:
         bot_token = getenv("TG_BOT_TOKEN")
@@ -81,18 +78,6 @@ class Configuration:
             "database": getenv("DB_NAME"),
         }
 
-    def _get_xray_publickey(self) -> str:
-        xray_publickey = getenv("XRAY_PUBLICKEY")
-        if not xray_publickey:
-            raise DotEnvVariableNotFound("XRAY_PUBLICKEY")
-        return xray_publickey
-
-    def _get_xray_shortid(self) -> str:
-        xray_shortid = getenv("XRAY_SHORTID")
-        if not xray_shortid:
-            raise DotEnvVariableNotFound("XRAY_SHORTID")
-        return xray_shortid
-
     def _get_xray_config_path(self) -> str:
         xray_config_path = getenv("XRAY_CONFIG_PATH")
         if not xray_config_path:
@@ -108,11 +93,6 @@ class Configuration:
         server_country_code = ip_info.get_server_country_code()
         return f"{flag(server_country_code)} {server_country}"
 
-    def _get_xray_sni(self) -> str:
-        xray_sni = getenv("XRAY_SNI")
-        if not xray_sni:
-            raise DotEnvVariableNotFound("XRAY_SNI")
-        return xray_sni
 
     @property
     def bot_token(self) -> str:
@@ -139,14 +119,6 @@ class Configuration:
         return self._database_connection_parameters
 
     @property
-    def xray_publickey(self) -> str:
-        return self._xray_publickey
-
-    @property
-    def xray_shortid(self) -> str:
-        return self._xray_shortid
-
-    @property
     def xray_config_path(self) -> str:
         return self._xray_config_path
 
@@ -158,6 +130,3 @@ class Configuration:
     def server_country(self) -> str:
         return self._server_country
 
-    @property
-    def xray_sni(self) -> str:
-        return self._xray_sni

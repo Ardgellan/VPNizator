@@ -1,4 +1,5 @@
 import asyncio
+import aiohttp
 
 from datetime import datetime, timedelta
 from aiogram.utils.exceptions import BotBlocked
@@ -9,7 +10,7 @@ from aiogram import types
 from loader import bot, db_manager
 from source.utils import localizer
 from source.utils.models import SubscriptionStatus
-from source.utils.xray import xray_config
+from source.utils.sub_reactivation import restore_user_configs_for_subscription
 
 
 class SubscriptionChecker:
@@ -33,7 +34,7 @@ class SubscriptionChecker:
 
         if users_to_restore:
             await self._check_and_renew_subscription(users_to_restore)
-            await xray_config.reactivate_user_configs_in_xray(users_to_restore)
+            await restore_user_configs_for_subscription(users_to_restore)
 
         if users_with_insufficient_balance:
             await self._disconnect_configs_for_users(users_with_insufficient_balance)
@@ -74,56 +75,136 @@ class SubscriptionChecker:
             logger.error(f"Error renewing subscription for user {user_id}: {e}")
 
 
+    # async def _disconnect_configs_for_users(self, users_ids: list[int]):
+    #     """
+    #     Отключаем конфиги для пользователей с недостаточным балансом и обновляем статус подписки,
+    #     только если деактивация конфигов прошла успешно. Обновление статуса подписки повторяется до 3 раз в случае неудачи.
+    #     """
+    #     # Шаг 1: Получаем UUID конфигов, сгруппированные по доменам
+    #     configs_by_domain = await db_manager.get_config_uuids_grouped_by_domain(users_ids)
+
+    #     if all_config_uuids:
+    #         try:
+    #             # Отключаем все конфиги за один вызов
+    #             await xray_config.deactivate_user_configs_in_xray(uuids=all_config_uuids)
+    #             # logger.info(f"Deactivated configs for users: {users_ids}")
+
+    #             # Шаг 2: Попытки обновить статус подписки
+    #             attempts = 3  # Количество попыток
+    #             for attempt in range(attempts):
+    #                 try:
+    #                     # Массово обновляем статус подписки для всех пользователей
+    #                     await db_manager.update_subscription_status_for_users(
+    #                         users_ids, is_active=False
+    #                     )
+    #                     # logger.info(f"Updated subscription status for users: {users_ids}")
+    #                     break  # Если обновление прошло успешно, выходим из цикла
+    #                 except Exception as e:
+    #                     logger.error(
+    #                         f"Попытка {attempt + 1} обновления статуса подписки для пользователей {users_ids} не удалась: {str(e)}"
+    #                     )
+    #                     if attempt < attempts - 1:
+    #                         await asyncio.sleep(2)  # Задержка перед повторной попыткой
+    #                     else:
+    #                         logger.critical(
+    #                             f"Не удалось обновить статус подписки для пользователей {users_ids} после {attempts} попыток."
+    #                         )
+    #                         return  # Прекращаем выполнение, если все попытки не удались
+
+    #         except Exception as e:
+    #             # Логируем ошибку, если деактивация не удалась
+    #             logger.error(
+    #                 f"Ошибка при деактивации конфигов для пользователей {users_ids}: {str(e)}"
+    #             )
+    #             # Здесь можно отправить уведомление администратору или обработать ошибку иначе
+    #             return
+
+    #     # Шаг 3: Уведомляем всех пользователей о статусе подписки только после успешной деактивации и обновления статуса
+    #     await self._notify_users_about_subscription_status(
+    #         users_ids=users_ids,
+    #         status=SubscriptionStatus.expired.value,
+    #     )
+    #     # logger.info(f"Notified users with expired subscription: {users_ids}")
+
     async def _disconnect_configs_for_users(self, users_ids: list[int]):
         """
         Отключаем конфиги для пользователей с недостаточным балансом и обновляем статус подписки,
         только если деактивация конфигов прошла успешно. Обновление статуса подписки повторяется до 3 раз в случае неудачи.
         """
-        # Шаг 1: Получаем все UUID конфигов для отключения за один раз
-        all_config_uuids = await db_manager.get_all_config_uuids_for_users(users_ids)
+        # Шаг 1: Получаем UUID конфигов, сгруппированные по доменам
+        configs_by_domain = await db_manager.get_config_uuids_grouped_by_domain(users_ids)
 
-        if all_config_uuids:
+        # Если есть конфиги для отключения, начинаем процесс деактивации
+        if configs_by_domain:
             try:
-                # Отключаем все конфиги за один вызов
-                await xray_config.deactivate_user_configs_in_xray(uuids=all_config_uuids)
-                # logger.info(f"Deactivated configs for users: {users_ids}")
+                # Отключаем конфиги для каждого домена
+                for domain, uuids in configs_by_domain.items():
+                    # Отправляем запрос на эндпоинт для деактивации конфигов на конкретном сервере
+                    response = await self._send_deactivation_request(domain, uuids)
+                
+                    if response.status_code != 200:
+                        logger.error(f"Ошибка при деактивации конфигов на {domain}: {response.text}")
+                        continue
+                    else:
+                        logger.info(f"Конфиги успешно деактивированы на домене {domain}.")
 
-                # Шаг 2: Попытки обновить статус подписки
-                attempts = 3  # Количество попыток
+                # Шаг 2: Попытки обновить статус подписки для всех пользователей
+                attempts = 3
                 for attempt in range(attempts):
                     try:
-                        # Массово обновляем статус подписки для всех пользователей
                         await db_manager.update_subscription_status_for_users(
                             users_ids, is_active=False
                         )
                         # logger.info(f"Updated subscription status for users: {users_ids}")
-                        break  # Если обновление прошло успешно, выходим из цикла
+                        break
                     except Exception as e:
                         logger.error(
                             f"Попытка {attempt + 1} обновления статуса подписки для пользователей {users_ids} не удалась: {str(e)}"
                         )
                         if attempt < attempts - 1:
-                            await asyncio.sleep(2)  # Задержка перед повторной попыткой
+                            await asyncio.sleep(2)
                         else:
                             logger.critical(
                                 f"Не удалось обновить статус подписки для пользователей {users_ids} после {attempts} попыток."
                             )
-                            return  # Прекращаем выполнение, если все попытки не удались
+                            return
+
+                # Шаг 3: Уведомляем пользователей о статусе подписки
+                await self._notify_users_about_subscription_status(
+                    users_ids=users_ids,
+                    status=SubscriptionStatus.expired.value,
+                )
 
             except Exception as e:
-                # Логируем ошибку, если деактивация не удалась
                 logger.error(
                     f"Ошибка при деактивации конфигов для пользователей {users_ids}: {str(e)}"
                 )
-                # Здесь можно отправить уведомление администратору или обработать ошибку иначе
                 return
 
-        # Шаг 3: Уведомляем всех пользователей о статусе подписки только после успешной деактивации и обновления статуса
-        await self._notify_users_about_subscription_status(
-            users_ids=users_ids,
-            status=SubscriptionStatus.expired.value,
-        )
-        # logger.info(f"Notified users with expired subscription: {users_ids}")
+    async def _send_deactivation_request(self, domain: str, uuids: list[str]):
+        """
+        Отправляем запрос на удаление конфигов для пользователей на конкретном сервере.
+        Используется aiohttp для отправки HTTP-запроса.
+        """
+        try:
+            # Формируем URL запроса
+            url = f"http://nginxtest.vpnizator.online/deactivate_configs/{domain}/"
+        
+            # Открываем сессию aiohttp для отправки запроса
+            async with aiohttp.ClientSession() as session:
+                async with session.delete(url, json={"config_uuids": uuids}) as response:
+                    # Проверка, что запрос прошел успешно
+                    if response.status == 200:
+                        return response
+                    else:
+                        # Если статус не 200, логируем ошибку
+                        logger.error(f"Ошибка при деактивации конфигов на {domain}. Код ошибки: {response.status}")
+                        return response
+        except Exception as e:
+            # Логируем ошибку при отправке запроса
+            logger.error(f"Ошибка при отправке запроса на деактивацию конфигов на {domain}: {str(e)}")
+            raise HTTPException(status_code=500, detail="Ошибка при деактивации конфигов на сервере.")
+
 
     async def _find_and_notify_users_with_last_day_left_subscription(self):
         """Find and notify users with last day left subscription"""

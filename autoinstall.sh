@@ -121,16 +121,6 @@ then
       config_prefix="VPNizator"
 fi
 
-#ask user for site url to hide reality
-echo ""
-echo "Enter site url to hide reality:"
-echo "Just press ENTER for use default url [$Blue dl.google.com $White]" | sed 's/\$//g'
-read site_url
-if [ -z "$site_url" ]
-then
-      site_url="dl.google.com"
-fi
-
 #all neccessary data is collected
 echo ""
 echo "All neccessary data is collected"
@@ -158,99 +148,6 @@ python3.11 /root/get-pip.py
 
 #install poetry
 pip3.11 install poetry
-
-
-echo "$Orange" | sed 's/\$//g'
-echo "Installing XRAY (XTLS-Reality)"
-echo "............................................................"
-echo "$Defaul_color" | sed 's/\$//g'
-
-#install xray
-bash -c "$(curl -L https://raw.githubusercontent.com/Ardgellan/XTLS_Reality_Server/main/install-release.sh)" @ install
-
-# To increase performance, you can configure
-# Bottleneck Bandwidth and
-# Round-trip propagation time (BBR) congestion control algorithm on the server
-echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
-echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
-sysctl -p
-
-#execute /usr/local/bin/xray x25519
-#and get public and private keys by splitting lines output and
-#remove "Private key: " and "Public key: " from output
-#and save it to variables
-x25519_keys=$(sudo /usr/local/bin/xray x25519)
-x25519_private_key=$(echo "$x25519_keys" | sed -n 1p | sed 's/Private key: //g')
-x25519_public_key=$(echo "$x25519_keys" | sed -n 2p | sed 's/Public key: //g')
-echo "$x25519_keys" | sed 's/\$//g'
-
-
-
-#get short id by using openssl
-short_id=$(sudo openssl rand -hex 8)
-
-#configure xray
-sudo cat <<EOF > /usr/local/etc/xray/config.json
-{
-    "log": {
-        "loglevel": "info"
-    },
-    "routing": {
-        "rules": [],
-        "domainStrategy": "AsIs"
-    },
-    "inbounds": [
-        {
-            "port": 443,
-            "protocol": "vless",
-            "tag": "vless_tls",
-            "settings": {
-                "clients": [],
-                "decryption": "none"
-            },
-            "streamSettings": {
-                "network": "tcp",
-                "security": "reality",
-                "realitySettings": {
-                    "show": false,
-                    "dest": "$site_url:443",
-                    "xver": 0,
-                    "serverNames": [
-                        "$site_url"
-                    ],
-                    "privateKey": "$x25519_private_key",
-                    "minClientVer": "",
-                    "maxClientVer": "",
-                    "maxTimeDiff": 0,
-                    "shortIds": [
-                        "$short_id"
-                    ]
-                }
-            },
-            "sniffing": {
-                "enabled": true,
-                "destOverride": [
-                    "http",
-                    "tls"
-                ]
-            }
-        }
-    ],
-    "outbounds": [
-        {
-            "protocol": "freedom",
-            "tag": "direct"
-        },
-        {
-            "protocol": "blackhole",
-            "tag": "block"
-        }
-    ]
-}
-EOF
-
-#restart xray
-systemctl restart xray.service
 
 #configure postgresql
 su - postgres -c "psql -c \"CREATE USER $database_user WITH PASSWORD '$database_passwd';\""
@@ -283,9 +180,6 @@ DB_HOST = "localhost"
 DB_PORT = "5432"
 
 XRAY_CONFIG_PATH = "/usr/local/etc/xray/config.json"
-XRAY_PUBLICKEY = "$x25519_public_key"
-XRAY_SHORTID = "$short_id"
-XRAY_SNI = "$site_url"
 EOF
 
 #try to run create_database_tables.py if it fails, then give db user superuser privileges

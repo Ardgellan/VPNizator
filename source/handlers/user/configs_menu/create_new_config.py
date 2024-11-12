@@ -1,12 +1,12 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from loguru import logger
+import aiohttp
 
 from loader import db_manager
 from source.middlewares import rate_limit
 from source.utils import localizer, qr_generator
 from source.utils.states.user import GeneratingNewConfig
-from source.utils.xray import xray_config
 from source.keyboard import inline
 
 from ..check_balance import has_sufficient_balance_for_conf_generation
@@ -42,27 +42,65 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     # Отправляем действие "загрузка"
     await message.answer_chat_action(action=types.ChatActions.UPLOAD_PHOTO)
 
-    # Генерация конфига
-    config = await xray_config.add_new_user(config_name=config_name, user_telegram_id=user_id)
+    # Страна, которую нужно передать в API
+    country = "estonia"  # Пример страны, можно настроить динамически
 
-    # Генерация QR-кода для конфига
-    config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(config)
+    # Теперь отправляем запрос к API для добавления пользователя и получения ссылки
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                f"http://nginxtest.vpnizator.online/add_user/{country}/",  # Указываем правильный URL API
+                params={"user_id": user_id, "config_name": config_name}
+            ) as response:
+                
+                # Проверяем статус ответа
+                if response.status == 200:
+                    
+                    data = await response.json()  # Асинхронно читаем JSON-ответ
+                    user_link = data.get("link")
+                    config_uuid = data.get("config_uuid")  # Получаем UUID конфигурации
+                    server_domain = data.get("server_domain")
 
-    # Отправляем QR-код и данные конфига
-    await message.answer_photo(
-        photo=config_qr_code,
-        caption=localizer.get_user_localized_text(
-            user_language_code=message.from_user.language_code,
-            text_localization=localizer.message.config_generated,
-        ).format(config_name=config_name, config_data=config),
-        parse_mode=types.ParseMode.HTML,
-        reply_markup=await inline.config_generation_keyboard(
-            language_code=message.from_user.language_code
-        ),
-    )
+                    # Генерация QR-кода для конфига
+                    config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(user_link)
 
-    # Обновляем баланс пользователя
-    await db_manager.update_user_balance(user_id, -3.00)
+                    # Отправляем QR-код и данные конфига
+                    await message.answer_photo(
+                        photo=config_qr_code,
+                        caption=localizer.get_user_localized_text(
+                            user_language_code=message.from_user.language_code,
+                            text_localization=localizer.message.config_generated,
+                        ).format(config_name=config_name, config_data=user_link),
+                        parse_mode=types.ParseMode.HTML,
+                    )
 
-    # Завершаем состояние
-    await state.finish()
+                    # Теперь данные передаем на бекэнд для записи в базу данных
+                    # Работа с базой данных на бекэнде:
+                    async with db_manager.transaction() as conn:
+                        await db_manager.insert_new_vpn_config(
+                            user_id=user_id,  # Получаем Telegram ID
+                            config_name=config_name,
+                            config_uuid=config_uuid,
+                            server_domain=server_domain,
+                            conn=conn,  # Передаем транзакцию для консистентности
+                        )
+
+                    # Обновляем баланс пользователя
+                    await db_manager.update_user_balance(user_id, -3.00)
+
+                    # Завершаем состояние
+                    await state.finish()
+
+                else:
+                    raise Exception(f"Failed to add user: {await response.text()}")
+
+    except Exception as e:
+        logger.error(f"Error while generating config: {str(e)}")
+        await message.answer(
+            text=localizer.get_user_localized_text(
+                user_language_code=message.from_user.language_code,
+                text_localization=localizer.message.error_generating_config,
+            ),
+            parse_mode=types.ParseMode.HTML,
+        )
+        await state.finish()
