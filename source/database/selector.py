@@ -3,7 +3,7 @@ from datetime import datetime
 from loguru import logger
 
 from source.data import config
-from source.utils.models import GlobalStatistics, UserInfo, VpnConfigDB
+from source.utils.models import GlobalStatistics, UserInfo, VpnConfigDB, VpnConfigDB_N
 
 from .connector import DatabaseConnector
 
@@ -445,4 +445,24 @@ class Selector(DatabaseConnector):
         """
         result = await self._execute_query(query)
         return result[0][0] if result else None
+
+    async def get_user_config_names_and_uuids_and_country_code(self, user_id: int) -> list[VpnConfigDB_N] | None:
+        query = f"""--sql
+            SELECT id, config_name, config_uuid, country_code
+            FROM vpn_configs
+            WHERE user_id = {user_id};
+        """
+        result = await self._execute_query(query)
+        if not result:
+            return None
+        return [
+            VpnConfigDB_N(
+                config_id=record[0],
+                user_id=user_id,
+                config_name=record[1],
+                config_uuid=record[2],
+                country_code=record[3],  # Добавляем country_code в объект
+            )
+            for record in result
+        ]
 

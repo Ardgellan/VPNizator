@@ -20,6 +20,15 @@ class VpnConfigDB:
     config_uuid: str
 
 
+@dataclass
+class VpnConfigDB_N:
+    config_id: int
+    user_id: int
+    config_name: str
+    config_uuid: str
+    country_code: str
+
+
 class SubscriptionStatus(Enum):
     expired = "EXPIRED"
     last_day_left = "LAST_DAY_LEFT"

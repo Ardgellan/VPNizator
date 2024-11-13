@@ -7,6 +7,8 @@ from source.utils.callback import support_callback
 
 from loguru import logger
 
+from source.utils.code_to_flag import *
+
 
 async def insert_button_support(
     keyboard: InlineKeyboardMarkup | None = None, language_code: str = "ru"
@@ -184,7 +186,7 @@ async def insert_button_back_to_main_menu(
 
 
 async def user_configs_list_keyboard(user_id: int, language_code: str) -> InlineKeyboardMarkup:
-    users_configs = await db_manager.get_user_config_names_and_uuids(user_id=user_id)
+    users_configs = await db_manager.get_user_config_names_and_uuids_and_country_code(user_id=user_id)
     keyboard = InlineKeyboardMarkup(row_width=2, resize_keyboard=True)
     # is_user_can_generate_new_config = (
     #     await db_manager.get_count_of_configs_user_can_create(user_id=user_id)
@@ -200,9 +202,10 @@ async def user_configs_list_keyboard(user_id: int, language_code: str) -> Inline
     keyboard.insert(create_new_config_button)
 
     if users_configs:
+
         exist_configs_buttons = [
             InlineKeyboardButton(
-                text=config.config_name,
+                text=f"{config.config_name} {country_code_to_flag(config.country_code)}",
                 callback_data=f"show_config_{config.config_uuid}",
             )
             for config in users_configs
