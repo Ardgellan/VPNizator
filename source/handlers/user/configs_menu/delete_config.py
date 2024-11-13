@@ -50,7 +50,7 @@ async def delete_config(call: types.CallbackQuery, state: FSMContext):
     target_server = await db_manager.get_domain_by_uuid(uuid=config_uuid)
         
     # Формируем URL для удаления конфигурации с учётом target_server
-    url = f"http://nginxtest.vpnizator.online/delete_config/{target_server}/"
+    url = f"https://nginxtest.vpnizator.online/delete_config/{target_server}/"
         
     # Используем aiohttp для отправки POST-запроса на эндпоинт
     async with aiohttp.ClientSession() as session:
