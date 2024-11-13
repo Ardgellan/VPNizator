@@ -54,7 +54,7 @@ async def delete_config(call: types.CallbackQuery, state: FSMContext):
         
     # Используем aiohttp для отправки POST-запроса на эндпоинт
     async with aiohttp.ClientSession() as session:
-        async with session.post(url, json={"config_uuid": config_uuid}) as response:
+        async with session.delete(url, params={"config_uuid": config_uuid}) as response:
             if response.status == 200:
                 # Успешно удалили конфиг на сервере, теперь удаляем его из базы данных
                 await db_manager.delete_one_vpn_config_by_uuid(uuid=config_uuid)
