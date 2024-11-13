@@ -27,27 +27,6 @@ async def confirm_delete_config(call: types.CallbackQuery, state: FSMContext):
     logger.info(f"Exiting_confirm_delete_config")
 
 
-# async def delete_config(call: types.CallbackQuery, state: FSMContext):
-#     logger.info(f"Entered_delete_config")
-#     config_uuid = call.data.split("_")[-1]
-#     await xray_config.disconnect_user_by_uuid(uuid=config_uuid)
-#     await db_manager.delete_one_vpn_config_by_uuid(uuid=uuid)
-#     await call.message.answer(
-#         text=localizer.get_user_localized_text(
-#             user_language_code=call.from_user.language_code,
-#             text_localization=localizer.message.config_deleted,
-#         ),
-#         parse_mode=types.ParseMode.HTML,
-#         reply_markup=await inline.insert_button_back_to_main_menu(
-#             language_code=call.from_user.language_code
-#         ),
-#     )
-#     await call.answer()
-#     await call.message.delete()
-#     await state.finish()
-#     logger.info(f"Successfully_deleted_config")
-
-
 async def delete_config(call: types.CallbackQuery, state: FSMContext):
     logger.info(f"Started deleting config with UUID: {call.data}")
     config_uuid = call.data.split("_")[-1]  # Получаем UUID конфигурации из данных callback

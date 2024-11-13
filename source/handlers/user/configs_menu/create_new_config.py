@@ -83,6 +83,9 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                             text_localization=localizer.message.config_generated,
                         ).format(config_name=config_name, config_data=user_link),
                         parse_mode=types.ParseMode.HTML,
+                        reply_markup=await inline.config_generation_keyboard(
+                            language_code=message.from_user.language_code
+                        ),
                     )
                     logger.info("QR code and config data sent to user.")
 
