@@ -46,7 +46,7 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
     logger.info(f"Fetching config name from database for UUID: {config_uuid}")
     config_name = await db_manager.get_config_name_by_config_uuid(config_uuid=config_uuid)
     logger.info(f"Config name fetched successfully: {config_name}")
-    target_server = await db_manager.get_config_name_by_config_uuid(config_uuid=config_uuid)
+    target_server = await db_manager.get_domain_by_uuid(config_uuid=config_uuid)
 
     # Отправляем запрос к API для получения сгенерированной ссылки
     logger.info("Creating HTTP session and sending GET request to API for config link...")
