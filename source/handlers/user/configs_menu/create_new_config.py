@@ -26,6 +26,8 @@ async def request_user_for_country(call: types.CallbackQuery, state: FSMContext)
             language_code=call.from_user.language_code
         )
     )
+    logger.info("we finished choose_country")
+
 
 
 async def request_user_for_config_name(call: types.CallbackQuery, state: FSMContext):
