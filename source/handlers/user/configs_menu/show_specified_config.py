@@ -44,7 +44,7 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
     config_uuid = call.data.split("_")[-1]
     country_name = await db_manager.get_country_name_by_uuid(config_uuid)
     country_code = await db_manager.get_country_code_by_uuid(config_uuid)
-    country_flag = country_code_to_flag(country_code)
+    # country_flag = country_code_to_flag(country_code)
     # Получаем имя конфигурации из базы данных
     logger.info(f"Fetching config name from database for UUID: {config_uuid}")
     config_name = await db_manager.get_config_name_by_config_uuid(config_uuid=config_uuid)
@@ -71,7 +71,7 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
                 logger.info("Generating QR code from the config link...")
                 config_qr_code = create_qr_code_from_config_as_link_str(config=config_as_link_str)
                 logger.info("QR code generated successfully.")
-
+                config_as_link_str_with_flag = f"{config_as_link_str} {country_code_to_flag(country_code)}"
                 # Удаляем сообщение с кнопкой
                 logger.info("Deleting previous message with button...")
                 await call.message.delete()
@@ -83,7 +83,7 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
                     caption=localizer.get_user_localized_text(
                         user_language_code=call.from_user.language_code,
                         text_localization=localizer.message.config_requseted,
-                    ).format(config_name=config_name, config_data=config_as_link_str, country_name=country_name, country_code=country_flag),
+                    ).format(config_name=config_name, config_data=config_as_link_str, country_name=country_name, country_code=country_code),
                     parse_mode=types.ParseMode.HTML,
                     reply_markup=await inline.delete_specified_config_keyboard(
                         config_uuid=config_uuid, language_code=call.from_user.language_code

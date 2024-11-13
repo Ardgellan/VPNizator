@@ -93,15 +93,13 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                     country_name = data.get("server_country")
                     country_code = data.get("server_country_code")
 
-                    country_flag = country_code_to_flag(country_code)
-
                     logger.info(f"Extracted values - user_link: {user_link}, config_uuid: {config_uuid}, server_domain: {server_domain}")
 
                     # Генерация QR-кода для конфига
                     logger.info("Generating QR code for config...")
                     config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(user_link)
                     logger.info("QR code generated successfully.")
-
+                    config_as_link_str_with_flag = f"{user_link} {country_code_to_flag(country_code)}"
                     # Отправляем QR-код и данные конфига
                     logger.info(f"Sending QR code and configuration data to user: {message.from_user.id}")
                     await message.answer_photo(
@@ -109,7 +107,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                         caption=localizer.get_user_localized_text(
                             user_language_code=message.from_user.language_code,
                             text_localization=localizer.message.config_generated,
-                        ).format(config_name=config_name, country_name=country_name, country_code=country_flag, config_data=user_link),
+                        ).format(config_name=config_name, country_name=country_name, country_code=country_code, config_data=config_as_link_str_with_flag),
                         parse_mode=types.ParseMode.HTML,
                         reply_markup=await inline.config_generation_keyboard(
                             language_code=message.from_user.language_code
