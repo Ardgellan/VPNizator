@@ -62,7 +62,7 @@
         },
         "config_requseted": {
             "en": "✅ Name: <b>{config_name}</b>\n\nCountry: {country_name} {country_code}\n\n📝 Connection data:\n<code>{config_data}</code>\n\nThis is one of your VPN connections. You can delete it if you choose to or install it on your device if you haven't already when you generated it!",
-            "ru": "✅ Название: <b>{config_name}</b>\n\nCountry: {country_name} {country_code}\n\n📝 Данные для подключения:\n<code>{config_data}</code>\n\nЭто одно из ваших VPN соединений. Вы можете удалить его если решите или установить на Ваше устройство, если не сделали этого сразу при генерации!"
+            "ru": "✅ Название: <b>{config_name}</b>\n\nСтрана: {country_name} {country_code}\n\n📝 Данные для подключения:\n<code>{config_data}</code>\n\nЭто одно из ваших VPN соединений. Вы можете удалить его если решите или установить на Ваше устройство, если не сделали этого сразу при генерации!"
         },
         "subscription_expired_notification": {
             "en": "{user}, I have bad news...😢\nYour VPN subscription <b>has expired</b> 😭. To renew your subscription, please, top up your balance!",
