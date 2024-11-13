@@ -1,7 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 import aiohttp
-from logguru import logger
+from loguru import logger
 
 from source.keyboard import inline
 from source.middlewares import rate_limit
