@@ -15,6 +15,8 @@ from ..check_balance import has_sufficient_balance_for_conf_generation
 @rate_limit(limit=1)
 @has_sufficient_balance_for_conf_generation
 async def request_user_for_country(call: types.CallbackQuery, state: FSMContext):
+    country_name = call.data.split("_")[1]
+    await state.update_data(country_name=country_name)
     logger.info("we entered choose_country")
     await call.message.answer(
         text=localizer.get_user_localized_text(
@@ -46,6 +48,10 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     config_name = message.text
     user_id = message.from_user.id
 
+    user_data = await state.get_data()
+    country_name = user_data.get("country_name")
+    country_name = country_name.lower()
+
     # Отправляем сообщение, что генерация началась
     await message.answer(
         text=localizer.get_user_localized_text(
@@ -58,8 +64,8 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     # Отправляем действие "загрузка"
     await message.answer_chat_action(action=types.ChatActions.UPLOAD_PHOTO)
 
-    # Страна, которую нужно передать в API
-    country = "estonia"  # Пример страны, можно настроить динамически
+    # # Страна, которую нужно передать в API
+    # country = "estonia"  # Пример страны, можно настроить динамически
 
     # Теперь отправляем запрос к API для добавления пользователя и получения ссылки
     try:
@@ -67,7 +73,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
         async with aiohttp.ClientSession() as session:
             logger.info(f"Sending POST request to add user. Params: user_id={user_id}, config_name={config_name}")
             async with session.post(
-                f"https://nginxtest.vpnizator.online/add_user/estonia/",  # Указываем правильный URL API
+                f"https://nginxtest.vpnizator.online/add_user/{country_name}/",  # Указываем правильный URL API
                 params={"user_id": user_id, "config_name": config_name}  # Передаем параметры в теле запроса
             ) as response:
                 logger.info(f"Received response from API. Status code: {response.status}")
