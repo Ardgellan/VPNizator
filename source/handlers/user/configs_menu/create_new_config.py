@@ -30,7 +30,7 @@ async def request_user_for_country(call: types.CallbackQuery, state: FSMContext)
 
 
 async def request_user_for_config_name(call: types.CallbackQuery, state: FSMContext):
-    country_name = call.data.split("_")[1]
+    selected_country = call.data.split("_")[1]
     await state.update_data(selected_country=selected_country)
 
     await call.message.answer(
