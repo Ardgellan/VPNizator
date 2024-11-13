@@ -54,7 +54,7 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
     logger.info("Creating HTTP session and sending GET request to API for config link...")
     async with aiohttp.ClientSession() as session:
         async with session.get(
-            f"https://nginxtest.vpnizator.online/show_specified_config/{target_server}",
+            f"https://nginxtest.vpnizator.online/show_specified_config/{target_server}/",
             params={"config_uuid": config_uuid, "config_name": config_name}
         ) as response:
             logger.info(f"Received response from API. Status code: {response.status}")
