@@ -31,7 +31,7 @@ async def request_user_for_country(call: types.CallbackQuery, state: FSMContext)
 
 async def request_user_for_config_name(call: types.CallbackQuery, state: FSMContext):
     country_name = call.data.split("_")[1]
-    # await state.update_data(country_name=country_name)
+    await state.update_data(selected_country=selected_country)
 
     await call.message.answer(
         text=localizer.get_user_localized_text(
@@ -48,10 +48,10 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     config_name = message.text
     user_id = message.from_user.id
 
-    # user_data = await state.get_data()
-    # country_name = user_data.get("country_name")
-    # country_name = country_name.lower()
-    # logger.info(f"Country name = {country_name}")
+    user_data = await state.get_data()
+    selected_country = user_data.get("selected_country")
+    selected_country = selected_country.lower()
+    logger.info(f"Country name = {selected_country}")
 
     # Отправляем сообщение, что генерация началась
     await message.answer(
@@ -74,7 +74,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
         async with aiohttp.ClientSession() as session:
             logger.info(f"Sending POST request to add user. Params: user_id={user_id}, config_name={config_name}")
             async with session.post(
-                f"https://nginxtest.vpnizator.online/add_user/estonia/",  # Указываем правильный URL API
+                f"https://nginxtest.vpnizator.online/add_user/{selected_country}/",  # Указываем правильный URL API
                 params={"user_id": user_id, "config_name": config_name}  # Передаем параметры в теле запроса
             ) as response:
                 logger.info(f"Received response from API. Status code: {response.status}")
@@ -89,6 +89,8 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                     user_link = data.get("link")
                     config_uuid = data.get("config_uuid")  # Получаем UUID конфигурации
                     server_domain = data.get("server_domain")
+                    country_name = data.get("server_country")
+                    server_country_code = data.get("server_country_code")
 
                     logger.info(f"Extracted values - user_link: {user_link}, config_uuid: {config_uuid}, server_domain: {server_domain}")
 
@@ -104,7 +106,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                         caption=localizer.get_user_localized_text(
                             user_language_code=message.from_user.language_code,
                             text_localization=localizer.message.config_generated,
-                        ).format(config_name=config_name, config_data=user_link),
+                        ).format(config_name=config_name, country_name=country_name, server_country_code=server_country_code, config_data=user_link),
                         parse_mode=types.ParseMode.HTML,
                         reply_markup=await inline.config_generation_keyboard(
                             language_code=message.from_user.language_code
