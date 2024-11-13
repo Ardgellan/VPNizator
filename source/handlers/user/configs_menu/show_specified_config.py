@@ -44,7 +44,7 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
     
     # Получаем имя конфигурации из базы данных
     logger.info(f"Fetching config name from database for UUID: {config_uuid}")
-    config_name = await db_manager.get_config_name_by_config_uuid(config_uuid=config_uuid)
+    target_server, domain = await selector.get_config_name_and_domain_by_config_uuid(config_uuid)
     logger.info(f"Config name fetched successfully: {config_name}")
 
 
@@ -52,7 +52,7 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
     logger.info("Creating HTTP session and sending GET request to API for config link...")
     async with aiohttp.ClientSession() as session:
         async with session.get(
-            f"https://nginxtest.vpnizator.online/show_specified_config/",
+            f"https://nginxtest.vpnizator.online/show_specified_config/{target_server}",
             params={"config_uuid": config_uuid, "config_name": config_name}
         ) as response:
             logger.info(f"Received response from API. Status code: {response.status}")

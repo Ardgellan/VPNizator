@@ -396,3 +396,24 @@ class Selector(DatabaseConnector):
             domain_to_uuids[domain].append(uuid)
 
         return domain_to_uuids
+    
+    async def get_config_name_and_domain_by_config_uuid(self, config_uuid: str) -> tuple[str, str] | None:
+        """
+        Возвращает имя конфигурации и домен по UUID конфигурации.
+    
+        :param config_uuid: UUID конфигурации
+        :return: Кортеж (config_name, domain) или None, если конфигурация не найдена
+        """
+        query = f"""--sql
+            SELECT config_name, domain
+            FROM vpn_configs
+            WHERE config_uuid = '{config_uuid}';
+        """
+        result = await self._execute_query(query)
+    
+        if result:
+            config_name, domain = result[0]
+            return config_name, domain
+        else:
+            return None
+
