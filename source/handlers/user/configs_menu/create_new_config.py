@@ -126,6 +126,8 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                             config_name=config_name,
                             config_uuid=config_uuid,
                             server_domain=server_domain,
+                            country_name=country_name,
+                            country_code=country_code,
                             conn=conn,  # Передаем транзакцию для консистентности
                         )
                     logger.info("Config data successfully inserted into the database.")
