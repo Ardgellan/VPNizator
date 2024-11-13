@@ -42,6 +42,10 @@ async def request_user_for_config_name(call: types.CallbackQuery, state: FSMCont
     )
     await GeneratingNewConfig.waiting_for_config_name.set()
 
+def country_code_to_flag(country_code: str) -> str:
+        # Преобразуем код страны (например, 'EE') в эмодзи флага
+        return ''.join([chr(0x1F1E6 + ord(c) - ord('A')) for c in country_code.upper()])
+
 
 async def generate_config_for_user(message: types.Message, state: FSMContext):
     # Получаем имя конфигурации от пользователя
@@ -147,7 +151,3 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     except Exception as e:
         logger.error(f"Error while generating config: {str(e)}")
         await state.finish()
-
-    def country_code_to_flag(country_code: str) -> str:
-        # Преобразуем код страны (например, 'EE') в эмодзи флага
-        return ''.join([chr(0x1F1E6 + ord(c) - ord('A')) for c in country_code.upper()])
