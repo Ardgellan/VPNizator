@@ -15,11 +15,6 @@ from ..check_balance import has_sufficient_balance_for_conf_generation
 @rate_limit(limit=1)
 @has_sufficient_balance_for_conf_generation
 async def request_user_for_country(call: types.CallbackQuery, state: FSMContext):
-    logger.info(f"Full callback data: {call.data}")  # Логируем полное содержимое callback_data
-    country_name = call.data.split("_")[1]
-    logger.info(f"Initial country name = {country_name}")
-    await state.update_data(country_name=country_name)
-    logger.info(f"Strana name = {country_name} && Country name = {country_name}")
     await call.message.answer(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
@@ -35,6 +30,9 @@ async def request_user_for_country(call: types.CallbackQuery, state: FSMContext)
 
 
 async def request_user_for_config_name(call: types.CallbackQuery, state: FSMContext):
+    country_name = call.data.split("_")[1]
+    await state.update_data(country_name=country_name)
+
     await call.message.answer(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
