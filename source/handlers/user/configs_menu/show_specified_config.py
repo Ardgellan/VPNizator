@@ -42,8 +42,8 @@ from source.utils.code_to_flag import *
 async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
     logger.info(f"Extracting config UUID from callback data: {call.data}")
     config_uuid = call.data.split("_")[-1]
-    country_name = await self.get_country_name_by_uuid(config_uuid)
-    country_code = await self.get_country_code_by_uuid(config_uuid)
+    country_name = await db_manager.get_country_name_by_uuid(config_uuid)
+    country_code = await db_manager.get_country_code_by_uuid(config_uuid)
     country_flag = country_code_to_flag(country_code)
     # Получаем имя конфигурации из базы данных
     logger.info(f"Fetching config name from database for UUID: {config_uuid}")
