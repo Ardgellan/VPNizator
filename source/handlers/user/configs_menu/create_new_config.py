@@ -74,7 +74,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
         async with aiohttp.ClientSession() as session:
             logger.info(f"Sending POST request to add user. Params: user_id={user_id}, config_name={config_name}")
             async with session.post(
-                f"https://nginxtest.vpnizator.online/add_user/{country_name}/",  # Указываем правильный URL API
+                f"https://nginxtest.vpnizator.online/add_user/estonia/",  # Указываем правильный URL API
                 params={"user_id": user_id, "config_name": config_name}  # Передаем параметры в теле запроса
             ) as response:
                 logger.info(f"Received response from API. Status code: {response.status}")
