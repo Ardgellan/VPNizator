@@ -17,8 +17,14 @@ def register_configs_menu_handlers(dp: Dispatcher):
         )
 
         dp.register_callback_query_handler(
+            request_user_for_country,  # Хендлер для выбора страны
+            lambda call: call.data.startswith("create_new_config"),  # Условие с "create_new_config"
+            state="*",
+        )
+
+        dp.register_callback_query_handler(
             request_user_for_config_name,
-            lambda call: call.data.startswith("create_new_config"),
+            lambda call: call.data.startswith("country_"),
             state="*",
         )
 

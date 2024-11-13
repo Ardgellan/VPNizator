@@ -281,3 +281,7 @@ class LocalizedMessageText(BaseLocalizedObject):
     @property
     def error_occurred_during_sub_renewal(self) -> LocalizedText:
         return self._get_entity_text("error_occurred_during_sub_renewal")
+
+    @property
+    def choose_country_message(self) -> LocalizedText:
+        return self._get_entity_text("choose_country_message")

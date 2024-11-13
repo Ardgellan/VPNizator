@@ -259,6 +259,10 @@
         "error_occurred_during_sub_renewal": {
             "en": "🤒 An error was made when restoring registration! Please form again! 🙏",
             "ru": "🤒 При попытке восстановления подписки возникла ошибка! Пожалуйста, попробуйте еще раз! 🙏"
+        },
+        "choose_country_message": {
+            "en": "🌐 Please select the country in which you would like to create a connection!\n\n<b>💡Tip:</b> The geographically closer the country is to you, the higher and more stable the connection speed. So in the European part of Russia, servers from Estonia and Finland are best suited, and in the Far East, a connection from Japan.",
+            "ru": "🌐 Пожалуйста, выберите страну, в которой хотите создать подключение!\n\n<b>💡Совет:</b> Чем географически ближе к Вам расположена страна, тем выше и стабильнее скорость соединения. Так, в европейской части России лучше всего подойдут сервера из Эстонии и Финляндии, а на Дальнем Востоке — соединение из Японии."
         }                          
     },
     "button": {
@@ -429,6 +433,10 @@
         "pay_button": {
             "en": "💳 Pay",
             "ru": "💳 Оплатить"
+        },
+        "estonia_button": {
+            "en": "🇪🇪 Estonia",
+            "ru": "🇪🇪 Эстония"
         }
     }
 }

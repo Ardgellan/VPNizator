@@ -14,6 +14,19 @@ from ..check_balance import has_sufficient_balance_for_conf_generation
 
 @rate_limit(limit=1)
 @has_sufficient_balance_for_conf_generation
+async def request_user_for_country(call: types.CallbackQuery, state: FSMContext):
+    await call.message.answer(
+        text=localizer.get_user_localized_text(
+            user_language_code=call.from_user.language_code,
+            text_localization=localizer.message.choose_country_message,
+        ),
+        parse_mode=types.ParseMode.HTML,
+        reply_markup=await inline.country_selection_keyboard(
+            language_code=call.from_user.language_code
+        )
+    )
+
+
 async def request_user_for_config_name(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer(
         text=localizer.get_user_localized_text(

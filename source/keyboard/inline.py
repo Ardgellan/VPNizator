@@ -587,3 +587,27 @@ async def payment_confirmation_keyboard(language_code: str, payment_url: str):
     )
 
     return keyboard
+
+async def country_selection_keyboard(language_code: str):
+    keyboard = InlineKeyboardMarkup(row_width=1)
+
+    buttons = [
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.estonia,
+            ),
+            callback_data="country_estonia",
+        ),
+    ]
+
+    for button in buttons:
+        keyboard.add(button)
+
+    keyboard = await insert_button_back_to_main_menu(
+        keyboard=keyboard,
+        language_code=language_code,
+    )
+    
+    return keyboard
+    
