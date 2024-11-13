@@ -48,10 +48,10 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     config_name = message.text
     user_id = message.from_user.id
 
-    user_data = await state.get_data()
-    country_name = user_data.get("country_name")
-    country_name = country_name.lower()
-    logger.info(f"Country name = {country_name}")
+    # user_data = await state.get_data()
+    # country_name = user_data.get("country_name")
+    # country_name = country_name.lower()
+    # logger.info(f"Country name = {country_name}")
 
     # Отправляем сообщение, что генерация началась
     await message.answer(
