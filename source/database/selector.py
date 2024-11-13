@@ -433,7 +433,8 @@ class Selector(DatabaseConnector):
             WHERE config_uuid = '{config_uuid}'
             LIMIT 1;
         """
-        return await self._execute_query(query)
+        result = await self._execute_query(query)
+        return result[0][0] if result else None
 
     async def get_country_code_by_uuid(self, config_uuid: str):
         query = f"""
@@ -442,5 +443,6 @@ class Selector(DatabaseConnector):
             WHERE config_uuid = '{config_uuid}'
             LIMIT 1;
         """
-        return await self._execute_query(query)
+        result = await self._execute_query(query)
+        return result[0][0] if result else None
 
