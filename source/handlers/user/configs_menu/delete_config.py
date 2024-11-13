@@ -54,7 +54,7 @@ async def delete_config(call: types.CallbackQuery, state: FSMContext):
     logger.info(f"Extracted config UUID: {config_uuid}")
     
     # Получаем домен для конфигурации
-    target_server = await db_manager.get_domain_by_uuid(uuid=config_uuid)
+    target_server = await db_manager.get_domain_by_uuid(config_uuid=config_uuid)
     logger.info(f"Fetched domain for UUID {config_uuid}: {target_server}")
         
     # Формируем URL для удаления конфигурации с учётом target_server
