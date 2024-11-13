@@ -11,8 +11,6 @@ from source.keyboard import inline
 
 from ..check_balance import has_sufficient_balance_for_conf_generation
 
-from emoji_country_flag import country_flag
-
 
 @rate_limit(limit=1)
 @has_sufficient_balance_for_conf_generation
@@ -94,8 +92,6 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                     country_name = data.get("server_country")
                     country_code = data.get("server_country_code")
 
-                    country_flag_emoji = country_flag(country_code)
-
                     logger.info(f"Extracted values - user_link: {user_link}, config_uuid: {config_uuid}, server_domain: {server_domain}")
 
                     # Генерация QR-кода для конфига
@@ -110,7 +106,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                         caption=localizer.get_user_localized_text(
                             user_language_code=message.from_user.language_code,
                             text_localization=localizer.message.config_generated,
-                        ).format(config_name=config_name, country_name=country_name, country_code=country_flag_emoji, config_data=user_link),
+                        ).format(config_name=config_name, country_name=country_name, country_code=country_code, config_data=user_link),
                         parse_mode=types.ParseMode.HTML,
                         reply_markup=await inline.config_generation_keyboard(
                             language_code=message.from_user.language_code
