@@ -31,7 +31,7 @@ async def request_user_for_country(call: types.CallbackQuery, state: FSMContext)
 
 async def request_user_for_config_name(call: types.CallbackQuery, state: FSMContext):
     country_name = call.data.split("_")[1]
-    await state.update_data(country_name=country_name)
+    # await state.update_data(country_name=country_name)
 
     await call.message.answer(
         text=localizer.get_user_localized_text(
