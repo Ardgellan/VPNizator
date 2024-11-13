@@ -8,6 +8,7 @@ from source.keyboard import inline
 from source.utils import localizer
 from source.utils.qr_generator import create_qr_code_from_config_as_link_str
 from source.middlewares import rate_limit
+from source.utils.code_to_flag import *
 
 
 # @rate_limit(limit=3)
@@ -41,7 +42,9 @@ from source.middlewares import rate_limit
 async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
     logger.info(f"Extracting config UUID from callback data: {call.data}")
     config_uuid = call.data.split("_")[-1]
-    
+    country_name = await self.get_country_name_by_uuid(config_uuid)
+    country_code = await self.get_country_code_by_uuid(config_uuid)
+    country_flag = country_code_to_flag(country_code)
     # Получаем имя конфигурации из базы данных
     logger.info(f"Fetching config name from database for UUID: {config_uuid}")
     config_name = await db_manager.get_config_name_by_config_uuid(config_uuid=config_uuid)
@@ -80,7 +83,7 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
                     caption=localizer.get_user_localized_text(
                         user_language_code=call.from_user.language_code,
                         text_localization=localizer.message.config_requseted,
-                    ).format(config_name=config_name, config_data=config_as_link_str),
+                    ).format(config_name=config_name, config_data=config_as_link_str, country_name=country_name, country_code=country_flag),
                     parse_mode=types.ParseMode.HTML,
                     reply_markup=await inline.delete_specified_config_keyboard(
                         config_uuid=config_uuid, language_code=call.from_user.language_code

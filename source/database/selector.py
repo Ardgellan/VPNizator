@@ -426,3 +426,21 @@ class Selector(DatabaseConnector):
     #     else:
     #         return None
 
+    async def get_country_name_by_uuid(self, config_uuid: str):
+        query = f"""
+            SELECT country_name
+            FROM vpn_configs
+            WHERE config_uuid = '{config_uuid}'
+            LIMIT 1;
+        """
+        return await self._execute_query(query)
+
+    async def get_country_code_by_uuid(self, config_uuid: str):
+        query = f"""
+            SELECT country_code
+            FROM vpn_configs
+            WHERE config_uuid = '{config_uuid}'
+            LIMIT 1;
+        """
+        return await self._execute_query(query)
+
