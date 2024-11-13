@@ -90,7 +90,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                     config_uuid = data.get("config_uuid")  # Получаем UUID конфигурации
                     server_domain = data.get("server_domain")
                     country_name = data.get("server_country")
-                    server_country_code = data.get("server_country_code")
+                    country_code = data.get("server_country_code")
 
                     logger.info(f"Extracted values - user_link: {user_link}, config_uuid: {config_uuid}, server_domain: {server_domain}")
 
@@ -106,7 +106,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                         caption=localizer.get_user_localized_text(
                             user_language_code=message.from_user.language_code,
                             text_localization=localizer.message.config_generated,
-                        ).format(config_name=config_name, country_name=country_name, server_country_code=server_country_code, config_data=user_link),
+                        ).format(config_name=config_name, country_name=country_name, country_code=country_code, config_data=user_link),
                         parse_mode=types.ParseMode.HTML,
                         reply_markup=await inline.config_generation_keyboard(
                             language_code=message.from_user.language_code
