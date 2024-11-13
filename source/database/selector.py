@@ -399,7 +399,7 @@ class Selector(DatabaseConnector):
 
     async def get_domain_by_uuid(self, config_uuid: str) -> str | None:
         query = f"""
-            SELECT domain
+            SELECT server_domain
             FROM vpn_configs
             WHERE config_uuid = '{config_uuid}';
         """
