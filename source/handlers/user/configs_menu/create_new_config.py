@@ -8,6 +8,7 @@ from source.middlewares import rate_limit
 from source.utils import localizer, qr_generator
 from source.utils.states.user import GeneratingNewConfig
 from source.keyboard import inline
+from source.utils.code_to_flag import *
 
 from ..check_balance import has_sufficient_balance_for_conf_generation
 
@@ -41,10 +42,6 @@ async def request_user_for_config_name(call: types.CallbackQuery, state: FSMCont
         parse_mode=types.ParseMode.HTML,
     )
     await GeneratingNewConfig.waiting_for_config_name.set()
-
-def country_code_to_flag(country_code: str) -> str:
-        # Преобразуем код страны (например, 'EE') в эмодзи флага
-        return ''.join([chr(0x1F1E6 + ord(c) - ord('A')) for c in country_code.upper()])
 
 
 async def generate_config_for_user(message: types.Message, state: FSMContext):
