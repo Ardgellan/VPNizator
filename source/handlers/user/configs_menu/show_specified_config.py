@@ -66,12 +66,12 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
                 data = await response.json()
                 config_as_link_str = data.get("config_link")
                 logger.info(f"Config link fetched from API: {config_as_link_str}")
-
+                config_as_link_str_with_flag = f"{config_as_link_str} {country_code_to_flag(country_code)}"
                 # Генерация QR-кода для конфигурации
                 logger.info("Generating QR code from the config link...")
                 config_qr_code = create_qr_code_from_config_as_link_str(config=config_as_link_str)
                 logger.info("QR code generated successfully.")
-                config_as_link_str_with_flag = f"{config_as_link_str} {country_code_to_flag(country_code)}"
+
                 # Удаляем сообщение с кнопкой
                 logger.info("Deleting previous message with button...")
                 await call.message.delete()
@@ -83,7 +83,7 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
                     caption=localizer.get_user_localized_text(
                         user_language_code=call.from_user.language_code,
                         text_localization=localizer.message.config_requseted,
-                    ).format(config_name=config_name, config_data=config_as_link_str, country_name=country_name, country_code=country_code),
+                    ).format(config_name=config_name, config_data=config_as_link_str_with_flag, country_name=country_name, country_code=country_code),
                     parse_mode=types.ParseMode.HTML,
                     reply_markup=await inline.delete_specified_config_keyboard(
                         config_uuid=config_uuid, language_code=call.from_user.language_code

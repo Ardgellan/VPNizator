@@ -94,12 +94,12 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                     country_code = data.get("server_country_code")
 
                     logger.info(f"Extracted values - user_link: {user_link}, config_uuid: {config_uuid}, server_domain: {server_domain}")
-
+                    config_as_link_str_with_flag = f"{user_link} {country_code_to_flag(country_code)}"
                     # Генерация QR-кода для конфига
                     logger.info("Generating QR code for config...")
                     config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(user_link)
                     logger.info("QR code generated successfully.")
-                    config_as_link_str_with_flag = f"{user_link} {country_code_to_flag(country_code)}"
+                    
                     # Отправляем QR-код и данные конфига
                     logger.info(f"Sending QR code and configuration data to user: {message.from_user.id}")
                     await message.answer_photo(
