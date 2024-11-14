@@ -8,8 +8,8 @@ from datetime import datetime
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from loader import db_manager
 
-
-async def restore_user_configs_for_subscription(self, user_ids: list[int]) -> bool:
+logger.info(f"Shagarunamba")
+async def restore_user_configs_for_subscription(user_ids: list[int]) -> bool:
     """
     Восстанавливает конфиги пользователей с активной подпиской.
     Включает обновление статуса подписки, списание средств и получение UUID конфигов,
