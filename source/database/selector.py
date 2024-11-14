@@ -378,10 +378,10 @@ class Selector(DatabaseConnector):
         Возвращаем словарь, где ключи — домены, а значения — списки UUID конфигов.
         """
         query = """
-            SELECT vc.domain, vc.config_uuid
+            SELECT vc.server_domain, vc.config_uuid
             FROM vpn_configs vc
             WHERE vc.user_id = ANY($1::int[])
-            ORDER BY vc.domain;
+            ORDER BY vc.server_domain;
         """
         result = await self._execute_query(query, [users_ids])
 
