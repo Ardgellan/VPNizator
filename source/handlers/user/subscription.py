@@ -7,9 +7,7 @@ from loader import db_manager
 from source.utils import localizer
 from source.keyboard import inline
 
-logger.info(f"Chakumba")
 from source.utils.sub_reactivation import restore_user_configs_for_subscription
-logger.info(f"Chakumba_2")
 
 async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext):
 

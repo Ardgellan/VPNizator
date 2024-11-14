@@ -8,7 +8,6 @@ from datetime import datetime
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from loader import db_manager
 
-logger.info(f"Shagarunamba")
 async def restore_user_configs_for_subscription(user_ids: list[int]) -> bool:
     """
     Восстанавливает конфиги пользователей с активной подпиской.
@@ -33,7 +32,7 @@ async def restore_user_configs_for_subscription(user_ids: list[int]) -> bool:
         logger.info(f"User {user_id}: Subscription status updated to active.")
 
     # Получаем UUID конфигов для всех пользователей, сгруппированные по доменам
-    user_configs_with_domains = await db_manager.get_config_uuids_grouped_by_domain(user_ids=user_ids)
+    user_configs_with_domains = await db_manager.get_config_uuids_grouped_by_domain(users_ids=user_ids)
     logger.info(f"User configs grouped by domain: {user_configs_with_domains}")
 
     # Группируем UUID по доменам
