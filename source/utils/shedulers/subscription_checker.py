@@ -18,7 +18,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 12:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=16, minute=52)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=17, minute=2)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -142,7 +142,7 @@ class SubscriptionChecker:
                     # Отправляем запрос на эндпоинт для деактивации конфигов на конкретном сервере
                     response = await self._send_deactivation_request(domain, uuids)
                 
-                    if response.status_code != 200:
+                    if response.status != 200:
                         logger.error(f"Ошибка при деактивации конфигов на {domain}: {response.text}")
                         continue
                     else:
