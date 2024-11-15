@@ -4,7 +4,7 @@ from loguru import logger
 import aiohttp
 
 from loader import db_manager
-from source.data import config
+
 from source.keyboard import inline
 from source.utils import localizer
 from source.utils.qr_generator import create_qr_code_from_config_as_link_str
@@ -22,13 +22,11 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
     config_name = await db_manager.get_config_name_by_config_uuid(config_uuid=config_uuid)
     target_server = await db_manager.get_domain_by_uuid(config_uuid=config_uuid)
 
-    proxy_server_domain = config.proxy_server_domain
-
 
     # Отправляем запрос к API для получения сгенерированной ссылки
     async with aiohttp.ClientSession() as session:
         async with session.get(
-            f"https://{proxy_server_domain}/show_specified_config/{target_server}/",
+            f"https://nginxtest.vpnizator.online/show_specified_config/{target_server}/",
             params={"config_uuid": config_uuid, "config_name": config_name}
         ) as response:
 

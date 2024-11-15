@@ -4,7 +4,6 @@ from loguru import logger
 import aiohttp
 
 from loader import db_manager
-from source.data import config
 from source.middlewares import rate_limit
 from source.utils import localizer, qr_generator
 from source.utils.states.user import GeneratingNewConfig
@@ -47,13 +46,13 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     # Получаем имя конфигурации от пользователя
     config_name = message.text
     user_id = message.from_user.id
-    logger.info("SALAM")
+
     user_data = await state.get_data()
     selected_country = user_data.get("selected_country")
     selected_country = selected_country.lower()
-    logger.info("kALAM")
-    proxy_server_domain = config.proxy_server_domain
-    logger.info("BALAM")
+
+
+
 
     # Отправляем сообщение, что генерация началась
     await message.answer(
@@ -72,7 +71,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
 
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                f"https://{proxy_server_domain}/add_user/{selected_country}/",  # Указываем правильный URL API
+                f"https://nginxtest.vpnizator.online/add_user/{selected_country}/",  # Указываем правильный URL API
                 params={"user_id": user_id, "config_name": config_name}  # Передаем параметры в теле запроса
             ) as response:
                 

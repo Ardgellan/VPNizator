@@ -111,6 +111,10 @@ class Configuration:
         return self._admins_ids
 
     @property
+    def proxy_server_domain(self) -> str:
+        return self.proxy_server_domain
+
+    @property
     def database_connection_parameters(self) -> dict[str, str]:
         return self._database_connection_parameters
 
@@ -126,7 +130,4 @@ class Configuration:
     def server_country(self) -> str:
         return self._server_country
 
-    @property
-    def proxy_server_domain(self) -> str:
-        return self.proxy_server_domain
 
