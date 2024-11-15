@@ -244,7 +244,7 @@ class Selector(DatabaseConnector):
             JOIN vpn_configs vc ON vc.user_id = u.user_id
             WHERE u.subscription_is_active = TRUE  -- Только активные пользователи
             GROUP BY u.user_id, u.balance
-            HAVING u.balance - (COUNT(vc.config_uuid) * 3) < (COUNT(vc.config_uuid) * 3)
+            HAVING u.balance < (COUNT(vc.config_uuid) * 3)
         """
         result = await self._execute_query(query)
         return [record[0] for record in result] if result else []
