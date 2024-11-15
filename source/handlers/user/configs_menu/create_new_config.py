@@ -51,6 +51,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     user_data = await state.get_data()
     selected_country = user_data.get("selected_country")
     selected_country = selected_country.lower()
+    logger.info("kALAM")
     proxy_server_domain = config.proxy_server_domain
     logger.info("BALAM")
 
