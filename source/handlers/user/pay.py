@@ -79,7 +79,8 @@ async def handle_payment(call: types.CallbackQuery):
                         user_language_code=call.from_user.language_code,
                         text_localization=localizer.message.successfull_payment_message,
                     ).format(amount=amount, current_balance=current_balance, current_subscription_status=current_subscription_status),
-                    reply_markup=await inline.insert_button_back_to_main_menu(
+                    parse_mode=types.ParseMode.HTML,
+                    reply_markup=await inline.successfull_payment_keyboard(
                         language_code=call.from_user.language_code
                     ),
                 )

@@ -630,4 +630,26 @@ async def country_selection_keyboard(language_code: str):
     )
     
     return keyboard
-    
+
+
+async def successfull_payment_keyboard(language_code: str):
+    keyboard = InlineKeyboardMarkup(row_width=1)  # Одна кнопка в ряду
+
+    # Кнопка "Оплатить"
+    pay_button = InlineKeyboardButton(
+        text=localizer.get_user_localized_text(
+            user_language_code=language_code,
+            text_localization=localizer.button.renew_subscription,  # Замените на вашу локализацию
+        ),
+        callback_data="renew_subscription",  # URL для перехода на сайт платежной системы
+    )
+
+    # Добавляем кнопки на клавиатуру
+    keyboard.add(pay_button)
+
+    keyboard = await insert_button_back_to_main_menu(
+        keyboard=keyboard,
+        language_code=language_code,
+    )
+
+    return keyboard
