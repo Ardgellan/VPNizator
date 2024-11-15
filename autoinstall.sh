@@ -183,8 +183,6 @@ DB_USER = "$database_user"
 DB_USER_PASSWORD = "$database_passwd"
 DB_HOST = "localhost"
 DB_PORT = "5432"
-
-XRAY_CONFIG_PATH = "/usr/local/etc/xray/config.json"
 EOF
 
 #try to run create_database_tables.py if it fails, then give db user superuser privileges

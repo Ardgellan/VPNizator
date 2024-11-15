@@ -79,18 +79,6 @@ class Updater(DatabaseConnector):
         await self._execute_query(query)
         # logger.info(f"Статус подписки для пользователя {user_id} обновлен на {is_active}.")
 
-    # async def update_subscription_status_for_users(self, users_ids: list[int], is_active: bool):
-    #     """
-    #     Массово обновляем статус подписки для списка пользователей.
-    #     """
-    #     query = """
-    #         UPDATE users
-    #         SET subscription_is_active = $2
-    #         WHERE user_id = ANY($1);
-    #     """
-    #     await self._execute_query(query, users_ids, is_active)
-    #     logger.info(f"Статус подписки для пользователей {users_ids} обновлен на {is_active}.")
-
     async def update_subscription_status_for_users(self, users_ids: list[int], is_active: bool):
         """
         Массово обновляем статус подписки для списка пользователей.

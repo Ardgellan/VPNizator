@@ -25,7 +25,6 @@ class Configuration:
         self._database_connection_parameters: dict[str, str] = (
             self._get_database_connection_parameters()
         )
-        self._xray_config_path: str = self._get_xray_config_path()
         self._server_ip: str = self._get_server_ip()
         self._server_country: str = self._get_server_country()
 
@@ -78,12 +77,6 @@ class Configuration:
             "database": getenv("DB_NAME"),
         }
 
-    def _get_xray_config_path(self) -> str:
-        xray_config_path = getenv("XRAY_CONFIG_PATH")
-        if not xray_config_path:
-            raise DotEnvVariableNotFound("XRAY_CONFIG_PATH")
-        return xray_config_path
-
     def _get_server_ip(self) -> str:
         return IPInfo().get_server_ip()
 
@@ -117,10 +110,6 @@ class Configuration:
     @property
     def database_connection_parameters(self) -> dict[str, str]:
         return self._database_connection_parameters
-
-    @property
-    def xray_config_path(self) -> str:
-        return self._xray_config_path
 
     @property
     def server_ip(self) -> str:
