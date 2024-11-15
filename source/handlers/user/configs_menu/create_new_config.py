@@ -27,8 +27,6 @@ async def request_user_for_country(call: types.CallbackQuery, state: FSMContext)
             language_code=call.from_user.language_code
         )
     )
-    logger.info("we finished choose_country")
-
 
 
 async def request_user_for_config_name(call: types.CallbackQuery, state: FSMContext):
@@ -49,11 +47,12 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     # Получаем имя конфигурации от пользователя
     config_name = message.text
     user_id = message.from_user.id
-
+    logger.info("SALAM")
     user_data = await state.get_data()
     selected_country = user_data.get("selected_country")
     selected_country = selected_country.lower()
     proxy_server_domain = config.proxy_server_domain
+    logger.info("BALAM")
 
     # Отправляем сообщение, что генерация началась
     await message.answer(

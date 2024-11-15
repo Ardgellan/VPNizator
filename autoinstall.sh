@@ -83,8 +83,8 @@ fi
 
 #ask user for admins ids
 echo ""
-echo "Enter admins ids (separated by comma):"
-echo "Just press ENTER for use default ids [$Blue nginxtest.vpnizator.online, $White]" | sed 's/\$//g'
+echo "Enter proxy server domain (separated by comma):"
+echo "Just press ENTER for use default ids [$Blue nginxtest.vpnizator.online $White]" | sed 's/\$//g'
 echo "You can get your id by sending /id command to @userinfobot"
 read proxy_server_domain
 if [ -z "$proxy_server_domain" ]
