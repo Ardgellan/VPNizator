@@ -14,7 +14,7 @@ async def restore_user_configs_for_subscription(user_ids: list[int]) -> bool:
     Включает обновление статуса подписки, списание средств и получение UUID конфигов,
     сгруппированных по доменам для восстановления на нужных серверах.
     """
-    logger.info(f"Starting config restoration for users: {user_ids}")
+
     # Словарь для хранения конфигов, сгруппированных по доменам
     configs_by_domain = {}
 
@@ -22,18 +22,18 @@ async def restore_user_configs_for_subscription(user_ids: list[int]) -> bool:
     for user_id in user_ids:
         # Списываем стоимость подписки с баланса
         subscription_cost = await db_manager.get_current_subscription_cost(user_id)
-        logger.info(f"User {user_id}: Subscription cost {subscription_cost}")
+
         await db_manager.update_user_balance(user_id, -subscription_cost)
-        logger.info(f"User {user_id}: Subscription cost deducted from balance.")
+
         
         # Обновляем время последнего платежа и статус подписки на активный
         await db_manager.update_last_subscription_payment(user_id, datetime.now())
         await db_manager.update_subscription_status(user_id=user_id, is_active=True)
-        logger.info(f"User {user_id}: Subscription status updated to active.")
+
 
     # Получаем UUID конфигов для всех пользователей, сгруппированные по доменам
     user_configs_with_domains = await db_manager.get_config_uuids_grouped_by_domain(users_ids=user_ids)
-    logger.info(f"User configs grouped by domain: {user_configs_with_domains}")
+
 
     # Группируем UUID по доменам
     for domain, uuids in user_configs_with_domains.items():
@@ -41,27 +41,22 @@ async def restore_user_configs_for_subscription(user_ids: list[int]) -> bool:
 
     # Проверяем, если есть конфиги для восстановления
     if configs_by_domain:
-        logger.info(f"Found configs to restore: {configs_by_domain}")
+
         # Инициализируем клиент для HTTP-запросов с aiohttp
         async with aiohttp.ClientSession() as session:
             for domain, uuids in configs_by_domain.items():
                 # Формируем URL с доменом
                 url = f"https://nginxtest.vpnizator.online/reactivate_configs/{domain}/"
-                logger.info(f"Restoring configs for domain {domain} with UUIDs: {uuids}")
 
                 try:
                     # Отправляем запрос на эндпоинт для восстановления конфигов
                     async with session.post(url, json={"config_uuids": uuids}) as response:
                         # Если статус не 200, продолжаем с следующим доменом
-                        if response.status == 200:
-                            logger.info(f"Successfully restored configs for domain {domain}.")
-                        else:
+                        if response.status != 200:
                             logger.error(f"Failed to restore configs for domain {domain}. Status: {response.status}")
                             return False  # Если хотя бы один запрос не успешен, возвращаем False
                 except:
                     pass
-            # Если все запросы прошли успешно, возвращаем True
-            logger.info("Config restoration completed successfully.")
             return True
 
     return False

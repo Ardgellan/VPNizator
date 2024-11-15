@@ -66,17 +66,12 @@ class SubscriptionChecker:
         """
         try:
             subscription_cost = await db_manager.get_current_subscription_cost(user_id)
-            # logger.info(
-            #     f"Renewing subscription for user {user_id}: subscription cost = {subscription_cost}"
-            # )
 
             # Обновляем баланс пользователя
             await db_manager.update_user_balance(user_id, -subscription_cost)
-            # logger.info(f"Updated balance for user {user_id} after renewal")
 
             # Обновляем время последнего платежа
             await db_manager.update_last_subscription_payment(user_id, datetime.now())
-            # logger.info(f"Updated last payment time for user {user_id}")
 
         except Exception as e:
             logger.error(f"Error renewing subscription for user {user_id}: {e}")
@@ -111,7 +106,6 @@ class SubscriptionChecker:
                         await db_manager.update_subscription_status_for_users(
                             users_ids, is_active=False
                         )
-                        # logger.info(f"Updated subscription status for users: {users_ids}")
                         break
                     except Exception as e:
                         logger.error(
@@ -167,20 +161,16 @@ class SubscriptionChecker:
         users_ids_with_last_day_left_subscription = (
             await db_manager.get_users_ids_with_last_day_left_subscription()
         )
-        # logger.info(
-        #     f"Users with last day of subscription: {users_ids_with_last_day_left_subscription}"
-        # )
+
         await self._notify_users_about_subscription_status(
             users_ids=users_ids_with_last_day_left_subscription,
             status=SubscriptionStatus.last_day_left.value,
         )
-        # logger.info(
-        #     f"Notified users about last day of subscription: {users_ids_with_last_day_left_subscription}"
-        # )
+
 
     async def _notify_users_about_subscription_status(self, users_ids: list[int], status: str):
         """Notify users about subscription status"""
-        # logger.info(f"Notifying users {users_ids} about subscription status: {status}")
+
         match status:
             case SubscriptionStatus.expired.value:
                 message_text = localizer.message.subscription_expired_notification
@@ -198,7 +188,7 @@ class SubscriptionChecker:
         """Helper function to send notification to a single user"""
         try:
             user = (await bot.get_chat_member(chat_id=user_id, user_id=user_id)).user
-            # logger.info(f"Sending message to user {user_id}")
+  
             await bot.send_message(
                 chat_id=user_id,
                 text=localizer.get_user_localized_text(
