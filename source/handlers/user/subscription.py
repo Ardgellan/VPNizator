@@ -43,12 +43,12 @@ async def manual_renew_subscription(call: types.CallbackQuery, state: FSMContext
     # Получаем текущий баланс и стоимость подписки
     current_balance = await db_manager.get_user_balance(user_id)
     subscription_cost = await db_manager.get_current_subscription_cost(user_id)
-    logger.info("Babasraka")
+
     if current_balance >= subscription_cost:
         # Продлеваем подписку
         # Восстанавливаем конфиги пользователя в Xray
         await restore_user_configs_for_subscription([user_id])
-        logger.info("Babasraka_2")
+
         await call.message.answer(
             text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,

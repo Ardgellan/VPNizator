@@ -20,8 +20,8 @@ class Configuration:
         self._bot_token: str = self._get_bot_token()
         self._yookassa_shop_id: str = self._get_yookassa_shop_id()  # Добавляем shop_id
         self._yookassa_api_token: str = self._get_yookassa_api_token()
+        self._proxy_server_domain: str = self._get_proxy_server_domain()
         self._admins_ids: list[int] = self._get_admins_ids()
-        self._user_config_prefix: str = self._get_user_config_prefix()
         self._database_connection_parameters: dict[str, str] = (
             self._get_database_connection_parameters()
         )
@@ -47,17 +47,17 @@ class Configuration:
             raise DotEnvVariableNotFound("YOOKASSA_API_TOKEN")
         return yookassa_api_token
 
+    def _get_proxy_server_domain(self) -> str:  # новый метод
+        proxy_server_domain = getenv("PROXY_SERVER_DOMAIN")
+        if not proxy_server_domain:
+            raise DotEnvVariableNotFound("PROXY_SERVER_DOMAIN")
+        return proxy_server_domain
+
     def _get_admins_ids(self) -> list[int]:
         admins_ids = getenv("ADMINS_IDS")
         if not admins_ids:
             raise DotEnvVariableNotFound("ADMINS_IDS")
         return [int(admin_id) for admin_id in admins_ids.split(",") if admin_id]
-
-    def _get_user_config_prefix(self) -> str:
-        user_config_prefix = getenv("CONFIGS_PREFIX")
-        if not user_config_prefix:
-            raise DotEnvVariableNotFound("CONFIGS_PREFIX")
-        return user_config_prefix
 
     def _get_database_connection_parameters(self) -> dict[str, str]:
         for parameter in [
@@ -111,10 +111,6 @@ class Configuration:
         return self._admins_ids
 
     @property
-    def user_config_prefix(self) -> str:
-        return self._user_config_prefix
-
-    @property
     def database_connection_parameters(self) -> dict[str, str]:
         return self._database_connection_parameters
 
@@ -129,4 +125,8 @@ class Configuration:
     @property
     def server_country(self) -> str:
         return self._server_country
+
+    @property
+    def proxy_server_domain(self) -> str:
+        return self.proxy_server_domain
 

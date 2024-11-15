@@ -4,12 +4,6 @@ from loguru import logger
 
 from .start import start, main_menu_by_button
 
-# from .pay import (
-#     show_balance_top_up_menu_function,
-#     handle_payment,
-#     process_pre_checkout_query,
-#     successful_payment,
-# )
 from .pay import *
 
 from .configs_menu.show_configs import show_user_configs

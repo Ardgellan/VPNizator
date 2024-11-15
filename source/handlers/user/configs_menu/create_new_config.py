@@ -4,6 +4,7 @@ from loguru import logger
 import aiohttp
 
 from loader import db_manager
+from source.data import config
 from source.middlewares import rate_limit
 from source.utils import localizer, qr_generator
 from source.utils.states.user import GeneratingNewConfig
@@ -52,7 +53,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     user_data = await state.get_data()
     selected_country = user_data.get("selected_country")
     selected_country = selected_country.lower()
-    logger.info(f"Country name = {selected_country}")
+    proxy_server_domain = config.proxy_server_domain
 
     # Отправляем сообщение, что генерация началась
     await message.answer(
@@ -66,26 +67,19 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     # Отправляем действие "загрузка"
     await message.answer_chat_action(action=types.ChatActions.UPLOAD_PHOTO)
 
-    # # Страна, которую нужно передать в API
-    # country = "estonia"  # Пример страны, можно настроить динамически
-
     # Теперь отправляем запрос к API для добавления пользователя и получения ссылки
     try:
-        logger.info("Creating HTTP session and sending POST request to API...")
+
         async with aiohttp.ClientSession() as session:
-            logger.info(f"Sending POST request to add user. Params: user_id={user_id}, config_name={config_name}")
             async with session.post(
-                f"https://nginxtest.vpnizator.online/add_user/{selected_country}/",  # Указываем правильный URL API
+                f"https://{proxy_server_domain}/add_user/{selected_country}/",  # Указываем правильный URL API
                 params={"user_id": user_id, "config_name": config_name}  # Передаем параметры в теле запроса
             ) as response:
-                logger.info(f"Received response from API. Status code: {response.status}")
                 
                 # Проверяем статус ответа
                 if response.status == 200:
-                    logger.info("Response status is 200. Proceeding with further processing...")
                     
                     data = await response.json() # Асинхронно читаем JSON-ответ
-                    logger.info("Parsed JSON response from API.")
 
                     user_link = data.get("link")
                     config_uuid = data.get("config_uuid")  # Получаем UUID конфигурации
@@ -93,15 +87,12 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                     country_name = data.get("server_country")
                     country_code = data.get("server_country_code")
 
-                    logger.info(f"Extracted values - user_link: {user_link}, config_uuid: {config_uuid}, server_domain: {server_domain}")
                     config_as_link_str_with_flag = f"{user_link} {country_code_to_flag(country_code)}"
                     # Генерация QR-кода для конфига
-                    logger.info("Generating QR code for config...")
                     config_qr_code = qr_generator.create_qr_code_from_config_as_link_str(user_link)
-                    logger.info("QR code generated successfully.")
+
                     
                     # Отправляем QR-код и данные конфига
-                    logger.info(f"Sending QR code and configuration data to user: {message.from_user.id}")
                     await message.answer_photo(
                         photo=config_qr_code,
                         caption=localizer.get_user_localized_text(
@@ -113,11 +104,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                             language_code=message.from_user.language_code
                         ),
                     )
-                    logger.info("QR code and config data sent to user.")
 
-                    # Теперь данные передаем на бекэнд для записи в базу данных
-                    # Работа с базой данных на бекэнде:
-                    logger.info("Inserting config data into the database...")
                     async with db_manager.transaction() as conn:
                         await db_manager.insert_new_vpn_config(
                             user_id=user_id,  # Получаем Telegram ID
@@ -128,17 +115,11 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                             country_code=country_code,
                             conn=conn,  # Передаем транзакцию для консистентности
                         )
-                    logger.info("Config data successfully inserted into the database.")
 
-                    # Обновляем баланс пользователя
-                    logger.info(f"Updating user balance for user_id={user_id}...")
                     await db_manager.update_user_balance(user_id, -3.00)
-                    logger.info("User balance updated successfully.")
 
                     # Завершаем состояние
-                    logger.info("Finishing the state and ending the process.")
                     await state.finish()
-                    logger.info("Finished the state and ended the process.")
 
                 else:
                     error_message = await response.text()

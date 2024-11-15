@@ -81,6 +81,17 @@ then
       admins_ids="123456789,"
 fi
 
+#ask user for admins ids
+echo ""
+echo "Enter admins ids (separated by comma):"
+echo "Just press ENTER for use default ids [$Blue nginxtest.vpnizator.online, $White]" | sed 's/\$//g'
+echo "You can get your id by sending /id command to @userinfobot"
+read proxy_server_domain
+if [ -z "$proxy_server_domain" ]
+then
+      proxy_server_domain="nginxtest.vpnizator.online"
+fi
+
 #ask user for Database name
 echo ""
 echo "Enter Database name:"
@@ -109,16 +120,6 @@ read database_passwd
 if [ -z "$database_passwd" ]
 then
       database_passwd="starscream"
-fi
-
-#ask user for config name prefix
-echo ""
-echo "Enter config name prefix:"
-echo "Just press ENTER for use default prefix [$Blue VPNizator $White]" | sed 's/\$//g'
-read config_prefix
-if [ -z "$config_prefix" ]
-then
-      config_prefix="VPNizator"
 fi
 
 #all neccessary data is collected
@@ -175,7 +176,7 @@ TG_BOT_TOKEN = "$bot_token"
 YOOKASSA_SHOP_ID = "$yookassa_shop_id"
 YOOKASSA_API_TOKEN = "$yookassa_api_token"
 ADMINS_IDS = "$admins_ids"
-CONFIGS_PREFIX = "$config_prefix"
+PROXY_SERVER_DOMAIN = "$proxy_server_domain"
 
 DB_NAME = "$database_name"
 DB_USER = "$database_user"
