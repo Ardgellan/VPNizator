@@ -245,8 +245,8 @@
             "ru": "🤒Простите, кажется возникла ошибка во время активации пробного периода! Пожалуйста, попробуйте еще раз 🙏!"
         },
         "successfull_payment_message": {
-            "en": "✅Payment of {amount} rubles was successful! Your balance has been topped up.",
-            "ru": "✅Оплата на сумму {amount} рублей прошла успешно! Ваш баланс был пополнен."
+            "en": "✅Payment of {amount} rubles was successful! Your balance has been topped up.\n\nYour current balance: <b>{current_balance}</b>\n\nYour current subscription status: {current_subscription_status}\n\nDon't forget to renew subscription, if necessary!",
+            "ru": "✅Оплата на сумму {amount} рублей прошла успешно! Ваш баланс был пополнен.\n\nВаш текущий баланс: <b>{current_balance}</b>\n\nВаш текущий статус подписки: {current_subscription_status}\n\nНе забудьте восстановить подписку, если необходимо!"
         },
         "payment_confirmation_message": {
             "en": "🟢 Please click on the \"Pay\" button to go to the payment system website.",

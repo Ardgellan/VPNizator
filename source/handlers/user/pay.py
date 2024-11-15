@@ -71,11 +71,14 @@ async def handle_payment(call: types.CallbackQuery):
             # Запуск проверки статуса платежа
             payment_success = await check_payment_status(payment_id, call.from_user.id, amount)
             if payment_success:
+                current_balance = await db_manager.get_user_balance(call.from_user.id)
+                current_subscription_status = await db_manager.get_subscription_status(call.from_user.id)
+                current_subscription_status = '🟢' if await db_manager.get_subscription_status(call.from_user.id) else '🔴'
                 await call.message.answer(
                     text=localizer.get_user_localized_text(
                         user_language_code=call.from_user.language_code,
                         text_localization=localizer.message.successfull_payment_message,
-                    ).format(amount=amount),
+                    ).format(amount=amount, current_balance=current_balance, current_subscription_status=current_subscription_status),
                     reply_markup=await inline.insert_button_back_to_main_menu(
                         language_code=call.from_user.language_code
                     ),
