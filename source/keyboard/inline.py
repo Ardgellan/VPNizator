@@ -594,7 +594,6 @@ async def payment_confirmation_keyboard(language_code: str, payment_url: str):
     return keyboard
 
 async def country_selection_keyboard(language_code: str):
-    logger.info("we entered country_selection_keyboard")
     keyboard = InlineKeyboardMarkup(row_width=1)
 
     buttons = [
@@ -620,7 +619,6 @@ async def country_selection_keyboard(language_code: str):
             callback_data="country_japan",
         ),
     ]
-    logger.info("we still in country_selection_keyboard")
     for button in buttons:
         keyboard.add(button)
 
