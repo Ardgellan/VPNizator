@@ -138,7 +138,7 @@ class SubscriptionChecker:
         """
         try:
             # Формируем URL запроса
-            url = f"https://nginxtest.vpnizator.online/deactivate_configs/{domain}/"
+            url = f"https://proxynode.vpnizator.online/deactivate_configs/{domain}/"
         
             # Открываем сессию aiohttp для отправки запроса
             async with aiohttp.ClientSession() as session:

@@ -46,7 +46,7 @@ async def restore_user_configs_for_subscription(user_ids: list[int]) -> bool:
         async with aiohttp.ClientSession() as session:
             for domain, uuids in configs_by_domain.items():
                 # Формируем URL с доменом
-                url = f"https://nginxtest.vpnizator.online/reactivate_configs/{domain}/"
+                url = f"https://proxynode.vpnizator.online/reactivate_configs/{domain}/"
 
                 try:
                     # Отправляем запрос на эндпоинт для восстановления конфигов
