@@ -614,9 +614,9 @@ async def country_selection_keyboard(language_code: str):
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.japan_button,
+                text_localization=localizer.button.america_button,
             ),
-            callback_data="country_japan",
+            callback_data="country_america",
         ),
     ]
     for button in buttons:
