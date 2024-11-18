@@ -51,8 +51,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
     selected_country = user_data.get("selected_country")
     selected_country = selected_country.lower()
 
-
-
+    await state.finish()
 
     # Отправляем сообщение, что генерация началась
     await message.answer(
