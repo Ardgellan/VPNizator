@@ -40,6 +40,7 @@ async def request_user_for_config_name(call: types.CallbackQuery, state: FSMCont
         parse_mode=types.ParseMode.HTML,
     )
     await GeneratingNewConfig.waiting_for_config_name.set()
+    await call.answer()
 
 
 async def generate_config_for_user(message: types.Message, state: FSMContext):
