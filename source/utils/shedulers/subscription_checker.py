@@ -18,7 +18,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 12:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=22, minute=20)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=22, minute=24)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -46,7 +46,7 @@ class SubscriptionChecker:
         Продлеваем подписку для списка пользователей, ограничивая количество
         одновременно выполняющихся задач.
         """
-        semaphore = asyncio.Semaphore(100)  # Ограничиваем до 10 одновременных задач
+        semaphore = asyncio.Semaphore(50)  # Ограничиваем до 10 одновременных задач
         tasks = []
         for user_id in user_ids:
             tasks.append(self._renew_with_semaphore(user_id, semaphore))
