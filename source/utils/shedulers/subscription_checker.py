@@ -18,7 +18,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 12:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=21, minute=45)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=21, minute=52)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -57,7 +57,6 @@ class SubscriptionChecker:
         """
         Обертка для продления подписки с использованием семафора.
         """
-        logger.info(f"Succesfully renewed subscription for for user - {user_id}")
         async with semaphore:
             await self._renew_single_subscription(user_id)
 
