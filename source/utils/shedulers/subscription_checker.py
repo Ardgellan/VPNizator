@@ -18,7 +18,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 12:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=22, minute=30)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=12, minute=0)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -32,15 +32,15 @@ class SubscriptionChecker:
         if users_with_sufficient_balance:
             await self._check_and_renew_subscription(users_with_sufficient_balance)
 
-        # if users_to_restore:
-        #     await restore_user_configs_for_subscription(users_to_restore)
+        if users_to_restore:
+            await restore_user_configs_for_subscription(users_to_restore)
 
-        # if users_with_insufficient_balance:
-        #     await self._disconnect_configs_for_users(users_with_insufficient_balance)
+        if users_with_insufficient_balance:
+            await self._disconnect_configs_for_users(users_with_insufficient_balance)
 
-        # await self._find_and_notify_users_with_last_day_left_subscription()
-        # self._messages_limits_counter = 0
-        logger.debug("Subscription_checker ended the job")
+        await self._find_and_notify_users_with_last_day_left_subscription()
+        self._messages_limits_counter = 0
+
         
 
     async def _check_and_renew_subscription(self, user_ids: list[int]):
