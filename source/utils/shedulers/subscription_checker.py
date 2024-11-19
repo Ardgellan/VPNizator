@@ -18,7 +18,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 12:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=22, minute=8)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=22, minute=14)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -72,7 +72,6 @@ class SubscriptionChecker:
         """
         Продлеваем подписку для одного пользователя.
         """
-        logger.debug("We entered _renew_single_subscription")
         try:
             subscription_cost = await db_manager.get_current_subscription_cost(user_id)
 
