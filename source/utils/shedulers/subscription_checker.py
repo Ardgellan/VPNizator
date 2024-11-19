@@ -46,7 +46,7 @@ class SubscriptionChecker:
         Продлеваем подписку для списка пользователей, ограничивая количество
         одновременно выполняющихся задач.
         """
-        semaphore = asyncio.Semaphore(250)  # Ограничиваем до 10 одновременных задач
+        semaphore = asyncio.Semaphore(50)  # Ограничиваем до 10 одновременных задач
         tasks = []
         for user_id in user_ids:
             tasks.append(self._renew_with_semaphore(user_id, semaphore))
@@ -60,6 +60,13 @@ class SubscriptionChecker:
         async with semaphore:
             await self._renew_single_subscription(user_id)
 
+    # async def _check_and_renew_subscription(self, user_ids: list[int]):
+    #     """
+    #     Продлеваем подписку для списка пользователей, без асинхронности.
+    #     """
+    #     for user_id in user_ids:
+    #         await self._renew_single_subscription(user_id)
+
     async def _renew_single_subscription(self, user_id: int):
         """
         Продлеваем подписку для одного пользователя.
@@ -72,6 +79,8 @@ class SubscriptionChecker:
 
             # Обновляем время последнего платежа
             await db_manager.update_last_subscription_payment(user_id, datetime.now())
+
+            # logger.info(f"Succesfully renewed subscription for for user - {user_id}")
 
         except Exception as e:
             logger.error(f"Error renewing subscription for user {user_id}: {e}")
