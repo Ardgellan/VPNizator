@@ -18,7 +18,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 12:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=21, minute=52)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=21, minute=58)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -41,31 +41,31 @@ class SubscriptionChecker:
         # await self._find_and_notify_users_with_last_day_left_subscription()
         # self._messages_limits_counter = 0
 
-    async def _check_and_renew_subscription(self, user_ids: list[int]):
-        """
-        Продлеваем подписку для списка пользователей, ограничивая количество
-        одновременно выполняющихся задач.
-        """
-        semaphore = asyncio.Semaphore(50)  # Ограничиваем до 10 одновременных задач
-        tasks = []
-        for user_id in user_ids:
-            tasks.append(self._renew_with_semaphore(user_id, semaphore))
-
-        await asyncio.gather(*tasks)
-
-    async def _renew_with_semaphore(self, user_id: int, semaphore: asyncio.Semaphore):
-        """
-        Обертка для продления подписки с использованием семафора.
-        """
-        async with semaphore:
-            await self._renew_single_subscription(user_id)
-
     # async def _check_and_renew_subscription(self, user_ids: list[int]):
     #     """
-    #     Продлеваем подписку для списка пользователей, без асинхронности.
+    #     Продлеваем подписку для списка пользователей, ограничивая количество
+    #     одновременно выполняющихся задач.
     #     """
+    #     semaphore = asyncio.Semaphore(50)  # Ограничиваем до 10 одновременных задач
+    #     tasks = []
     #     for user_id in user_ids:
+    #         tasks.append(self._renew_with_semaphore(user_id, semaphore))
+
+    #     await asyncio.gather(*tasks)
+
+    # async def _renew_with_semaphore(self, user_id: int, semaphore: asyncio.Semaphore):
+    #     """
+    #     Обертка для продления подписки с использованием семафора.
+    #     """
+    #     async with semaphore:
     #         await self._renew_single_subscription(user_id)
+
+    async def _check_and_renew_subscription(self, user_ids: list[int]):
+        """
+        Продлеваем подписку для списка пользователей, без асинхронности.
+        """
+        for user_id in user_ids:
+            await self._renew_single_subscription(user_id)
 
     async def _renew_single_subscription(self, user_id: int):
         """
@@ -79,6 +79,8 @@ class SubscriptionChecker:
 
             # Обновляем время последнего платежа
             await db_manager.update_last_subscription_payment(user_id, datetime.now())
+
+            logger.debug(f"Subscription was successfully renewed for user : {user_id}")
 
         except Exception as e:
             logger.error(f"Error renewing subscription for user {user_id}: {e}")
