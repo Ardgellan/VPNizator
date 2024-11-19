@@ -18,7 +18,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 12:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=22, minute=24)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=22, minute=30)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -40,6 +40,8 @@ class SubscriptionChecker:
 
         # await self._find_and_notify_users_with_last_day_left_subscription()
         # self._messages_limits_counter = 0
+        logger.debug("Subscription_checker ended the job")
+        
 
     async def _check_and_renew_subscription(self, user_ids: list[int]):
         """
@@ -60,14 +62,6 @@ class SubscriptionChecker:
         async with semaphore:
             await self._renew_single_subscription(user_id)
 
-    # async def _check_and_renew_subscription(self, user_ids: list[int]):
-    #     """
-    #     Продлеваем подписку для списка пользователей, без асинхронности.
-    #     """
-    #     logger.debug("We entered _check_and_renew_subscriptions")
-    #     for user_id in user_ids:
-    #         await self._renew_single_subscription(user_id)
-
     async def _renew_single_subscription(self, user_id: int):
         """
         Продлеваем подписку для одного пользователя.
@@ -80,8 +74,6 @@ class SubscriptionChecker:
 
             # Обновляем время последнего платежа
             await db_manager.update_last_subscription_payment(user_id, datetime.now())
-
-            logger.debug(f"Subscription was successfully renewed for user : {user_id}")
 
         except Exception as e:
             logger.error(f"Error renewing subscription for user {user_id}: {e}")
