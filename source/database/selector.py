@@ -380,7 +380,7 @@ class Selector(DatabaseConnector):
         query = """
             SELECT vc.server_domain, vc.config_uuid
             FROM vpn_configs vc
-            WHERE vc.user_id = ANY($1::int[])
+            WHERE vc.user_id = ANY($1::bigint[])
             ORDER BY vc.server_domain;
         """
         result = await self._execute_query(query, [users_ids])
