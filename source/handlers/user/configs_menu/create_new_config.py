@@ -46,12 +46,12 @@ async def request_user_for_config_name(call: types.CallbackQuery, state: FSMCont
 
 async def generate_config_for_user(message: types.Message, state: FSMContext):
     # Получаем имя конфигурации от пользователя
-    config_name = escape(message.text)
+    config_name = message.text
     user_id = message.from_user.id
 
     user_data = await state.get_data()
     selected_country = user_data.get("selected_country")
-    selected_country = escape(selected_country.lower())
+    selected_country = selected_country.lower()
 
     await state.finish()
 
@@ -81,11 +81,11 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                     
                     data = await response.json() # Асинхронно читаем JSON-ответ
 
-                    user_link = escape(data.get("link"))
-                    config_uuid = escape(data.get("config_uuid"))  # Получаем UUID конфигурации
-                    server_domain = escape(data.get("server_domain"))
-                    country_name = escape(data.get("server_country"))
-                    country_code = escape(data.get("server_country_code"))
+                    user_link = data.get("link")
+                    config_uuid = data.get("config_uuid")  # Получаем UUID конфигурации
+                    server_domain = data.get("server_domain")
+                    country_name = data.get("server_country")
+                    country_code = data.get("server_country_code")
 
                     config_as_link_str_with_flag = escape(f"{user_link} {country_code_to_flag(country_code)}")
                     # Генерация QR-кода для конфига
