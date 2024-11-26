@@ -2,6 +2,7 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from loguru import logger
 import aiohttp
+from html import escape
 
 from loader import db_manager
 
@@ -35,7 +36,7 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
                 data = await response.json()
                 config_as_link_str = data.get("config_link")
 
-                config_as_link_str_with_flag = f"{config_as_link_str} {country_code_to_flag(country_code)}"
+                config_as_link_str_with_flag = escape(f"{config_as_link_str} {country_code_to_flag(country_code)}")
                 
                 # Генерация QR-кода для конфигурации
                 config_qr_code = create_qr_code_from_config_as_link_str(config=config_as_link_str)
