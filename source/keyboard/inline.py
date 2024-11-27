@@ -597,13 +597,13 @@ async def country_selection_keyboard(language_code: str):
     keyboard = InlineKeyboardMarkup(row_width=1)
 
     buttons = [
-        InlineKeyboardButton(
-            text=localizer.get_user_localized_text(
-                user_language_code=language_code,
-                text_localization=localizer.button.estonia_button,
-            ),
-            callback_data="country_estonia",
-        ),
+        # InlineKeyboardButton(
+        #     text=localizer.get_user_localized_text(
+        #         user_language_code=language_code,
+        #         text_localization=localizer.button.estonia_button,
+        #     ),
+        #     callback_data="country_estonia",
+        # ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
