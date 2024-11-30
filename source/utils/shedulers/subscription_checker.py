@@ -10,7 +10,7 @@ from aiogram import types
 from loader import bot, db_manager
 from source.utils import localizer
 from source.utils.models import SubscriptionStatus
-from source.utils.sub_reactivation import restore_user_configs_for_subscription
+# from source.utils.sub_reactivation import restore_user_configs_for_subscription
 
 
 class SubscriptionChecker:
