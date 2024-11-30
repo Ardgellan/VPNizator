@@ -8,7 +8,7 @@ from .pay import *
 
 from .configs_menu.show_configs import show_user_configs
 from .trial import trial_period_function, start_trial_period_function
-from .subscription import manual_renew_subscription
+# from .subscription import manual_renew_subscription
 from .banners import about_us_function, terms_of_use_function
 from .ask_support import *
 from .balance import show_balance_function
@@ -50,11 +50,11 @@ def register_user_handlers(dp: Dispatcher):
             state="*",
         )
 
-        dp.register_callback_query_handler(
-            manual_renew_subscription,
-            lambda call: call.data == "renew_subscription",
-            state="*",
-        )
+        # dp.register_callback_query_handler(
+        #     manual_renew_subscription,
+        #     lambda call: call.data == "renew_subscription",
+        #     state="*",
+        # )
 
         dp.register_callback_query_handler(
             ask_user_for_question_to_support,

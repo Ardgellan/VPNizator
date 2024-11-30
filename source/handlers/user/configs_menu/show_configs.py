@@ -23,7 +23,7 @@ async def show_user_configs(call: types.CallbackQuery, state: FSMContext):
 
     if not is_user_have_any_configs:
         message_text = localizer.message.no_configs_found_create_new_one
-    else: subscription_is_active:
+    else:
         message_text = localizer.message.user_configs_list
 
     await call.message.edit_text(

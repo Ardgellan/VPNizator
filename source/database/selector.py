@@ -146,20 +146,37 @@ class Selector(DatabaseConnector):
         # logger.debug(f"Config name by config uuid {config_uuid}: {result[0][0]}")
         return result[0][0]
 
+    # async def get_global_stats(self) -> GlobalStatistics: #OLD
+    #     query = """--sql
+    #         SELECT
+    #             (SELECT COUNT(*) FROM users) AS users_registered,
+    #             (SELECT COUNT(*) FROM users WHERE is_banned) AS users_banned,
+    #             (SELECT COUNT(*) FROM users WHERE subscription_is_active = TRUE) AS users_with_active_subscription,
+    #             (SELECT COUNT(*) FROM vpn_configs) AS active_configs_count
+    #     """
+    #     result = await self._execute_query(query)
+    #     global_stats = GlobalStatistics(
+    #         users_registered=result[0][0],
+    #         users_banned=result[0][1],
+    #         # users_with_active_subscription=result[0][2],
+    #         active_configs_count=result[0][2], # тут изменено [0][3] - yf [0][2]
+    #     )
+    #     # logger.debug(f"Global stats: {global_stats}")
+    #     return global_stats
+
     async def get_global_stats(self) -> GlobalStatistics:
         query = """--sql
             SELECT
                 (SELECT COUNT(*) FROM users) AS users_registered,
                 (SELECT COUNT(*) FROM users WHERE is_banned) AS users_banned,
-                (SELECT COUNT(*) FROM users WHERE subscription_is_active = TRUE) AS users_with_active_subscription,
                 (SELECT COUNT(*) FROM vpn_configs) AS active_configs_count
         """
         result = await self._execute_query(query)
         global_stats = GlobalStatistics(
             users_registered=result[0][0],
             users_banned=result[0][1],
-            users_with_active_subscription=result[0][2],
-            active_configs_count=result[0][3],
+            # users_with_active_subscription=result[0][2],
+            active_configs_count=result[0][2], # тут изменено [0][3] - yf [0][2]
         )
         # logger.debug(f"Global stats: {global_stats}")
         return global_stats
@@ -233,6 +250,22 @@ class Selector(DatabaseConnector):
         result = await self._execute_query(query)
         return [record[0] for record in result] if result else []
 
+    # async def get_users_ids_with_last_day_left_subscription(self) -> list[int]: #OLD
+    #     """
+    #     Получаем список пользователей, у которых после списания за текущий день
+    #     подписки баланс не позволяет оплатить следующий день подписки.
+    #     """
+    #     query = """--sql
+    #         SELECT DISTINCT u.user_id
+    #         FROM users u
+    #         JOIN vpn_configs vc ON vc.user_id = u.user_id
+    #         WHERE u.subscription_is_active = TRUE  -- Только активные пользователи
+    #         GROUP BY u.user_id, u.balance
+    #         HAVING u.balance < (COUNT(vc.config_uuid) * 3)
+    #     """
+    #     result = await self._execute_query(query)
+    #     return [record[0] for record in result] if result else []
+
     async def get_users_ids_with_last_day_left_subscription(self) -> list[int]:
         """
         Получаем список пользователей, у которых после списания за текущий день
@@ -242,7 +275,6 @@ class Selector(DatabaseConnector):
             SELECT DISTINCT u.user_id
             FROM users u
             JOIN vpn_configs vc ON vc.user_id = u.user_id
-            WHERE u.subscription_is_active = TRUE  -- Только активные пользователи
             GROUP BY u.user_id, u.balance
             HAVING u.balance < (COUNT(vc.config_uuid) * 3)
         """
@@ -277,16 +309,36 @@ class Selector(DatabaseConnector):
         result = await self._execute_query(query)
         return [record[0] for record in result] if result else []
 
-    async def get_subscription_status(self, user_id: int) -> bool:
-        query = f"""--sql
-            SELECT subscription_is_active
-            FROM users
-            WHERE user_id = {user_id};
-        """
-        result = await self._execute_query(query)
-        subscription_status = result[0][0] if result else False
-        # logger.debug(f"Subscription status for user {user_id}: {subscription_status}")
-        return subscription_status
+    # async def get_subscription_status(self, user_id: int) -> bool:
+    #     query = f"""--sql
+    #         SELECT subscription_is_active
+    #         FROM users
+    #         WHERE user_id = {user_id};
+    #     """
+    #     result = await self._execute_query(query)
+    #     subscription_status = result[0][0] if result else False
+    #     # logger.debug(f"Subscription status for user {user_id}: {subscription_status}")
+    #     return subscription_status
+
+    # async def get_users_with_sufficient_balance(self) -> list[int]: #OLD
+    #     """
+    #     Получаем список уникальных user_id, у которых подписка активна,
+    #     последнее списание было более 24 часов назад,
+    #     и баланс достаточен для оплаты конфигов (по 3 рубля за каждый конфиг).
+    #     """
+    #     query = """
+    #         SELECT DISTINCT u.user_id
+    #         FROM users u
+    #         JOIN vpn_configs vc ON u.user_id = vc.user_id
+    #         WHERE u.subscription_is_active = TRUE
+    #         AND u.last_subscription_payment::date < CURRENT_DATE
+    #         GROUP BY u.user_id
+    #         HAVING u.balance >= COUNT(vc.config_uuid) * 3;
+    #     """
+    #     result = await self._execute_query(query)
+    #     # logger.info(f"Найдено пользователей с достаточным балансом: {result}")
+    #     # Возвращаем список user_id, если есть результат, иначе возвращаем пустой список
+    #     return [record[0] for record in result] if result else []
 
     async def get_users_with_sufficient_balance(self) -> list[int]:
         """
@@ -298,8 +350,7 @@ class Selector(DatabaseConnector):
             SELECT DISTINCT u.user_id
             FROM users u
             JOIN vpn_configs vc ON u.user_id = vc.user_id
-            WHERE u.subscription_is_active = TRUE
-            AND u.last_subscription_payment::date < CURRENT_DATE
+            WHERE u.last_subscription_payment::date < CURRENT_DATE
             GROUP BY u.user_id
             HAVING u.balance >= COUNT(vc.config_uuid) * 3;
         """
@@ -307,6 +358,26 @@ class Selector(DatabaseConnector):
         # logger.info(f"Найдено пользователей с достаточным балансом: {result}")
         # Возвращаем список user_id, если есть результат, иначе возвращаем пустой список
         return [record[0] for record in result] if result else []
+
+    # async def get_users_with_insufficient_balance(self) -> list[int]: #OLD
+    #     """
+    #     Получаем список уникальных user_id, у которых подписка активна,
+    #     последнее списание было более 24 часов назад,
+    #     и баланс недостаточен для оплаты конфигов (по 3 рубля за каждый конфиг).
+    #     """
+    #     query = """
+    #         SELECT DISTINCT u.user_id
+    #         FROM users u
+    #         JOIN vpn_configs vc ON u.user_id = vc.user_id
+    #         WHERE u.subscription_is_active = TRUE
+    #         AND u.last_subscription_payment::date < CURRENT_DATE
+    #         GROUP BY u.user_id
+    #         HAVING u.balance < COUNT(vc.config_uuid) * 3;
+    #     """
+    #     result = await self._execute_query(query)
+    #     # logger.info(f"Найдено пользователей с недостаточным балансом: {result}")
+    #     # Возвращаем список user_id, если есть результат, иначе возвращаем пустой список
+    #     return [record[0] for record in result] if result else []
 
     async def get_users_with_insufficient_balance(self) -> list[int]:
         """
@@ -318,8 +389,7 @@ class Selector(DatabaseConnector):
             SELECT DISTINCT u.user_id
             FROM users u
             JOIN vpn_configs vc ON u.user_id = vc.user_id
-            WHERE u.subscription_is_active = TRUE
-            AND u.last_subscription_payment::date < CURRENT_DATE
+            WHERE u.last_subscription_payment::date < CURRENT_DATE
             GROUP BY u.user_id
             HAVING u.balance < COUNT(vc.config_uuid) * 3;
         """
@@ -328,23 +398,23 @@ class Selector(DatabaseConnector):
         # Возвращаем список user_id, если есть результат, иначе возвращаем пустой список
         return [record[0] for record in result] if result else []
 
-    async def get_users_to_restore(self) -> list[int]:
-        """
-        Получаем список уникальных user_id, у которых подписка неактивна,
-        но баланс достаточен для восстановления подписки (по 3 рубля за каждый конфиг).
-        """
-        query = """
-            SELECT DISTINCT u.user_id
-            FROM users u
-            JOIN vpn_configs vc ON u.user_id = vc.user_id
-            WHERE u.subscription_is_active = FALSE
-            GROUP BY u.user_id
-            HAVING u.balance >= COUNT(vc.config_uuid) * 3;
-        """
-        result = await self._execute_query(query)
-        # logger.info(f"Найдено пользователей для восстановления подписки: {result}")
-        # Возвращаем список user_id, если есть результат, иначе возвращаем пустой список
-        return [record[0] for record in result] if result else []
+    # async def get_users_to_restore(self) -> list[int]:
+    #     """
+    #     Получаем список уникальных user_id, у которых подписка неактивна,
+    #     но баланс достаточен для восстановления подписки (по 3 рубля за каждый конфиг).
+    #     """
+    #     query = """
+    #         SELECT DISTINCT u.user_id
+    #         FROM users u
+    #         JOIN vpn_configs vc ON u.user_id = vc.user_id
+    #         WHERE u.subscription_is_active = FALSE
+    #         GROUP BY u.user_id
+    #         HAVING u.balance >= COUNT(vc.config_uuid) * 3;
+    #     """
+    #     result = await self._execute_query(query)
+    #     # logger.info(f"Найдено пользователей для восстановления подписки: {result}")
+    #     # Возвращаем список user_id, если есть результат, иначе возвращаем пустой список
+    #     return [record[0] for record in result] if result else []
 
     async def get_all_config_uuids_for_users(self, users_ids: list[int]) -> list[str]:
         """

@@ -70,28 +70,28 @@ class Updater(DatabaseConnector):
         # logger.debug(f"User {user_id} last subscription payment updated to {payment_time}")
         return True
 
-    async def update_subscription_status(self, user_id: int, is_active: bool):
-        query = f"""--sql
-            UPDATE users
-            SET subscription_is_active = {is_active}
-            WHERE user_id = {user_id};
-        """
-        await self._execute_query(query)
-        # logger.info(f"Статус подписки для пользователя {user_id} обновлен на {is_active}.")
+    # async def update_subscription_status(self, user_id: int, is_active: bool):
+    #     query = f"""--sql
+    #         UPDATE users
+    #         SET subscription_is_active = {is_active}
+    #         WHERE user_id = {user_id};
+    #     """
+    #     await self._execute_query(query)
+    #     # logger.info(f"Статус подписки для пользователя {user_id} обновлен на {is_active}.")
 
-    async def update_subscription_status_for_users(self, users_ids: list[int], is_active: bool):
-        """
-        Массово обновляем статус подписки для списка пользователей.
-        """
-        query = """
-            UPDATE users
-            SET subscription_is_active = $2
-            WHERE user_id = ANY($1);
-        """
-        try:
-            await self._execute_query(query, users_ids, is_active)  # Выполняем запрос
-            # logger.info(f"Статус подписки для пользователей {users_ids} обновлен на {is_active}.")
-        except Exception as e:
-            # Логируем ошибку и пробрасываем исключение дальше
-            logger.error(f"Ошибка при массовом обновлении статуса подписки для пользователей {users_ids}: {str(e)}")
-            raise  # Пробрасываем исключение для обработки в вызывающей функции
+    # async def update_subscription_status_for_users(self, users_ids: list[int], is_active: bool):
+    #     """
+    #     Массово обновляем статус подписки для списка пользователей.
+    #     """
+    #     query = """
+    #         UPDATE users
+    #         SET subscription_is_active = $2
+    #         WHERE user_id = ANY($1);
+    #     """
+    #     try:
+    #         await self._execute_query(query, users_ids, is_active)  # Выполняем запрос
+    #         # logger.info(f"Статус подписки для пользователей {users_ids} обновлен на {is_active}.")
+    #     except Exception as e:
+    #         # Логируем ошибку и пробрасываем исключение дальше
+    #         logger.error(f"Ошибка при массовом обновлении статуса подписки для пользователей {users_ids}: {str(e)}")
+    #         raise  # Пробрасываем исключение для обработки в вызывающей функции

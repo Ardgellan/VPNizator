@@ -226,9 +226,9 @@ class LocalizedMessageText(BaseLocalizedObject):
     def insufficient_balance_for_sub_renewal(self) -> LocalizedText:
         return self._get_entity_text("insufficient_balance_for_sub_renewal")
 
-    @property
-    def subscription_is_active(self) -> LocalizedText:
-        return self._get_entity_text("subscription_is_active")
+    # @property
+    # def subscription_is_active(self) -> LocalizedText:
+    #     return self._get_entity_text("subscription_is_active")
 
     @property
     def subscription_renewed_successfully(self) -> LocalizedText:
