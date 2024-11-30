@@ -19,7 +19,7 @@ class Deleter(DatabaseConnector):
     async def delete_many_vpn_configs_by_uuids(self, uuids: list[str]) -> None:
         query = f"""--sql
             DELETE FROM vpn_configs
-            WHERE config_uuid IN ({", ".join([f"'{uuid}'" for uuid in uuids])});
+            WHERE config_uuid = ANY($1);
         """
         await self._execute_query(query)
         # logger.debug(f"VPN configs {uuids} were deleted")

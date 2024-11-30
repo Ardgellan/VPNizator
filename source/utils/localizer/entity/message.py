@@ -55,12 +55,12 @@ class LocalizedMessageText(BaseLocalizedObject):
         return self._get_entity_text("user_configs_list_for_admin")
 
     @property
-    def user_configs_list_active(self) -> LocalizedText:
-        return self._get_entity_text("user_configs_list_active")
+    def user_configs_list(self) -> LocalizedText:
+        return self._get_entity_text("user_configs_list")
 
-    @property
-    def user_configs_list_inactive(self) -> LocalizedText:
-        return self._get_entity_text("user_configs_list_inactive")
+    # @property
+    # def user_configs_list_inactive(self) -> LocalizedText:
+    #     return self._get_entity_text("user_configs_list_inactive")
 
     @property
     def no_configs_found_create_new_one(self) -> LocalizedText:

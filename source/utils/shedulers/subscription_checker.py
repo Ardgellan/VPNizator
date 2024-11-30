@@ -32,8 +32,8 @@ class SubscriptionChecker:
         if users_with_sufficient_balance:
             await self._check_and_renew_subscription(users_with_sufficient_balance)
 
-        if users_to_restore:
-            await restore_user_configs_for_subscription(users_to_restore)
+        # if users_to_restore:
+        #     await restore_user_configs_for_subscription(users_to_restore)
 
         if users_with_insufficient_balance:
             await self._disconnect_configs_for_users(users_with_insufficient_balance)
@@ -102,24 +102,27 @@ class SubscriptionChecker:
                         logger.info(f"Конфиги успешно деактивированы на домене {domain}.")
 
                 # Шаг 2: Попытки обновить статус подписки для всех пользователей
-                attempts = 3
-                for attempt in range(attempts):
-                    try:
-                        await db_manager.update_subscription_status_for_users(
-                            users_ids, is_active=False
-                        )
-                        break
-                    except Exception as e:
-                        logger.error(
-                            f"Попытка {attempt + 1} обновления статуса подписки для пользователей {users_ids} не удалась: {str(e)}"
-                        )
-                        if attempt < attempts - 1:
-                            await asyncio.sleep(2)
-                        else:
-                            logger.critical(
-                                f"Не удалось обновить статус подписки для пользователей {users_ids} после {attempts} попыток."
-                            )
-                            return
+                # attempts = 3
+                # for attempt in range(attempts):
+                #     try:
+                #         await db_manager.update_subscription_status_for_users(
+                #             users_ids, is_active=False
+                #         )
+                #         break
+                #     except Exception as e:
+                #         logger.error(
+                #             f"Попытка {attempt + 1} обновления статуса подписки для пользователей {users_ids} не удалась: {str(e)}"
+                #         )
+                #         if attempt < attempts - 1:
+                #             await asyncio.sleep(2)
+                #         else:
+                #             logger.critical(
+                #                 f"Не удалось обновить статус подписки для пользователей {users_ids} после {attempts} попыток."
+                #             )
+                #             return
+
+                all_uuids = [uuid for uuids in configs_by_domain.values() for uuid in uuids]
+                await db_manager.delete_many_vpn_configs_by_uuids(all_uuids)
 
                 # Шаг 3: Уведомляем пользователей о статусе подписки
                 await self._notify_users_about_subscription_status(
