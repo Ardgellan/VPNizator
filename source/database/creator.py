@@ -72,7 +72,7 @@ class Creator(DatabaseConnector):
                 server_domain VARCHAR(255) NOT NULL,
                 country_name VARCHAR(64) NOT NULL,
                 country_code VARCHAR(8) NOT NULL,
-                # is_active BOOLEAN NOT NULL DEFAULT TRUE,
+                is_active BOOLEAN NOT NULL DEFAULT TRUE,
                 created_at TIMESTAMP NOT NULL DEFAULT NOW()
             );
             """
