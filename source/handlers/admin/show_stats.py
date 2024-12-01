@@ -19,7 +19,6 @@ async def show_global_stats(call: types.CallbackQuery, state: FSMContext):
         ).format(
             users_registered=global_stats.users_registered,
             users_banned=global_stats.users_banned,
-            # users_with_active_subscription=global_stats.users_with_active_subscription,
             active_configs_count=global_stats.active_configs_count,
         ),
         parse_mode=types.ParseMode.HTML,
