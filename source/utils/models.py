@@ -8,7 +8,6 @@ class UserInfo:
     user_id: int
     username: str
     is_not_banned: str
-    is_active_subscription: bool
     created_at: datetime
 
 

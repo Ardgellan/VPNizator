@@ -8,9 +8,7 @@ from source.utils import localizer
 
 
 async def show_global_stats(call: types.CallbackQuery, state: FSMContext):
-    logger.debug("Entered show_global_stats. Headed to get global stats")
     global_stats = await db_manager.get_global_stats()
-    logger.debug("Out of gathering global stats. Headed forward")
 
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
