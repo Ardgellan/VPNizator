@@ -209,8 +209,8 @@
             "ru": "💳Пожалуйста, выберите сумму, на которую хотите пополнить свой баланс.\n\n💸 Деньги с него будут списываться ежедневно в 12:00, из расчета 3 рубля в день за каждое активное соединение!"
         },
         "insufficient_balance_for_conf_gen_message": {
-            "en": "❌Insufficient funds on your balance for new VPN connection generation or subscription is not activated!",
-            "ru": "❌На вашем балансе недостаточно средств для генерации нового VPN соединения или подписка не активирована!"
+            "en": "❌Insufficient funds on your balance for new VPN connection generation! To generate a config, you must have at least 15 rubles on your balance!",
+            "ru": "❌На вашем балансе недостаточно средств для генерации нового VPN соединения. Для генерации конфига, на балансе должно быть хотя бы 15 рубля!"
         },
         "insufficient_balance_for_sub_renewal": {
             "en": "❌ Insufficient funds to renew the subscription. Please top up your balance or delete unused configurations.",
@@ -259,6 +259,10 @@
         "choose_country_message": {
             "en": "🌐 Please select the country in which you would like to create a connection!\n\n<b>💡Tip:</b> The geographically closer the country is to you, the higher and more stable the connection speed.",
             "ru": "🌐 Пожалуйста, выберите страну, в которой хотите создать подключение!\n\n<b>💡Совет:</b> Чем географически ближе к Вам расположена страна, тем выше и стабильнее скорость соединения."
+        },
+        "can_not_delete_config_yet": {
+            "en": "❌ К сожалению, удалить конфиг пока невозможно, так как он был создан менее чем сутки назад!",
+            "ru": "❌ Unfortunately, it is not yet possible to delete the config, since it was created less than a day ago!"
         }                          
     },
     "button": {

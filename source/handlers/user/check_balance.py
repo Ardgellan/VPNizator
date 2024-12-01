@@ -16,7 +16,7 @@ def has_sufficient_balance_for_conf_generation(func):
         current_balance = await db_manager.get_user_balance(user_id)
         # current_subscription_status = await db_manager.get_subscription_status(user_id)
         # Проверяем, хватает ли средств для создания одного нового конфига (стоимость 3 рубля)
-        if current_balance < 3.00:
+        if current_balance < 15.00:
             if isinstance(message_or_call, types.CallbackQuery):
                 message = message_or_call.message
                 language_code = (

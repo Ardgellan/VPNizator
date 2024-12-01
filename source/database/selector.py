@@ -514,3 +514,17 @@ class Selector(DatabaseConnector):
             for record in result
         ]
 
+    async def get_config_creation_date(self, uuid: str) -> datetime | None:
+        """
+        Получает дату создания конфигурации по ее UUID.
+        :param uuid: Уникальный идентификатор конфигурации.
+        :return: Дата создания конфигурации или None, если конфигурация не найдена.
+        """
+        query = f"""
+            SELECT created_at
+            FROM vpn_configs
+            WHERE config_uuid = '{uuid}'
+            LIMIT 1;
+        """
+        result = await self._execute_query(query)
+        return result[0][0] if result else None

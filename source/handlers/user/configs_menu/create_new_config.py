@@ -116,7 +116,7 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                             conn=conn,  # Передаем транзакцию для консистентности
                         )
 
-                    await db_manager.update_user_balance(user_id, -3.00)
+                    # await db_manager.update_user_balance(user_id, -3.00)
 
                     # Завершаем состояние
                     await state.finish()
