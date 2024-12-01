@@ -66,7 +66,7 @@ async def create_user_info_message_text(user_id: int) -> str:
         # unused_configs_count=db_user_info.unused_configs_count,
         created_at=db_user_info.created_at.strftime("%d.%m.%Y %H:%M:%S"),
     )
-    # logger.debug(f"Generated user info message text: {text}")
+    logger.debug(f"Generated user info message text: {text}")
     return text
 
 
