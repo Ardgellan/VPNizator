@@ -72,6 +72,7 @@ async def handle_payment(call: types.CallbackQuery):
             payment_success = await check_payment_status(payment_id, call.from_user.id, amount)
             if payment_success:
                 current_balance = await db_manager.get_user_balance(call.from_user.id)
+                logger.debug("In payment function, before configuring success message")
                 # current_subscription_status = await db_manager.get_subscription_status(call.from_user.id)
                 # current_subscription_status = '🟢' if await db_manager.get_subscription_status(call.from_user.id) else '🔴'
                 await call.message.answer(
