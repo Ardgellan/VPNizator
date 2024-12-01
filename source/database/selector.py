@@ -177,7 +177,7 @@ class Selector(DatabaseConnector):
             users_banned=result[0][1],
             active_configs_count=result[0][2], # тут изменено [0][3] - yf [0][2]
         )
-        # logger.debug(f"Global stats: {global_stats}")
+        logger.debug(f"Global stats: {global_stats}")
         return global_stats
 
     async def get_unblocked_users_ids(self) -> list[int]:
