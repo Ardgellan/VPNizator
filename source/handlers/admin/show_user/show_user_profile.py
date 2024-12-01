@@ -49,7 +49,7 @@ async def create_user_info_message_text(user_id: int) -> str:
 
     language_code = (await bot.get_chat_member(chat_id=user_id, user_id=user_id)).user.language_code
 
-    # logger.debug(f"Language code for user {user_id}: {language_code}")
+    logger.debug(f"Language code for user {user_id}: {language_code}")
 
     text = localizer.get_user_localized_text(
         user_language_code=language_code,
