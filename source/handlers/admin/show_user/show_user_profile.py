@@ -58,7 +58,7 @@ async def create_user_info_message_text(user_id: int) -> str:
         user_id=user_id,
         user_username=db_user_info.username,
         is_not_banned=db_user_info.is_not_banned,
-        is_active_subscription=db_user_info.is_active_subscription,
+        # is_active_subscription=db_user_info.is_active_subscription,
         # subscription_end_date=db_user_info.subscription_end_date.strftime("%d.%m.%Y"),
         # subscription_days_left=subscription_days_left,
         # configs_count=db_user_info.configs_count,

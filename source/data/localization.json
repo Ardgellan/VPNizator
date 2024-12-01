@@ -29,8 +29,8 @@
             "ru": "❌ Оплата отклонена"
         },
         "user_info": {
-            "en": "👤User: {user_id}\n👤Username: {user_username}\n\n🤕Has access to the bot: {is_not_banned}\n\n💰Subscription status: {is_active_subscription}\n\n📅Registration date: {created_at}",
-            "ru": "👤Пользователь: {user_id}\n👤Username: {user_username}\n\n🤕Есть доступ к боту: {is_not_banned}\n\n💰Статус подписки: {is_active_subscription}\n\n📅Дата регистрации: {created_at}"
+            "en": "👤User: {user_id}\n👤Username: {user_username}\n\n🤕Has access to the bot: {is_not_banned}\n\n📅Registration date: {created_at}",
+            "ru": "👤Пользователь: {user_id}\n👤Username: {user_username}\n\n🤕Есть доступ к боту: {is_not_banned}\n\n📅Дата регистрации: {created_at}"
         },
         "user_configs_list_for_admin": {
             "en": "📄Current list of <b>user: {user_id}</b> VPN connections\n\n",
