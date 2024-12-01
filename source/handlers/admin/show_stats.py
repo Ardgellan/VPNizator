@@ -1,6 +1,6 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from loguru import logger
+# from loguru import logger
 
 from loader import db_manager
 from source.keyboard import inline

@@ -45,7 +45,7 @@ class Selector(DatabaseConnector):
             logger.error(f"User {user_id} not found")
             return None, None, None
         username, is_banned, created_at = result[0]
-        logger.debug(f"User {user_id} base info was fetched")
+        # logger.debug(f"User {user_id} base info was fetched")
         return username, is_banned, created_at
 
     async def _get_created_configs_count_by_user_id(self, user_id: int) -> int:
