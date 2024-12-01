@@ -38,5 +38,4 @@ class SubscriptionStatus(Enum):
 class GlobalStatistics:
     users_registered: int
     users_banned: int
-    users_with_active_subscription: int
     active_configs_count: int

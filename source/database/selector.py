@@ -175,7 +175,6 @@ class Selector(DatabaseConnector):
         global_stats = GlobalStatistics(
             users_registered=result[0][0],
             users_banned=result[0][1],
-            # users_with_active_subscription=result[0][2],
             active_configs_count=result[0][2], # тут изменено [0][3] - yf [0][2]
         )
         # logger.debug(f"Global stats: {global_stats}")
