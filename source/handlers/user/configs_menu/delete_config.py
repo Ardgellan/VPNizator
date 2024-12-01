@@ -24,7 +24,8 @@ async def confirm_delete_config(call: types.CallbackQuery, state: FSMContext):
             text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.can_not_delete_config_yet
-            )
+            ),
+            reply_markup=await inline.back_to_main_menu(language_code=call.from_user.language_code)
         )
     else:
         await call.message.answer(
