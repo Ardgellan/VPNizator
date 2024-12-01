@@ -32,6 +32,7 @@ def has_sufficient_balance_for_conf_generation(func):
                     user_language_code=language_code,
                     text_localization=localizer.message.insufficient_balance_for_conf_gen_message,  # Локализация сообщения о нехватке средств
                 ),
+                reply_markup=await inline.insert_button_back_to_main_menu(language_code=language_code)
             )
             await state.finish()
             return
