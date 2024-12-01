@@ -649,6 +649,14 @@ async def successfull_payment_keyboard(language_code: str):
     #     callback_data="renew_subscription",  # URL для перехода на сайт платежной системы
     # )
 
+    pay_button = InlineKeyboardButton(
+        text=localizer.get_user_localized_text(
+            user_language_code=language_code,
+            text_localization=localizer.button.create_new_config,  # Замените на вашу локализацию
+        ),
+        callback_data="create_new_config",  # URL для перехода на сайт платежной системы
+    )
+
     # Добавляем кнопки на клавиатуру
     keyboard.add(pay_button)
 
