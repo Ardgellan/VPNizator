@@ -625,6 +625,13 @@ async def country_selection_keyboard(language_code: str):
             ),
             callback_data="country_finland",
         ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.japan_button,
+            ),
+            callback_data="country_japan",
+        ),
     ]
     for button in buttons:
         keyboard.add(button)
