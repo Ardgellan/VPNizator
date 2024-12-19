@@ -391,7 +391,7 @@ class Selector(DatabaseConnector):
             HAVING u.balance < COUNT(vc.config_uuid) * 3;
         """
         result = await self._execute_query(query)
-        # logger.info(f"Найдено пользователей с недостаточным балансом: {result}")
+        logger.info(f"Найдено пользователей с недостаточным балансом: {result}")
         # Возвращаем список user_id, если есть результат, иначе возвращаем пустой список
         return [record[0] for record in result] if result else []
 
