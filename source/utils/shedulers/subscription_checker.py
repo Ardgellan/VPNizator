@@ -27,7 +27,7 @@ class SubscriptionChecker:
 
         users_with_sufficient_balance = await db_manager.get_users_with_sufficient_balance()
         users_with_insufficient_balance = await db_manager.get_users_with_insufficient_balance()
-        users_to_restore = await db_manager.get_users_to_restore()
+        # users_to_restore = await db_manager.get_users_to_restore()
 
         if users_with_sufficient_balance:
             await self._check_and_renew_subscription(users_with_sufficient_balance)

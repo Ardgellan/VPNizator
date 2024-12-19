@@ -597,13 +597,6 @@ async def country_selection_keyboard(language_code: str):
     keyboard = InlineKeyboardMarkup(row_width=1)
 
     buttons = [
-        # InlineKeyboardButton(
-        #     text=localizer.get_user_localized_text(
-        #         user_language_code=language_code,
-        #         text_localization=localizer.button.estonia_button,
-        #     ),
-        #     callback_data="country_estonia",
-        # ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
@@ -625,13 +618,6 @@ async def country_selection_keyboard(language_code: str):
             ),
             callback_data="country_finland",
         ),
-        InlineKeyboardButton(
-            text=localizer.get_user_localized_text(
-                user_language_code=language_code,
-                text_localization=localizer.button.japan_button,
-            ),
-            callback_data="country_japan",
-        ),
     ]
     for button in buttons:
         keyboard.add(button)
@@ -645,26 +631,16 @@ async def country_selection_keyboard(language_code: str):
 
 
 async def successfull_payment_keyboard(language_code: str):
-    keyboard = InlineKeyboardMarkup(row_width=1)  # Одна кнопка в ряду
-
-    # Кнопка "Оплатить"
-    # pay_button = InlineKeyboardButton(
-    #     text=localizer.get_user_localized_text(
-    #         user_language_code=language_code,
-    #         text_localization=localizer.button.renew_subscription,  # Замените на вашу локализацию
-    #     ),
-    #     callback_data="renew_subscription",  # URL для перехода на сайт платежной системы
-    # )
+    keyboard = InlineKeyboardMarkup(row_width=1)
 
     button = InlineKeyboardButton(
         text=localizer.get_user_localized_text(
             user_language_code=language_code,
-            text_localization=localizer.button.create_new_config,  # Замените на вашу локализацию
+            text_localization=localizer.button.create_new_config,
         ),
-        callback_data="create_new_config",  # URL для перехода на сайт платежной системы
+        callback_data="create_new_config",
     )
 
-    # Добавляем кнопки на клавиатуру
     keyboard.add(button)
 
     keyboard = await insert_button_back_to_main_menu(

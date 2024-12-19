@@ -528,3 +528,31 @@ class Selector(DatabaseConnector):
         """
         result = await self._execute_query(query)
         return result[0][0] if result else None
+
+    async def get_germany_configs_count(self):
+        query = f"""
+            SELECT count(*)
+            FROM vpn_configs
+            WHERE country_name = 'Germany';
+        """
+        result = await self._execute_query(query)
+        return result[0][0] if result else None
+
+    async def get_finland_configs_count(self):
+        query = f"""
+            SELECT count(*)
+            FROM vpn_configs
+            WHERE country_name = 'Finland';
+        """
+        result = await self._execute_query(query)
+        return result[0][0] if result else None
+
+    async def get_america_configs_count(self):
+        query = f"""
+            SELECT count(*)
+            FROM vpn_configs
+            WHERE country_name = 'America';
+        """
+        result = await self._execute_query(query)
+        return result[0][0] if result else None
+
