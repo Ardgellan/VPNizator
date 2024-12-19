@@ -210,7 +210,7 @@
         },
         "insufficient_balance_for_conf_gen_message": {
             "en": "❌Insufficient funds on your balance for new VPN connection generation! To generate a config, you must have at least 15 rubles on your balance!",
-            "ru": "❌На вашем балансе недостаточно средств для генерации нового VPN соединения. Для генерации конфига, на балансе должно быть хотя бы 15 рубля!"
+            "ru": "❌На вашем балансе недостаточно средств для генерации нового VPN соединения. Для генерации конфига, на балансе должно быть хотя бы 15 рублей!"
         },
         "insufficient_balance_for_sub_renewal": {
             "en": "❌ Insufficient funds to renew the subscription. Please top up your balance or delete unused configurations.",
