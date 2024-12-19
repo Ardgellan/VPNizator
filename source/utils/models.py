@@ -31,7 +31,7 @@ class VpnConfigDB_N:
 class SubscriptionStatus(Enum):
     expired = "EXPIRED"
     last_day_left = "LAST_DAY_LEFT"
-    last_two_days_left = "LAST_TWO_DAYS_LAYS"
+    last_two_days_left = "LAST_TWO_DAYS_LEFT"
 
 
 @dataclass
