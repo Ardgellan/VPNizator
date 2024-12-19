@@ -122,7 +122,7 @@ class SubscriptionChecker:
                 #             return
 
                 all_uuids = [uuid for uuids in configs_by_domain.values() for uuid in uuids]
-                logger.debug("All_UUIDS =" {all_uuids})
+                logger.debug("All_UUIDS = {all_uuids}")
                 await db_manager.delete_many_vpn_configs_by_uuids(all_uuids)
 
                 # Шаг 3: Уведомляем пользователей о статусе подписки
