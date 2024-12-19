@@ -391,7 +391,6 @@ class Selector(DatabaseConnector):
             HAVING u.balance < COUNT(vc.config_uuid) * 3;
         """
         result = await self._execute_query(query)
-        logger.info(f"Найдено пользователей с недостаточным балансом: {result}")
         # Возвращаем список user_id, если есть результат, иначе возвращаем пустой список
         return [record[0] for record in result] if result else []
 
@@ -555,4 +554,14 @@ class Selector(DatabaseConnector):
         """
         result = await self._execute_query(query)
         return result[0][0] if result else None
+
+    async def get_count_of_users_with_active_configs(self) -> int:
+        """Получаем количество пользователей, у которых есть хотя бы один конфиг"""
+        query = """--sql
+            SELECT COUNT(DISTINCT user_id)
+            FROM vpn_configs;
+        """
+        result = await self._execute_query(query)
+        return result[0][0] if result else 0
+
 

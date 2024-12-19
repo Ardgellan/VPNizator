@@ -13,6 +13,7 @@ async def show_global_stats(call: types.CallbackQuery, state: FSMContext):
     germany_configs = await db_manager.get_germany_configs_count()
     finland_configs = await db_manager.get_finland_configs_count()
     america_configs = await db_manager.get_america_configs_count()
+    active_users = await db_manager.get_count_of_users_with_active_configs()
 
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
@@ -22,6 +23,7 @@ async def show_global_stats(call: types.CallbackQuery, state: FSMContext):
             users_registered=global_stats.users_registered,
             users_banned=global_stats.users_banned,
             active_configs_count=global_stats.active_configs_count,
+            active_users=active_users,
             germany_configs=germany_configs,
             finland_configs=finland_configs,
             america_configs=america_configs

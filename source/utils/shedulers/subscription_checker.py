@@ -18,7 +18,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 12:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=18, minute=3)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=18, minute=45)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -122,7 +122,6 @@ class SubscriptionChecker:
                 #             return
 
                 all_uuids = [uuid for uuids in configs_by_domain.values() for uuid in uuids]
-                logger.debug(f"All_UUIDS = {all_uuids}")
                 await db_manager.delete_many_vpn_configs_by_uuids(uuids=all_uuids)
 
                 # Шаг 3: Уведомляем пользователей о статусе подписки
