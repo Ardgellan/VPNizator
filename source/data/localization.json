@@ -68,9 +68,9 @@
             "en": "{user}, I have bad news...😟\nYour VPN subscription <b>will expire tomorrow</b> 😱! Please, top up your balance!",
             "ru": "{user}, у меня плохие новости...😟\nВаша подписка на VPN <b>истекает уже завтра</b> 😱! Пожалуйста, пополните свой баланс!"
         },
-        "subscription_two_days_left_notification": {
-            "en": "{user}, I have bad news...😢\nYour VPN subscription will expire <b>in 2 days</b>. To renew your subscription, please use the /pay command",
-            "ru": "{user}, у меня плохие новости...😢\nТвоя подписка на VPN истекает <b>через 2 дня</b>. Для продления подписки, пожалуйста, воспользуйся командой /pay"
+        "subscription_last_two_days_left_notification": {
+            "en": "{user}, I have bad news...😟\nYour VPN subscription will expire <b>in 2 days</b>. Please, top up your balance!",
+            "ru": "{user}, у меня плохие новости...😟\nВаша подписка на VPN <b>истекает через 2 дня</b> 😱! Пожалуйста, пополните свой баланс!"
         },
         "request_user_id_or_username": {
             "en": "👤Enter the user ID or username to display information about the user",

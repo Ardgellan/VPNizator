@@ -18,7 +18,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 12:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=18, minute=45)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=19, minute=30)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -38,7 +38,15 @@ class SubscriptionChecker:
         if users_with_insufficient_balance:
             await self._disconnect_configs_for_users(users_with_insufficient_balance)
 
-        await self._find_and_notify_users_with_last_day_left_subscription()
+        last_day_users = await db_manager.get_users_ids_with_last_day_left_subscription()
+        last_two_days_users = await db_manager.get_users_ids_with_last_two_days_left_subscription()
+
+        if users_with_two_days_left:
+            await self._find_and_notify_users_with_last_two_days_left_subscription(users_with_two_days_left)
+
+        if users_with_one_day_left:
+            await self._find_and_notify_users_with_last_day_left_subscription(users_with_one_day_left)
+        
         self._messages_limits_counter = 0
 
         
@@ -161,15 +169,26 @@ class SubscriptionChecker:
             raise HTTPException(status_code=500, detail="Ошибка при деактивации конфигов на сервере.")
 
 
-    async def _find_and_notify_users_with_last_day_left_subscription(self):
-        """Find and notify users with last day left subscription"""
-        users_ids_with_last_day_left_subscription = (
-            await db_manager.get_users_ids_with_last_day_left_subscription()
-        )
+    async def _find_and_notify_users_with_last_day_left_subscription(self, users_ids: list[int]):
+        # """Find and notify users with last day left subscription"""
+        # users_ids_with_last_day_left_subscription = (
+        #     await db_manager.get_users_ids_with_last_day_left_subscription()
+        # )
 
         await self._notify_users_about_subscription_status(
-            users_ids=users_ids_with_last_day_left_subscription,
+            users_ids=users_ids,
             status=SubscriptionStatus.last_day_left.value,
+        )
+
+    async def _find_and_notify_users_with_last_two_days_left_subscription(self, users_ids: list[int]):
+        # """Find and notify users with last day left subscription"""
+        # users_ids_with_last_two_days_left_subscription = (
+        #     await db_manager.get_users_ids_with_last_two_days_left_subscription()
+        # )
+
+        await self._notify_users_about_subscription_status(
+            users_ids=users_ids,
+            status=SubscriptionStatus.last_two_days_left.value,
         )
 
 
@@ -181,6 +200,8 @@ class SubscriptionChecker:
                 message_text = localizer.message.subscription_expired_notification
             case SubscriptionStatus.last_day_left.value:
                 message_text = localizer.message.subscription_last_day_left_notification
+            case SubscriptionStatus.last_two_days_left.value:
+                message_text = localizer.message.subscription_last_two_days_left_notification
             case _:
                 raise ValueError(f"Unknown subscription status: {status}")
 

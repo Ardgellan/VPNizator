@@ -278,6 +278,22 @@ class Selector(DatabaseConnector):
         result = await self._execute_query(query)
         return [record[0] for record in result] if result else []
 
+    async def get_users_ids_with_two_days_left_subscription(self) -> list[int]:
+        """
+        Получаем список пользователей, у которых баланс позволяет оплатить один день подписки,
+        но не хватает на два дня.
+        """
+        query = """--sql
+            SELECT DISTINCT u.user_id
+            FROM users u
+            JOIN vpn_configs vc ON vc.user_id = u.user_id
+            GROUP BY u.user_id, u.balance
+            HAVING u.balance >= (COUNT(vc.config_uuid) * 3)
+                AND u.balance < (COUNT(vc.config_uuid) * 6)
+        """
+        result = await self._execute_query(query)
+        return [record[0] for record in result] if result else []
+
     async def get_last_subscription_payment(self, user_id: int) -> datetime:
         """Получаем время последнего платежа пользователя по его user_id"""
         query = f"""--sql
