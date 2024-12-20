@@ -41,7 +41,7 @@
             "ru": "📄Актуальный список Ваших VPN соединений!\n\nВы можете вызвать конфигурационные данные VPN соединения нажав на него.\nТакже вы сможете удалить соединение 🗑️, если захотите!\n☝️ Однако, вы не сможете удалить конфиг созданный раньше чем 24 часа назад!\nДневная подписка - 3 рубля за конфиг.\n\n<b>Средства списываются ежедневно в 12.00</b>\n\n<b>Текущий Баланс:</b> {current_balance} рублей\n\n<b>Текущая стоимость подписки:</b> {current_subscription}\n\n"
         },
         "no_configs_found_create_new_one": {
-            "en": "📄No configs found, let's create a new VPN connection 😊\n\n⚠️To create a config, you need to have at least 15 roubles on your balance!\n\n💳Your current balance: {current_balance} roubles",
+            "en": "📄No configs found, let's create a new VPN connection 😊\n\n⚠️To create a config, you need to have at least 15 rubles on your balance!\n\n💳Your current balance: {current_balance} rubles",
             "ru": "📄Конфигурации не найдены, давайте создадим новое VPN соединение 😊\n\n⚠️Для создания конфига вам необходимо иметь на балансе не менее 15 рублей!\n\n💳Ваш текущий баланс: {current_balance} рублей"
         },
         "request_config_name": {
@@ -241,8 +241,8 @@
             "ru": "🤒Простите, кажется возникла ошибка во время активации пробного периода! Пожалуйста, попробуйте еще раз 🙏!"
         },
         "successfull_payment_message": {
-            "en": "✅Payment of {amount} rubles was successful! Your balance has been topped up.\n\nYour current balance: <b>{current_balance}</b>\n\nYou can create new connections immediately or later, if it is more convenient for you!",
-            "ru": "✅Оплата на сумму {amount} рублей прошла успешно! Ваш баланс был пополнен.\n\nВаш текущий баланс: <b>{current_balance}</b>\n\nВы можете создать новые подключения сразу или позднее, если Вам так будет удобнее!"
+            "en": "✅Payment of {amount} rubles was successful! Your balance has been topped up.\n\nYour current balance: <b>{current_balance} rubles</b>\n\nYou can create new connections immediately or later, if it is more convenient for you!",
+            "ru": "✅Оплата на сумму {amount} рублей прошла успешно! Ваш баланс был пополнен.\n\nВаш текущий баланс: <b>{current_balance}</b> рублей\n\nВы можете создать новые подключения сразу или позднее, если Вам так будет удобнее!"
         },
         "payment_confirmation_message": {
             "en": "🟢 Please click on the \"Pay\" button to go to the payment system website.",
