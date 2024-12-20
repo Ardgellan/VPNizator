@@ -18,7 +18,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 12:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=13, minute=25)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=13, minute=36)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -177,7 +177,7 @@ class SubscriptionChecker:
         # users_ids_with_last_day_left_subscription = (
         #     await db_manager.get_users_ids_with_last_day_left_subscription()
         # )
-
+        logger.debug(f"Notifying users with one day left: {users_ids}")
         await self._notify_users_about_subscription_status(
             users_ids=users_ids,
             status=SubscriptionStatus.last_day_left.value,
@@ -188,7 +188,7 @@ class SubscriptionChecker:
         # users_ids_with_last_two_days_left_subscription = (
         #     await db_manager.get_users_ids_with_last_two_days_left_subscription()
         # )
-
+        logger.debug(f"Notifying users with two days left: {users_ids}")
         await self._notify_users_about_subscription_status(
             users_ids=users_ids,
             status=SubscriptionStatus.last_two_days_left.value,
