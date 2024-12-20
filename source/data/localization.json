@@ -61,16 +61,16 @@
             "ru": "✅ Название: <b>{config_name}</b>\n\nСтрана: {country_name} {country_code}\n\n📝 Данные для подключения:\n<code>{config_data}</code>\n\nЭто одно из ваших VPN соединений. Вы можете удалить его если решите или установить на Ваше устройство, если не сделали этого сразу при генерации!"
         },
         "subscription_expired_notification": {
-            "en": "{user}, I have bad news...😢\nYour VPN subscription <b>has expired</b> 😭. Your configs have been deleted 🗑️. To renew your subscription, please, top up your balance and create new configurations!",
-            "ru": "{user}, у меня плохие новости...😢\nВаша подписка на VPN <b>истекла</b> 😭. Ваши конфиги были удалены 🗑️. Для восстановления подписки, пожалуйста, пополните свой баланс и создайте новые конфигурации!"
+            "en": "{user}, I have bad news...😢\nYour VPN subscription <b>has expired</b> 😭. Your VPN connections have been deleted 🗑️. To renew your subscription, please, top up your balance and create new configurations!",
+            "ru": "{user}, у меня плохие новости...😢\nВаша подписка на VPN <b>истекла</b> 😭. Ваши VPN соединения были удалены 🗑️. Для восстановления подписки, пожалуйста, пополните свой баланс и создайте новые конфигурации!"
         },
         "subscription_last_day_left_notification": {
-            "en": "{user}, I have bad news...😟\nYour VPN subscription <b>will expire tomorrow</b> and your configs will be deleted😱! Please, top up your balance!",
-            "ru": "{user}, у меня плохие новости...😟\nВаша подписка на VPN <b>истекает уже завтра</b> и ваши конфиги будут удалены😱! Пожалуйста, пополните свой баланс!"
+            "en": "{user}, I have bad news...😟\nYour VPN subscription <b>will expire tomorrow</b> and the VPN connections you created will be deleted😱! Please, top up your balance!",
+            "ru": "{user}, у меня плохие новости...😟\nВаша подписка на VPN <b>истекает уже завтра</b> и созданые Вами VPN соединения будут удалены😱! Пожалуйста, пополните свой баланс!"
         },
         "subscription_last_two_days_left_notification": {
-            "en": "{user}, I have bad news...😟\nYour VPN subscription will expire <b>in 2 days</b> and your configs will be deleted😵. Please, top up your balance!",
-            "ru": "{user}, у меня плохие новости...😟\nВаша подписка на VPN <b>истекает через 2 дня</b> и ваши конфиги будут удалены😵! Пожалуйста, пополните свой баланс!"
+            "en": "{user}, I have bad news...😟\nYour VPN subscription will expire <b>in 2 days</b> and the VPN connections you created will be deleted😵. Please, top up your balance!",
+            "ru": "{user}, у меня плохие новости...😟\nВаша подписка на VPN <b>истекает через 2 дня</b> и созданые Вами VPN соединения будут удалены😵! Пожалуйста, пополните свой баланс!"
         },
         "request_user_id_or_username": {
             "en": "👤Enter the user ID or username to display information about the user",
