@@ -40,9 +40,6 @@ class SubscriptionChecker:
 
         last_day_users = await db_manager.get_users_ids_with_last_day_left_subscription()
         last_two_days_users = await db_manager.get_users_ids_with_two_days_left_subscription()
-        
-        logger.debug(f"last_day_users = {last_day_users}")
-        logger.debug(f"last_two_days_users = {last_two_days_users}")
 
         if last_two_days_users:
             await self._find_and_notify_users_with_last_two_days_left_subscription(users_ids=last_two_days_users)
@@ -173,22 +170,14 @@ class SubscriptionChecker:
 
 
     async def _find_and_notify_users_with_last_day_left_subscription(self, users_ids: list[int]):
-        # """Find and notify users with last day left subscription"""
-        # users_ids_with_last_day_left_subscription = (
-        #     await db_manager.get_users_ids_with_last_day_left_subscription()
-        # )
-        logger.debug(f"Notifying users with one day left: {users_ids}")
+
         await self._notify_users_about_subscription_status(
             users_ids=users_ids,
             status=SubscriptionStatus.last_day_left.value,
         )
 
     async def _find_and_notify_users_with_last_two_days_left_subscription(self, users_ids: list[int]):
-        # """Find and notify users with last day left subscription"""
-        # users_ids_with_last_two_days_left_subscription = (
-        #     await db_manager.get_users_ids_with_last_two_days_left_subscription()
-        # )
-        logger.debug(f"Notifying users with two days left: {users_ids}")
+
         await self._notify_users_about_subscription_status(
             users_ids=users_ids,
             status=SubscriptionStatus.last_two_days_left.value,
@@ -197,7 +186,6 @@ class SubscriptionChecker:
 
     async def _notify_users_about_subscription_status(self, users_ids: list[int], status: str):
         """Notify users about subscription status"""
-        logger.debug(f"Preparing to send notifications to {users_ids} with status {status}")
 
         match status:
             case SubscriptionStatus.expired.value:
@@ -211,7 +199,6 @@ class SubscriptionChecker:
 
         tasks = []
         for user_id in users_ids:
-            logger.debug(f"Attempting to send notification to user {user_id} with status {status}")
             tasks.append(self._send_subscription_notification(user_id, message_text))
         await asyncio.gather(*tasks)
 
