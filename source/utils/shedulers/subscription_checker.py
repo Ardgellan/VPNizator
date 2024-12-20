@@ -18,7 +18,7 @@ class SubscriptionChecker:
         self._messages_limits_counter = 0
         self._scheduler = AsyncIOScheduler()
         # start checking subscriptions every day at 12:00
-        self._scheduler.add_job(self._check_subscriptions, "cron", hour=13, minute=36)
+        self._scheduler.add_job(self._check_subscriptions, "cron", hour=13, minute=54)
         self._scheduler.start()
         logger.info("Subscription checker was started...")
 
@@ -197,6 +197,7 @@ class SubscriptionChecker:
 
     async def _notify_users_about_subscription_status(self, users_ids: list[int], status: str):
         """Notify users about subscription status"""
+        logger.debug(f"Preparing to send notifications to {users_ids} with status {status}")
 
         match status:
             case SubscriptionStatus.expired.value:
@@ -210,6 +211,7 @@ class SubscriptionChecker:
 
         tasks = []
         for user_id in users_ids:
+            logger.debug(f"Attempting to send notification to user {user_id} with status {status}")
             tasks.append(self._send_subscription_notification(user_id, message_text))
         await asyncio.gather(*tasks)
 
