@@ -241,8 +241,8 @@
             "ru": "🤒Простите, кажется возникла ошибка во время активации пробного периода! Пожалуйста, попробуйте еще раз 🙏!"
         },
         "successfull_payment_message": {
-            "en": "✅Payment of {amount} rubles was successful! Your balance has been topped up.\n\nYour current balance: <b>{current_balance} rubles</b>\n\nYou can create new connections immediately or later, if it is more convenient for you!",
-            "ru": "✅Оплата на сумму {amount} рублей прошла успешно! Ваш баланс был пополнен.\n\nВаш текущий баланс: <b>{current_balance}</b> рублей\n\nВы можете создать новые подключения сразу или позднее, если Вам так будет удобнее!"
+            "en": "✅Payment of {amount} rubles was successful! Your balance has been topped up.\n\nYour current balance: <b>{current_balance} rubles</b>\n\nIf necessary, you can create new connections now or later by clicking the 'My VPN Connections' button from the main menu.",
+            "ru": "✅Оплата на сумму {amount} рублей прошла успешно! Ваш баланс был пополнен.\n\nВаш текущий баланс: <b>{current_balance}</b> рублей\n\nЕсли необходимо, вы можете создать новые подключения сейчас или позднее, перейдя по кнопке 'Мои VPN соединения' из главного меню."
         },
         "payment_confirmation_message": {
             "en": "🟢 Please click on the \"Pay\" button to go to the payment system website.",
