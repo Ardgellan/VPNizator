@@ -618,13 +618,13 @@ async def country_selection_keyboard(language_code: str):
             ),
             callback_data="country_finland",
         ),
-        # InlineKeyboardButton(
-        #     text=localizer.get_user_localized_text(
-        #         user_language_code=language_code,
-        #         text_localization=localizer.button.sweden_button,
-        #     ),
-        #     callback_data="country_sweden",
-        # ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.sweden_button,
+            ),
+            callback_data="country_sweden",
+        ),
     ]
     for button in buttons:
         keyboard.add(button)
