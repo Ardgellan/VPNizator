@@ -361,7 +361,7 @@ async def download_app_for_connect_to_vpn_keyboard(
 ) -> InlineKeyboardMarkup:
     match platform:
         case "ios":
-            url = "https://apps.apple.com/us/app/streisand/id6450534064"
+            url = "https://apps.apple.com/ru/app/v2raytun/id6476628951"
 
         case "android":
             url = "https://play.google.com/store/apps/details?id=com.v2ray.ang"
