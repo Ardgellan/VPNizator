@@ -370,7 +370,7 @@ async def download_app_for_connect_to_vpn_keyboard(
             url = "https://apps.apple.com/us/app/v2box-v2ray-client/id6446814690"
 
         case "windows":
-            url = "https://github.com/MatsuriDayo/nekoray/releases/download/3.26/nekoray-3.26-2023-12-09-windows64.zip"
+            url = "https://apps.microsoft.com/detail/9pdfnl3qv2s5?hl=en-EN&gl=EN"
 
         case "linux":
             url = "https://github.com/MatsuriDayo/nekoray/releases/download/3.26/nekoray-3.26-2023-12-09-linux64.zip"
