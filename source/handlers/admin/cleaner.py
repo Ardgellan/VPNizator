@@ -39,8 +39,6 @@ async def cleanup_all_servers(call: types.CallbackQuery):
 
         summary_message = (
             f"✅ Очистка всех серверов завершена!\n"
-            f"🔹 Успешных: {success_count}\n"
-            f"🔸 Неудачных: {failed_count}"
         )
 
         logger.info(summary_message)
