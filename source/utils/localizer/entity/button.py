@@ -179,6 +179,10 @@ class LocalizedButtonText(BaseLocalizedObject):
         return self._get_entity_text("pay_button")
 
     @property
+    def cleanup_configs(self) -> LocalizedText:
+        return self._get_entity_text("cleanup_configs")
+
+    @property
     def estonia_button(self) -> LocalizedText:
         return self._get_entity_text("estonia_button")
 

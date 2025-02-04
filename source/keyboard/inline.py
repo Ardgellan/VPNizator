@@ -99,6 +99,13 @@ async def add_buttons_for_admin_main_menu(keyboard: InlineKeyboardMarkup, langua
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
+                text_localization=localizer.button.cleanup_configs,
+            ),
+            callback_data="cleanup_configs",
+        ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
                 text_localization=localizer.button.show_user,
             ),
             callback_data="show_user",

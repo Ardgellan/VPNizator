@@ -2,6 +2,7 @@ from aiogram import Dispatcher, types
 from loguru import logger
 
 from source.utils.callback import support_callback
+from .cleaner import cleanup_all_servers
 
 
 from .answer_support import *
@@ -42,6 +43,12 @@ def register_admin_handlers(dp: Dispatcher):
         dp.register_callback_query_handler(
             show_global_stats,
             lambda call: call.data.startswith("show_statistics"),
+            state="*",
+        )
+
+        dp.register_callback_query_handler(
+            cleanup_all_servers,
+            lambda call: call.data.startswith("cleanup_configs"),
             state="*",
         )
 

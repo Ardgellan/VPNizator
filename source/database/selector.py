@@ -580,4 +580,29 @@ class Selector(DatabaseConnector):
         result = await self._execute_query(query)
         return result[0][0] if result else 0
 
+    async def get_all_configs_grouped_by_domain(self) -> dict[str, list[str]]:
+        """
+        Получаем все конфиги из базы данных, сгруппированные по доменам.
+        Возвращаем словарь, где ключи — домены, а значения — списки UUID конфигов.
+        """
+        query = """
+            SELECT vc.server_domain, vc.config_uuid
+            FROM vpn_configs vc
+            ORDER BY vc.server_domain;
+        """
+        result = await self._execute_query(query)
+
+        domain_to_uuids = {}
+        for record in result:
+            domain = record[0]
+            uuid = record[1]
+
+            if domain not in domain_to_uuids:
+                domain_to_uuids[domain] = []
+
+            domain_to_uuids[domain].append(uuid)
+
+        return domain_to_uuids
+
+
 
