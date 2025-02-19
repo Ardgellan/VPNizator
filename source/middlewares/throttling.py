@@ -189,6 +189,15 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher.middlewares import BaseMiddleware
 from aiogram.dispatcher.handler import CancelHandler, current_handler
 
+def rate_limit(limit: int, key=None):
+    """ Декоратор для задания лимита на команды """
+    def decorator(func):
+        setattr(func, "throttling_rate_limit", limit)
+        if key:
+            setattr(func, "throttling_key", key)
+        return func
+    return decorator
+
 class ThrottlingMiddleware(BaseMiddleware):
     def __init__(self, default_message_limit=2, default_callback_limit=1):
         super().__init__()
