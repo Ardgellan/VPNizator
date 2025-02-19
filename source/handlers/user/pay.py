@@ -38,7 +38,7 @@ async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FS
     )
     await call.answer()
 
-
+@rate_limit(limit=1)
 async def handle_payment(call: types.CallbackQuery):
     # Получаем сумму из callback_data
     amount_mapping = {
