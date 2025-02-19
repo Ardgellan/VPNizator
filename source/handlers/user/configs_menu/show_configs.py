@@ -17,6 +17,7 @@ from loguru import logger     # Это тоже
 async def show_user_configs(call: types.CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
 
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     logger.info(f"Time: {current_time}, Query ID: {call.id}, callback_data: {call.data}, user_id: {call.from_user.id}")
 
     # Check if the user has any configurations
