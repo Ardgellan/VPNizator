@@ -199,12 +199,12 @@ class ThrottlingMiddleware(BaseMiddleware):
         dispatcher = Dispatcher.get_current()
         thr = await dispatcher.check_key(key)
 
-        # Если текущий запрос — последний с этим ключом, уведомляем пользователя о разблокировке
-        if thr.exceeded_count == throttled.exceeded_count:
-            if isinstance(obj, types.Message):
-                await obj.reply("Доступ получен 👀")
-            elif isinstance(obj, types.CallbackQuery):
-                await obj.answer("Доступ получен 👀", show_alert=True)
+        # # Если текущий запрос — последний с этим ключом, уведомляем пользователя о разблокировке
+        # if thr.exceeded_count == throttled.exceeded_count:
+        #     if isinstance(obj, types.Message):
+        #         await obj.reply("Доступ получен 👀")
+        #     elif isinstance(obj, types.CallbackQuery):
+        #         await obj.answer("Доступ получен 👀", show_alert=True)
 
 
 # import time
