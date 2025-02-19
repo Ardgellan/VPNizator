@@ -189,6 +189,8 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher.middlewares import BaseMiddleware
 from aiogram.dispatcher.handler import CancelHandler, current_handler
 
+from loguru import logger
+
 def rate_limit(limit: int, key=None):
     """ Декоратор для задания лимита на команды """
     def decorator(func):
@@ -199,11 +201,16 @@ def rate_limit(limit: int, key=None):
     return decorator
 
 class ThrottlingMiddleware(BaseMiddleware):
-    def __init__(self, default_message_limit=2, default_callback_limit=1):
+    def __init__(self, default_message_limit=2, default_callback_limit=1, cleanup_interval=600):
         super().__init__()
         self.default_message_limit = default_message_limit
         self.default_callback_limit = default_callback_limit
         self.user_limits = defaultdict(lambda: {"message": 0, "callback": 0})  # Время последнего действия
+
+        loop = asyncio.get_running_loop()
+        loop.call_later(cleanup_interval, lambda: asyncio.create_task(self.cleanup_task(cleanup_interval)))
+
+
 
     async def on_process_message(self, message: types.Message, data: dict):
         """ Проверка лимита для сообщений с учётом @rate_limit """
@@ -214,7 +221,10 @@ class ThrottlingMiddleware(BaseMiddleware):
         limit = getattr(handler, "throttling_rate_limit", self.default_message_limit)  # Получаем лимит из декоратора
 
         if now - self.user_limits[user_id]["message"] < limit:
-            await message.reply(f"🛡️Защита от спама! ⏳ Подождите {int(limit - (now - self.user_limits[user_id]['message']))} секунды.")
+            remaining_time = int(limit - (now - self.user_limits[user_id]["message"]))
+            await message.reply(f"🛡️Защита от спама! ⏳ Подождите {remaining_time} секунды.")
+
+            logger.info(f"❌ User {user_id} заблокирован на {remaining_time} сек (превышен лимит сообщений message).")
             raise CancelHandler()
 
         self.user_limits[user_id]["message"] = now
@@ -228,8 +238,28 @@ class ThrottlingMiddleware(BaseMiddleware):
         limit = getattr(handler, "throttling_rate_limit", self.default_callback_limit)  # Получаем лимит из декоратора
 
         if now - self.user_limits[user_id]["callback"] < limit:
-            await call.answer(f"🛡️Защита от спама! ⏳ Подождите {int(limit - (now - self.user_limits[user_id]['callback']))} секунды.", show_alert=True)
+            remaining_time = int(limit - (now - self.user_limits[user_id]["callback"]))
+            await call.answer(f"🛡️Защита от спама! ⏳ Подождите {remaining_time} секунды.", show_alert=True)
+
+            logger.info(f"❌ User {user_id} заблокирован на {remaining_time} сек (превышен лимит callback-запросов).")
             raise CancelHandler()
 
         self.user_limits[user_id]["callback"] = now
+
+    async def cleanup_task(self, interval):
+        """ Периодически очищает неактивных пользователей """
+
+        now = time.time()
+        to_delete = [
+            user_id for user_id, timestamps in self.user_limits.items()
+            if now - max(timestamps["message"], timestamps["callback"]) > interval
+        ]
+        for user_id in to_delete:
+            del self.user_limits[user_id]
+
+        logger.info(f"🧹 Очистка: удалено {len(to_delete)} неактивных пользователей.")
+
+        # Запускаем задачу снова через interval секунд
+        loop = asyncio.get_running_loop()
+        loop.call_later(interval, lambda: asyncio.create_task(self.cleanup_task(interval)))
 
