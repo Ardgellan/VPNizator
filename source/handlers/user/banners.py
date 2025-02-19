@@ -7,7 +7,7 @@ from source.keyboard import inline
 from source.middlewares import rate_limit
 from source.utils import localizer
 
-
+@rate_limit(limit=1)
 async def terms_of_use_function(call: types.CallbackQuery, state: FSMContext):
 
     await state.finish()
@@ -25,7 +25,7 @@ async def terms_of_use_function(call: types.CallbackQuery, state: FSMContext):
 
     await call.answer()
 
-
+@rate_limit(limit=1)
 async def about_us_function(call: types.CallbackQuery, state: FSMContext):
 
     await state.finish()

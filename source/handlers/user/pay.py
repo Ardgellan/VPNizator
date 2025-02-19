@@ -23,6 +23,7 @@ Configuration.secret_key = config.yookassa_api_token
 
 
 @is_user_banned
+@rate_limit(limit=1)
 async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FSMContext):
     # logger.info(f"Пользователь {call.from_user.id} открыл меню пополнения баланса")
     await state.finish()

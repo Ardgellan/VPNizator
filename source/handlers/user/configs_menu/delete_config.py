@@ -40,7 +40,7 @@ async def confirm_delete_config(call: types.CallbackQuery, state: FSMContext):
         )
 
 
-
+@rate_limit(limit=1)
 async def delete_config(call: types.CallbackQuery, state: FSMContext):
 
     config_uuid = call.data.split("_")[-1]  # Получаем UUID конфигурации из данных callback

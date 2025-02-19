@@ -13,7 +13,7 @@ from source.middlewares import rate_limit
 from source.utils.code_to_flag import *
 
 
-@rate_limit(limit=3)
+@rate_limit(limit=1)
 async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
 
     config_uuid = call.data.split("_")[-1]

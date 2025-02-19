@@ -24,7 +24,7 @@ async def ask_user_for_question_to_support(call: types.CallbackQuery, state: FSM
     )
     await AskSupport.waiting_for_question.set()
 
-
+@rate_limit(limit=1)
 async def forward_question_to_admins(message: types.Message, state: FSMContext):
     await state.finish()
     await message.answer(

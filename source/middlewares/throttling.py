@@ -214,7 +214,7 @@ class ThrottlingMiddleware(BaseMiddleware):
         limit = getattr(handler, "throttling_rate_limit", self.default_message_limit)  # Получаем лимит из декоратора
 
         if now - self.user_limits[user_id]["message"] < limit:
-            await message.reply(f"⏳ Подожди {int(limit - (now - self.user_limits[user_id]['message']))} сек.")
+            await message.reply(f"🛡️Защита от спама! ⏳ Подождите {int(limit - (now - self.user_limits[user_id]['message']))} секунды.")
             raise CancelHandler()
 
         self.user_limits[user_id]["message"] = now
@@ -228,7 +228,7 @@ class ThrottlingMiddleware(BaseMiddleware):
         limit = getattr(handler, "throttling_rate_limit", self.default_callback_limit)  # Получаем лимит из декоратора
 
         if now - self.user_limits[user_id]["callback"] < limit:
-            await call.answer(f"⏳ Подожди {int(limit - (now - self.user_limits[user_id]['callback']))} сек.", show_alert=True)
+            await call.answer(f"🛡️Защита от спама! ⏳ Подождите {int(limit - (now - self.user_limits[user_id]['callback']))} секунды.", show_alert=True)
             raise CancelHandler()
 
         self.user_limits[user_id]["callback"] = now
