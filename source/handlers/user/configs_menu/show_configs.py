@@ -8,17 +8,10 @@ from source.utils import localizer
 
 from ..check_is_user_banned import is_user_banned
 
-from datetime import datetime # Не забудь удалить
-from loguru import logger     # Это тоже
-
-
 @rate_limit(limit=1)
 @is_user_banned
 async def show_user_configs(call: types.CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
-
-    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    logger.info(f"Time: {current_time}, Query ID: {call.id}, callback_data: {call.data}, user_id: {call.from_user.id}")
 
     # Check if the user has any configurations
     is_user_have_any_configs = await db_manager.is_user_have_any_config(user_id=user_id)

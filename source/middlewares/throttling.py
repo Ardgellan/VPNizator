@@ -271,7 +271,6 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher.middlewares import BaseMiddleware
 from aiogram.dispatcher.handler import CancelHandler, current_handler
 
-from loguru import logger
 
 def rate_limit(limit: int, key=None):
     """ Декоратор для задания лимита на команды """
@@ -301,10 +300,8 @@ class ThrottlingMiddleware(BaseMiddleware):
         limit = getattr(handler, "throttling_rate_limit", self.default_message_limit)  # Лимит из декоратора
 
         if now - self.user_limits[user_id]["message"] < limit:
-            remaining_time = int(limit - (now - self.user_limits[user_id]["message"]))
-            await message.reply(f"🛡️ Защита от спама! ⏳ Подождите {remaining_time} секунд.")
+            await message.reply(f"🛡️ Защита от спама! ⏳ Пожалуйста, подождите секунду.")
 
-            logger.info(f"❌ User {user_id} заблокирован на {remaining_time} сек (превышен лимит сообщений).")
             raise CancelHandler()
 
         self.user_limits[user_id]["message"] = now
@@ -322,10 +319,8 @@ class ThrottlingMiddleware(BaseMiddleware):
         if callback_data in self.user_limits[user_id]["callback"]:
             last_pressed = self.user_limits[user_id]["callback"][callback_data]
             if now - last_pressed < limit:
-                remaining_time = int(limit - (now - last_pressed))
-                await call.answer(f"🛡️ Защита от спама! ⏳ Подождите {remaining_time} секунд.", show_alert=True)
+                await call.answer(f"🛡️ Защита от спама! ⏳ Пожалуйста, подождите секунду.", show_alert=True)
 
-                logger.info(f"❌ User {user_id} заблокирован на {remaining_time} сек (превышен лимит нажатий на кнопку '{callback_data}').")
                 raise CancelHandler()
 
         self.user_limits[user_id]["callback"][callback_data] = now
@@ -339,8 +334,6 @@ class ThrottlingMiddleware(BaseMiddleware):
         ]
         for user_id in to_delete:
             del self.user_limits[user_id]
-
-        logger.info(f"🧹 Очистка: удалено {len(to_delete)} неактивных пользователей.")
 
         loop = asyncio.get_running_loop()
         loop.call_later(interval, lambda: asyncio.create_task(self.cleanup_task(interval)))
