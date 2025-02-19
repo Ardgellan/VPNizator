@@ -267,7 +267,7 @@
 import time
 import asyncio
 from collections import defaultdict
-from aiogram import types
+from aiogram import Dispatcher, types
 from aiogram.dispatcher.middlewares import BaseMiddleware
 from aiogram.dispatcher.handler import CancelHandler, current_handler
 
