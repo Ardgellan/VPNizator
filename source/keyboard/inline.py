@@ -609,21 +609,21 @@ async def country_selection_keyboard(language_code: str):
                 user_language_code=language_code,
                 text_localization=localizer.button.finland_button,
             ),
-            callback_data="finland_country",
+            callback_data="country_finland",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
                 text_localization=localizer.button.germany_button,
             ),
-            callback_data="germany_country",
+            callback_data="country_germany",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
                 text_localization=localizer.button.america_button,
             ),
-            callback_data="america_country",
+            callback_data="country_america",
         ),
         # InlineKeyboardButton(
         #     text=localizer.get_user_localized_text(
