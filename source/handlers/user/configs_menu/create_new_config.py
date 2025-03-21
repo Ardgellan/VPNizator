@@ -98,7 +98,12 @@ async def generate_config_for_user(message: types.Message, state: FSMContext):
                         caption=localizer.get_user_localized_text(
                             user_language_code=message.from_user.language_code,
                             text_localization=localizer.message.config_generated,
-                        ).format(config_name=config_name, country_name=country_name, country_code=country_code, config_data=config_as_link_str_with_flag),
+                        ).format(
+                            config_name=config_name,
+                            country_name=country_name,
+                            country_code=country_code,
+                            config_data=config_as_link_str_with_flag
+                            ),
                         parse_mode=types.ParseMode.HTML,
                         reply_markup=await inline.config_generation_keyboard(
                             language_code=message.from_user.language_code
