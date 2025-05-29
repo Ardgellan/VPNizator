@@ -637,7 +637,7 @@ async def country_selection_keyboard(language_code: str):
                 user_language_code=language_code,
                 text_localization=localizer.button.russia_button,
             ),
-            callback_data="russia_button",
+            callback_data="country_russia",
         ),
     ]
     for button in buttons:
