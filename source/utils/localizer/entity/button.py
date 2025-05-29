@@ -205,3 +205,7 @@ class LocalizedButtonText(BaseLocalizedObject):
     @property
     def sweden_button(self) -> LocalizedText:
         return self._get_entity_text("sweden_button")
+
+    @property
+    def russia_button(self) -> LocalizedText:
+        return self._get_entity_text("russia_button")

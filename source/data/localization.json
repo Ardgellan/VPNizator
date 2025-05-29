@@ -461,6 +461,10 @@
         "sweden_button": {
             "en": "🇸🇪 Sweden",
             "ru": "🇸🇪 Швеция"
+        },
+        "russia_button": {
+            "en": "🇷🇺 Russia",
+            "ru": "🇷🇺 Россия"
         }
     }
 }
