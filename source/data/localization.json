@@ -257,8 +257,8 @@
             "ru": "🤒 При попытке восстановления подписки возникла ошибка! Пожалуйста, попробуйте еще раз! 🙏"
         },
         "choose_country_message": {
-            "en": "🌐 Please select the country in which you would like to create a connection!\n\n<b>💡Tip:</b> The geographically closer the country is to you, the higher and more stable the connection speed.\n\n⚠️ Due to technical difficulties, the country selection is currently limited to Finland 🇫🇮",
-            "ru": "🌐 Пожалуйста, выберите страну, в которой хотите создать подключение!\n\n<b>💡Совет:</b> Чем географически ближе к Вам расположена страна, тем выше и стабильнее скорость соединения.\n\n⚠️ В виду технических сложностей, в настоящее время выбор страны ограничен Финляндией 🇫🇮"
+            "en": "🌐 Please select the country in which you would like to create a connection!\n\n<b>💡Tip:</b> The geographically closer the country is to you, the higher and more stable the connection speed.\n\n",
+            "ru": "🌐 Пожалуйста, выберите страну, в которой хотите создать подключение!\n\n<b>💡Совет:</b> Чем географически ближе к Вам расположена страна, тем выше и стабильнее скорость соединения.\n\n"
         },
         "can_not_delete_config_yet": {
             "en": "❌ Unfortunately, it is not yet possible to delete the config, since it was created less than a day ago!",
