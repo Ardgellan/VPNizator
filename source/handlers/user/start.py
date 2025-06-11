@@ -9,7 +9,7 @@ from source.keyboard import inline
 from source.middlewares import rate_limit
 from source.utils import localizer
 
-from .check_is_user_banned import is_user_banned
+from source.handlers.user.check_is_user_banned import is_user_banned
 
 
 @rate_limit(limit=1)

@@ -1,7 +1,7 @@
 from aiogram import Dispatcher
 from loguru import logger
 
-# from .ban_toggle import toggle_ban_for_user
+from .ban_toggle import toggle_ban_for_user
 
 from .show_user_profile import *
 
@@ -22,11 +22,11 @@ def register_admin_show_user_handlers(dp: Dispatcher):
             state=GetUserInfo.wait_for_user_id_or_username,
         )
 
-        # dp.register_callback_query_handler(
-        #     toggle_ban_for_user,
-        #     lambda call: call.data.startswith("ban_user_"),
-        #     state="*",
-        # )
+        dp.register_callback_query_handler(
+            toggle_ban_for_user,
+            lambda call: call.data.startswith("ban_user_"),
+            state="*",
+        )
 
 
     except Exception as e:

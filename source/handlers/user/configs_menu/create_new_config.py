@@ -13,9 +13,12 @@ from source.utils.code_to_flag import *
 
 from ..check_balance import has_sufficient_balance_for_conf_generation
 
+from source.handlers.user.check_is_user_banned import is_user_banned
+
 
 @rate_limit(limit=1)
 @has_sufficient_balance_for_conf_generation
+@is_user_banned
 async def request_user_for_country(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer(
         text=localizer.get_user_localized_text(

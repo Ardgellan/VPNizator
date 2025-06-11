@@ -9,6 +9,8 @@ from source.middlewares import rate_limit
 from source.utils import localizer
 from source.utils.states.user import AskSupport
 
+from source.handlers.user.check_is_user_banned import is_user_banned
+
 
 @rate_limit(limit=1)
 async def ask_user_for_question_to_support(call: types.CallbackQuery, state: FSMContext):
