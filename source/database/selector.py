@@ -621,17 +621,15 @@ class Selector(DatabaseConnector):
 
     async def get_unblocked_users_ids_by_domain(self, domain: str) -> list[int]:
         """
-        Получаем список user_id пользователей, у которых есть конфиги на заданном домене
-        и которые не заблокировали бота.
-        Возвращаем список user_id.
+        Получаем список user_id пользователей с конфигами на заданном домене,
+        которые не заблокированы (is_banned = FALSE).
         """
         query = """
-            SELECT DISTINCT user_id
-            FROM vpn_configs
-            WHERE server_domain = $1
-            AND user_id NOT IN (
-                SELECT user_id FROM blocked_users
-            );
+            SELECT DISTINCT vc.user_id
+            FROM vpn_configs vc
+            JOIN users u ON vc.user_id = u.user_id
+            WHERE vc.server_domain = $1
+            AND u.is_banned = FALSE;
         """
         result = await self._execute_query(query, [domain])
         return [record[0] for record in result] if result else []
