@@ -632,4 +632,5 @@ class Selector(DatabaseConnector):
             AND u.is_banned = FALSE;
         """
         result = await self._execute_query(query, [domain])
+        logger.debug(f"Users for domain '{domain}': {result}")
         return [record[0] for record in result] if result else []
