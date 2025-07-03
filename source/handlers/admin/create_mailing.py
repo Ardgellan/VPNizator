@@ -53,6 +53,7 @@
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
+from loguru import logger
 
 from source.keyboard import inline
 from source.utils import Mailer, localizer
