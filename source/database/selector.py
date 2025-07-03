@@ -624,13 +624,13 @@ class Selector(DatabaseConnector):
         Получаем список user_id пользователей с конфигами на заданном домене,
         которые не заблокированы (is_banned = FALSE).
         """
-        query = """
+        query = f"""
             SELECT DISTINCT vc.user_id
             FROM vpn_configs vc
             JOIN users u ON vc.user_id = u.user_id
-            WHERE vc.server_domain = $1
+            WHERE vc.server_domain = '{domain}'
             AND u.is_banned = FALSE;
         """
-        result = await self._execute_query(query, [domain])
+        result = await self._execute_query(query)
         logger.debug(f"Users for domain '{domain}': {result}")
         return [record[0] for record in result] if result else []
