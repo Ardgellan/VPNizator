@@ -11,6 +11,7 @@ from .create_mailing import (
     confirm_mailing_message,
     create_mailing_message,
     send_mailing_message,
+    send_mailing_message_to_server,
 )
 from .delete_keyboard import *
 
@@ -67,7 +68,7 @@ def register_admin_handlers(dp: Dispatcher):
                 types.ContentType.VIDEO,
             ],
         )
-        
+
         dp.register_callback_query_handler(
             send_mailing_message,
             lambda call: call.data.startswith("confirm_mailing_message"),
