@@ -111,7 +111,9 @@ async def send_mailing_message(call: types.CallbackQuery, state: FSMContext):
 
 async def send_mailing_message_to_server(call: types.CallbackQuery, state: FSMContext):
     mailing_message: types.Message = (await state.get_data()).get("mailing_message")
+    logger.debug(f"call.data: {call.data} ({type(call.data)})")
     domain = call.data.split("server_mailing:")[1]
+    logger.debug(f"Extracted domain: {domain} ({type(domain)})")
 
     # Здесь вызываешь функцию рассылки только на пользователей с конфигами на domain
     await Mailer(message=mailing_message).run_mailing_post(server_domain=domain)
