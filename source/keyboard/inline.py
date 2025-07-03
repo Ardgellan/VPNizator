@@ -396,24 +396,62 @@ async def download_app_for_connect_to_vpn_keyboard(
     return keyboard
 
 
+# async def insert_button_confirm_mailing_message(
+#     keyboard: InlineKeyboardMarkup | None = None, language_code: str = "ru"
+# ):
+#     if not keyboard:
+#         keyboard = InlineKeyboardMarkup(row_width=1)
+#     keyboard.add(
+#         InlineKeyboardButton(
+#             text=localizer.get_user_localized_text(
+#                 user_language_code=language_code,
+#                 text_localization=localizer.button.confirm_mailing_message,
+#             ),
+#             callback_data="confirm_mailing_message",
+#         )
+#     )
+#     keyboard = await insert_button_back_to_main_menu(
+#         keyboard=keyboard,
+#         language_code=language_code,
+#     )
+#     return keyboard
+
+
 async def insert_button_confirm_mailing_message(
-    keyboard: InlineKeyboardMarkup | None = None, language_code: str = "ru"
-):
+    keyboard: InlineKeyboardMarkup | None = None,
+    language_code: str = "ru",
+) -> InlineKeyboardMarkup:
     if not keyboard:
         keyboard = InlineKeyboardMarkup(row_width=1)
+
+    # Кнопка для рассылки всем
     keyboard.add(
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
                 text_localization=localizer.button.confirm_mailing_message,
             ),
-            callback_data="confirm_mailing_message",
+            callback_data="confirm_mailing_message",  # рассылка всем
         )
     )
+
+    # Получаем список серверов из базы
+    server_domains = await db_manager.get_all_unique_server_domains()
+
+    for domain in server_domains:
+        keyboard.add(
+            InlineKeyboardButton(
+                text=f"📡 {domain}",
+                callback_data=f"server_mailing:{domain}"  # рассылка по серверу
+            )
+        )
+
+    # Кнопка назад в главное меню
     keyboard = await insert_button_back_to_main_menu(
         keyboard=keyboard,
         language_code=language_code,
     )
+
     return keyboard
 
 

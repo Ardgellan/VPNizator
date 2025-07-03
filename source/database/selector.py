@@ -605,4 +605,33 @@ class Selector(DatabaseConnector):
         return domain_to_uuids
 
 
+    async def get_all_unique_server_domains(self) -> list[str]:
+        """
+        Получает список всех уникальных серверов (server_domain), 
+        отсортированных по алфавиту.
+        """
+        query = """
+            SELECT DISTINCT server_domain
+            FROM vpn_configs
+            ORDER BY server_domain ASC;
+        """
+        result = await self._execute_query(query)
+        return [row[0] for row in result] if result else []
 
+
+    async def get_unblocked_users_ids_by_domain(self, domain: str) -> list[int]:
+        """
+        Получаем список user_id пользователей, у которых есть конфиги на заданном домене
+        и которые не заблокировали бота.
+        Возвращаем список user_id.
+        """
+        query = """
+            SELECT DISTINCT user_id
+            FROM vpn_configs
+            WHERE server_domain = $1
+            AND user_id NOT IN (
+                SELECT user_id FROM blocked_users
+            );
+        """
+        result = await self._execute_query(query, [domain])
+        return [record[0] for record in result] if result else []

@@ -67,10 +67,19 @@ def register_admin_handlers(dp: Dispatcher):
                 types.ContentType.VIDEO,
             ],
         )
+        
         dp.register_callback_query_handler(
             send_mailing_message,
             lambda call: call.data.startswith("confirm_mailing_message"),
             state=CreateMailing.wait_for_confirmation,
+        )
+
+        # Для рассылки на конкретный сервер
+        dp.register_callback_query_handler(
+            send_mailing_message_to_server,
+            lambda call: call.data.startswith("server_mailing:"),
+            state=CreateMailing.wait_for_confirmation,
+        
         )
 
         register_admin_show_user_handlers(dp)
