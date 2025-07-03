@@ -62,7 +62,7 @@ from source.utils.states.admin import CreateMailing
 
 async def create_mailing_message(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
-    logger.debug("Salamba_1")
+    # logger.debug("Salamba_1")
     await call.message.answer(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
@@ -72,7 +72,7 @@ async def create_mailing_message(call: types.CallbackQuery, state: FSMContext):
             language_code=call.from_user.language_code,
         ),
     )
-    logger.debug("Salamba_2")
+    # logger.debug("Salamba_2")
     await CreateMailing.wait_for_mailing_message.set()
 
 
@@ -80,7 +80,7 @@ async def confirm_mailing_message(message: types.Message, state: FSMContext):
     await state.update_data(mailing_message=message)
     await CreateMailing.wait_for_confirmation.set()
     await Mailer(message=message).echo()
-    logger.debug("Salamba_3")
+    # logger.debug("Salamba_3")
 
     await message.answer(
         text=localizer.get_user_localized_text(
@@ -96,7 +96,7 @@ async def confirm_mailing_message(message: types.Message, state: FSMContext):
 async def send_mailing_message(call: types.CallbackQuery, state: FSMContext):
     mailing_message: types.Message = (await state.get_data()).get("mailing_message")
     await Mailer(message=mailing_message).run_mailing_post()
-    logger.debug("Salamba_4")
+    # logger.debug("Salamba_4")
     await call.message.answer(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
@@ -106,7 +106,7 @@ async def send_mailing_message(call: types.CallbackQuery, state: FSMContext):
             language_code=call.from_user.language_code,
         ),
     )
-    logger.debug("Salamba_5")
+    # logger.debug("Salamba_5")
     await state.finish()
 
 async def send_mailing_message_to_server(call: types.CallbackQuery, state: FSMContext):

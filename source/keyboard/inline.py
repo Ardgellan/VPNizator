@@ -421,7 +421,7 @@ async def insert_button_confirm_mailing_message(
     keyboard: InlineKeyboardMarkup | None = None,
     language_code: str = "ru",
 ) -> InlineKeyboardMarkup:
-    logger.debug("Зашли в клавиатуру")
+    # logger.debug("Зашли в клавиатуру")
     if not keyboard:
         keyboard = InlineKeyboardMarkup(row_width=1)
 
@@ -455,7 +455,7 @@ async def insert_button_confirm_mailing_message(
         language_code=language_code,
     )
 
-    logger.debug("Клавиатура сломалась")
+    # logger.debug("Клавиатура сломалась")
 
     return keyboard
 
