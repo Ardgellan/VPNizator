@@ -22,117 +22,28 @@ async def frequently_asked_questions(call: types.CallbackQuery, state: FSMContex
     )
 
 
-# @rate_limit(limit=1)
-# async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
-#     await state.finish()
-
-#     user_lang = call.from_user.language_code
-#     callback_data = call.data
-
-#     # Подбираем ответ по callback_data
-#     faq_answers = {
-#         "faq_q1": localizer.message.faq_q1_message,
-#         "faq_q2": localizer.message.faq_q2_message,
-#         "faq_q3": localizer.message.faq_q3_message,
-#     }
-
-#     answer_text = localizer.get_user_localized_text(
-#         user_language_code=user_lang,
-#         text_localization=faq_answers.get(callback_data, localizer.message.default_faq_answer),
-#     )
-
-#     await call.message.edit_text(
-#         text=answer_text,
-#         reply_markup=await support_hub_keyboard(language_code=user_lang),
-#         parse_mode=types.ParseMode.HTML,
-#     )
-
-
-# @rate_limit(limit=1)
-# async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
-#     await state.finish()
-
-#     user_lang = call.from_user.language_code
-#     callback_data = call.data
-
-#     # Маппинг callback -> локализованный текст
-#     faq_mapping = {
-#         "faq_q1": localizer.message.faq_q1_message,
-#         "faq_q2": localizer.message.faq_q2_message,
-#         "faq_q3": localizer.message.faq_q3_message,
-#     }
-
-#     text_localization = faq_mapping.get(callback_data)
-
-#     answer_text = localizer.get_user_localized_text(
-#         user_language_code=user_lang,
-#         text_localization=text_localization,
-#     )
-
-#     await call.message.edit_text(
-#         text=answer_text,
-#         reply_markup=await support_hub_keyboard(language_code=user_lang),
-#         parse_mode=types.ParseMode.HTML,
-#     )
-
-
-# @rate_limit(limit=1)
-# async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
-#     await state.finish()
-
-#     user_lang = call.from_user.language_code
-#     callback_data = call.data
-
-#     # Маппинг callback -> локализованный текст
-#     faq_mapping = {
-#         "faq_q1": localizer.message.faq_q1_message,
-#         "faq_q2": localizer.message.faq_q2_message,
-#         "faq_q3": localizer.message.faq_q3_message,
-#     }
-
-#     text_localization = faq_mapping.get(callback_data)
-
-#     if not text_localization:
-#         await call.answer("⚠️ Нет ответа на этот вопрос.", show_alert=True)
-#         logger.warning(f"FAQ not found for callback: {callback_data}")
-#         return
-
-#     answer_text = localizer.get_user_localized_text(
-#         user_language_code=user_lang,
-#         text_localization=text_localization,
-#     )
-
-#     await call.message.edit_text(
-#         text=answer_text,
-#         reply_markup=await insert_back_to_faq_keyboard(language_code=user_lang),
-#         parse_mode=types.ParseMode.HTML,
-#     )
-
-
 @rate_limit(limit=1)
 async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
 
     user_lang = call.from_user.language_code
-    callback_data = call.data  # "faq_q1", "faq_q2", ...
+    callback_data = call.data
 
-    # Генерируем ключ: "faq_q1_message"
-    message_key = f"{callback_data}_message"
-
-    # Пробуем достать текст локализованного сообщения
-    try:
-        text_localization = getattr(localizer.message, message_key)
-    except AttributeError:
-        await call.answer("Ответ не найден.", show_alert=True)
-        return
+    # Подбираем ответ по callback_data
+    faq_answers = {
+        "faq_q1": localizer.message.faq_q1_message,
+        "faq_q2": localizer.message.faq_q2_message,
+        "faq_q3": localizer.message.faq_q3_message,
+    }
 
     answer_text = localizer.get_user_localized_text(
         user_language_code=user_lang,
-        text_localization=text_localization,
+        text_localization=faq_answers.get(callback_data, localizer.message.default_faq_answer),
     )
 
     await call.message.edit_text(
         text=answer_text,
-        reply_markup=await insert_back_to_faq_keyboard(language_code=user_lang),
+        reply_markup=await support_hub_keyboard_2(language_code=user_lang),
         parse_mode=types.ParseMode.HTML,
     )
+
