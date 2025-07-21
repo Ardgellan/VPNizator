@@ -11,6 +11,7 @@ from .trial import trial_period_function, start_trial_period_function
 from .banners import about_us_function, terms_of_use_function
 from .ask_support import *
 from .balance import show_balance_function
+from .faq import *
 
 from .configs_menu import register_configs_menu_handlers
 from .guide import register_show_help_guide_handlers
@@ -58,6 +59,12 @@ def register_user_handlers(dp: Dispatcher):
         dp.register_callback_query_handler(
             ask_user_for_question_to_support,
             lambda call: call.data == "create_support_ticket",
+            state="*",
+        )
+
+        dp.register_callback_query_handler(
+            frequently_asked_questions,
+            lambda call: call.data == "support_faq",
             state="*",
         )
 

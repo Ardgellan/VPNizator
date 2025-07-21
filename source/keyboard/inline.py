@@ -55,6 +55,51 @@ async def support_hub_keyboard(language_code: str) -> InlineKeyboardMarkup:
     return keyboard
 
 
+
+async def faq_keyboard(language_code: str):
+    keyboard = InlineKeyboardMarkup(row_width=1)
+    buttons = [
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.faq_question_1,
+            ),
+            callback_data="faq_q1",
+        ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.faq_question_2,
+            ),
+            callback_data="faq_q2",
+        ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.faq_question_3,
+            ),
+            callback_data="faq_q3",
+        ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.write_to_support,
+            ),
+            callback_data="support_write",
+        ),
+        # Добавь больше вопросов по необходимости
+    ]
+
+    for button in buttons:
+        keyboard.insert(button)
+
+    keyboard = await insert_button_back_to_main_menu(
+        keyboard=keyboard,
+        language_code=language_code,
+    )
+    return keyboard
+
+
 async def start_menu_kb(language_code: str, user_id: int):
     keyboard = InlineKeyboardMarkup(row_width=1)
     buttons = [

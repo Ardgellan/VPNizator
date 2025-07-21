@@ -86,6 +86,17 @@ class LocalizedButtonText(BaseLocalizedObject):
     def faq_button(self) -> LocalizedText:
         return self._get_entity_text("faq_button")
 
+    @property
+    def faq_q1_button(self) -> LocalizedText:
+        return self._get_entity_text("faq_q1_button")
+
+    @property
+    def faq_q2_button(self) -> LocalizedText:
+        return self._get_entity_text("faq_q2_button")
+
+    @property
+    def faq_q3_button(self) -> LocalizedText:
+        return self._get_entity_text("faq_q3_button")
 
     @property
     def give_bonus_configs(self) -> LocalizedText:

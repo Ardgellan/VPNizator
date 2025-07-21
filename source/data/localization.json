@@ -88,6 +88,10 @@
             "en": "📝Please, enter your question for support. We will study it most carefully!",
             "ru": "📝Пожалуйста, введите свой вопрос для службы поддержки. Мы изучим его самым внимательным образом!"
         },
+        "faq_message": {
+            "en": "📚 Here are answers to frequently asked questions.\n\nYou might find a solution to your issue here.",
+            "ru": "📚 Здесь собраны ответы на часто задаваемые вопросы.\n\nВозможно, здесь вы найдете решение своей проблемы."
+        },
         "support_question_sent_by_user": {
             "en": "✅ Your question has been sent to the support service. The administration will respond to you as soon as possible!",
             "ru": "✅ Ваш вопрос отправлен в службу поддержки. Администрация ответит вам в ближайшее время!"
@@ -449,6 +453,18 @@
         "cleanup_configs": {
             "en": "🗑️ Clean up configs",
             "ru": "🗑️ Почистить конфиги"
+        },
+        "faq_q1_button": {
+            "en": "VPN is not working",
+            "ru": "VPN не работает"
+        },
+        "faq_q2_button": {
+            "en": "VPN is not working after payment",
+            "ru": "VPN не работает после оплаты"
+        },
+        "faq_q3_button": {
+            "en": "Where can i find a link?",
+            "ru": "Где найти ссылку/ключ?"
         },
         "estonia_button": {
             "en": "🇪🇪 Estonia",
