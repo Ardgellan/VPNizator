@@ -80,6 +80,10 @@
             "en": "❌User not found, please try again",
             "ru": "❌Пользователь не найден, пожалуйста, попробуйте еще раз"
         },
+        "support_hub_message": {
+            "en": "❓ Have questions? We're here to help!\n\nYou can check the frequently asked questions or write directly to our support team.",
+            "ru": "❓ Возникли вопросы? Мы готовы помочь!\n\nВы можете сначала ознакомиться с ответами на часто задаваемые вопросы или сразу написать нам в поддержку."
+        },
         "ask_support_question": {
             "en": "📝Please, enter your question for support. We will study it most carefully!",
             "ru": "📝Пожалуйста, введите свой вопрос для службы поддержки. Мы изучим его самым внимательным образом!"
@@ -330,9 +334,17 @@
             "en": "📝Support",
             "ru": "📝Поддержка"
         },
+        "write_to_support": {
+            "en": "📝Write to Support",
+            "ru": "📝Написать в поддержку"
+        },
         "answer_to_user_as_support": {
             "en": "📝Answer to user",
             "ru": "📝Ответить пользователю"
+        },
+        "faq_button": {
+            "en": "🤓Frequently Asked Questions",
+            "ru": "🤓Часто задаваемые вопросы"
         },
         "give_bonus_configs": {
             "en": "📄Give bonus configs",

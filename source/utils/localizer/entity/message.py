@@ -99,6 +99,10 @@ class LocalizedMessageText(BaseLocalizedObject):
         return self._get_entity_text("error_user_not_found")
 
     @property
+    def support_hub_message(self) -> LocalizedText:
+        return self._get_entity_text("support_hub_message")
+
+    @property
     def ask_support_question(self) -> LocalizedText:
         return self._get_entity_text("ask_support_question")
 

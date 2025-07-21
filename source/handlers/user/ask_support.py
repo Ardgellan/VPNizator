@@ -13,6 +13,20 @@ from source.handlers.user.check_is_user_banned import is_user_banned
 
 
 @rate_limit(limit=1)
+async def support_hub(call: types.CallbackQuery, state: FSMContext):
+    await state.finish()
+    await call.message.edit_text(
+        text=localizer.get_user_localized_text(
+            user_language_code=call.from_user.language_code,
+            text_localization=localizer.message.support_hub_message,
+        ),
+        reply_markup=await inline.support_hub_keyboard(
+            language_code=call.from_user.language_code,
+        ),
+    )
+
+
+@rate_limit(limit=1)
 async def ask_user_for_question_to_support(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
     await call.message.edit_text(
@@ -25,6 +39,7 @@ async def ask_user_for_question_to_support(call: types.CallbackQuery, state: FSM
         ),
     )
     await AskSupport.waiting_for_question.set()
+    
 
 @rate_limit(limit=1)
 async def forward_question_to_admins(message: types.Message, state: FSMContext):

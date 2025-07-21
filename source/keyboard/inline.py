@@ -21,9 +21,37 @@ async def insert_button_support(
                 user_language_code=language_code,
                 text_localization=localizer.button.support,
             ),
-            callback_data="create_support_ticket",
+            callback_data="support",
         )
     )
+    return keyboard
+
+
+async def support_hub_keyboard(language_code: str) -> InlineKeyboardMarkup:
+    keyboard = InlineKeyboardMarkup(row_width=1)
+
+    buttons = [
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.faq_button,  # 📚 Частые вопросы
+            ),
+            callback_data="support_faq",
+        ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.write_to_support,  # ✍ Написать в поддержку
+            ),
+            callback_data="create_support_ticket",
+        ),
+    ]
+
+    for button in buttons:
+        keyboard.insert(button)
+
+    keyboard = await insert_button_support(keyboard=keyboard, language_code=language_code)
+
     return keyboard
 
 
