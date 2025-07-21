@@ -41,8 +41,8 @@
             "ru": "📄Актуальный список Ваших VPN соединений!\n\nВы можете вызвать конфигурационные данные VPN соединения нажав на него.\nТакже вы сможете удалить соединение 🗑️, если захотите!\n☝️ Однако, вы не сможете удалить конфиг созданный раньше чем 24 часа назад!\nДневная подписка - 3 рубля за конфиг.\n\n<b>Средства списываются ежедневно в 12.00</b>\n\n<b>Текущий Баланс:</b> {current_balance} рублей\n\n<b>Текущая стоимость подписки:</b> {current_subscription} рублей\n\n"
         },
         "no_configs_found_create_new_one": {
-            "en": "📄No configs found, let's create a new VPN connection 😊\n\n⚠️To create a config, you need to have at least 15 rubles on your balance!\n\n💳Your current balance: {current_balance} rubles",
-            "ru": "📄Конфигурации не найдены, давайте создадим новое VPN соединение 😊\n\n⚠️Для создания конфига вам необходимо иметь на балансе не менее 15 рублей!\n\n💳Ваш текущий баланс: {current_balance} рублей"
+            "en": "📄No configs found, let's create a new VPN connection 😊\n\n⚠️To create a config, you need to have at least 15 rubles on your balance!\n\n❗The subscription cost is 3 rubles per day for each config! Configuration generation is <b>free</b>💰!\n\n💳Your current balance: {current_balance} rubles",
+            "ru": "📄Конфигурации не найдены, давайте создадим новое VPN соединение 😊\n\n⚠️Для создания конфига вам необходимо иметь на балансе не менее 15 рублей!\n\n❗Стоимость подписки составляет 3 рубля в день за каждый конфиг! Генерация конфига <b>бесплатна</b>💰!\n\n💳Ваш текущий баланс: {current_balance} рублей"
         },
         "request_config_name": {
             "en": "📄Enter the name of the new config. It will be displayed on the button in the config menu.\n\n💡Tip: use a short name for the name that will definitely fit on the button. For example: <code>PC</code>, <code>iPhone</code>, <code>Mom</code>, <code>Grandma</code>",
@@ -257,8 +257,8 @@
             "ru": "🤒 При попытке восстановления подписки возникла ошибка! Пожалуйста, попробуйте еще раз! 🙏"
         },
         "choose_country_message": {
-            "en": "🌐 Please select the country in which you would like to create a connection!\n\n<b>💡Tip:</b> The geographically closer the country is to you, the higher and more stable the connection speed.\n\n",
-            "ru": "🌐 Пожалуйста, выберите страну, в которой хотите создать подключение!\n\n<b>💡Совет:</b> Чем географически ближе к Вам расположена страна, тем выше и стабильнее скорость соединения.\n\n"
+            "en": "🌐 Please select the country in which you would like to create a connection!\n\n❗The subscription cost is 3 rubles per day for each config! Configuration generation is <b>free</b>💰!\n\n<b>💡Tip:</b> The geographically closer the country is to you, the higher and more stable the connection speed.\n\n",
+            "ru": "🌐 Пожалуйста, выберите страну, в которой хотите создать подключение!\n\n❗Стоимость подписки составляет 3 рубля в день за каждый конфиг! Генерация конфига <b>бесплатна</b>💰!\n\n<b>💡Совет:</b> Чем географически ближе к Вам расположена страна, тем выше и стабильнее скорость соединения.\n\n"
         },
         "can_not_delete_config_yet": {
             "en": "❌ Unfortunately, it is not yet possible to delete the config, since it was created less than a day ago!",
