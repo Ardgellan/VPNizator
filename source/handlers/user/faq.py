@@ -25,7 +25,7 @@ async def frequently_asked_questions(call: types.CallbackQuery, state: FSMContex
 @rate_limit(limit=1)
 async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
-
+    logger.debug("Salam_1")
     user_lang = call.from_user.language_code
     callback_data = call.data
 
@@ -36,7 +36,7 @@ async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
         "faq_q3": localizer.message.faq_q3_message,
     }
     answer = faq_answers.get(call.data)
-
+    logger.debug("Salam_2")
     answer_text = localizer.get_user_localized_text(
         user_language_code=user_lang,
         text_localization=answer,
@@ -47,4 +47,5 @@ async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
         reply_markup=await support_hub_keyboard(language_code=user_lang),
         parse_mode=types.ParseMode.HTML,
     )
+    logger.debug("Salam_3")
 
