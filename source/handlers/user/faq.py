@@ -41,9 +41,9 @@ async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
         text_localization=faq_answers.get(callback_data, localizer.message.default_faq_answer),
     )
 
-    await call.message.edit_text(
+    await call.message.anwer(
         text=answer_text,
-        reply_markup=await support_hub_keyboard_2(language_code=user_lang),
+        reply_markup=await support_hub_keyboard(language_code=user_lang),
         parse_mode=types.ParseMode.HTML,
     )
 
