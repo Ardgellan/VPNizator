@@ -62,21 +62,21 @@ async def faq_keyboard(language_code: str):
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.faq_question_1,
+                text_localization=localizer.button.faq_q1_button,
             ),
             callback_data="faq_q1",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.faq_question_2,
+                text_localization=localizer.button.faq_q2_button,
             ),
             callback_data="faq_q2",
         ),
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.faq_question_3,
+                text_localization=localizer.button.faq_q3_button,
             ),
             callback_data="faq_q3",
         ),
