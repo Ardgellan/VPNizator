@@ -297,3 +297,16 @@ class LocalizedMessageText(BaseLocalizedObject):
     @property
     def can_not_delete_config_yet(self) -> LocalizedText:
         return self._get_entity_text("can_not_delete_config_yet")
+
+    @property
+    def faq_q1_message(self) -> LocalizedText:
+        return self._get_entity_text("faq_q1_message")
+
+    @property
+    def faq_q2_message(self) -> LocalizedText:
+        return self._get_entity_text("faq_q1_message")
+
+    @property
+    def faq_q3_message(self) -> LocalizedText:
+        return self._get_entity_text("faq_q1_message")
+

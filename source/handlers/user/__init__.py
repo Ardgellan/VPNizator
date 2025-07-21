@@ -69,6 +69,12 @@ def register_user_handlers(dp: Dispatcher):
         )
 
         dp.register_callback_query_handler(
+            show_faq_answer,
+            lambda call: call.data.startswith("faq_q"),
+            state="*"
+        )
+
+        dp.register_callback_query_handler(
             trial_period_function,
             lambda call: call.data == "trial_period",
             state="*",

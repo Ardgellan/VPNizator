@@ -271,7 +271,19 @@
         "can_not_delete_config_yet": {
             "en": "❌ Unfortunately, it is not yet possible to delete the config, since it was created less than a day ago!",
             "ru": "❌ К сожалению, удалить конфиг пока невозможно, так как он был создан менее чем сутки назад!"
-        }                          
+        },
+        "faq_q1_message": {
+            "en": "faq_q1_message!",
+            "ru": "faq_q1_message!"
+        },
+        "faq_q2_message": {
+            "en": "faq_q2_message!",
+            "ru": "faq_q2_message!"
+        },
+        "faq_q3_message": {
+            "en": "faq_q3_message!",
+            "ru": "faq_q3_message!"
+        }                            
     },
     "button": {
         "pc": {
