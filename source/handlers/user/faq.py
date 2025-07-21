@@ -76,25 +76,54 @@ async def frequently_asked_questions(call: types.CallbackQuery, state: FSMContex
 #     )
 
 
+# @rate_limit(limit=1)
+# async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
+#     await state.finish()
+
+#     user_lang = call.from_user.language_code
+#     callback_data = call.data
+
+#     # Маппинг callback -> локализованный текст
+#     faq_mapping = {
+#         "faq_q1": localizer.message.faq_q1_message,
+#         "faq_q2": localizer.message.faq_q2_message,
+#         "faq_q3": localizer.message.faq_q3_message,
+#     }
+
+#     text_localization = faq_mapping.get(callback_data)
+
+#     if not text_localization:
+#         await call.answer("⚠️ Нет ответа на этот вопрос.", show_alert=True)
+#         logger.warning(f"FAQ not found for callback: {callback_data}")
+#         return
+
+#     answer_text = localizer.get_user_localized_text(
+#         user_language_code=user_lang,
+#         text_localization=text_localization,
+#     )
+
+#     await call.message.edit_text(
+#         text=answer_text,
+#         reply_markup=await insert_back_to_faq_keyboard(language_code=user_lang),
+#         parse_mode=types.ParseMode.HTML,
+#     )
+
+
 @rate_limit(limit=1)
 async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
 
     user_lang = call.from_user.language_code
-    callback_data = call.data
+    callback_data = call.data  # "faq_q1", "faq_q2", ...
 
-    # Маппинг callback -> локализованный текст
-    faq_mapping = {
-        "faq_q1": localizer.message.faq_q1_message,
-        "faq_q2": localizer.message.faq_q2_message,
-        "faq_q3": localizer.message.faq_q3_message,
-    }
+    # Генерируем ключ: "faq_q1_message"
+    message_key = f"{callback_data}_message"
 
-    text_localization = faq_mapping.get(callback_data)
-
-    if not text_localization:
-        await call.answer("⚠️ Нет ответа на этот вопрос.", show_alert=True)
-        logger.warning(f"FAQ not found for callback: {callback_data}")
+    # Пробуем достать текст локализованного сообщения
+    try:
+        text_localization = getattr(localizer.message, message_key)
+    except AttributeError:
+        await call.answer("Ответ не найден.", show_alert=True)
         return
 
     answer_text = localizer.get_user_localized_text(
