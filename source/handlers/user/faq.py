@@ -79,7 +79,7 @@ async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
         )
         logger.debug(f"Salam_4 - Localized answer text: {answer_text}")
 
-        keyboard = await support_hub_keyboard(language_code=user_lang)
+        keyboard = await inline.support_hub_keyboard(language_code=user_lang)
         logger.debug(f"Salam_5 - Keyboard generated: {keyboard}")
 
         await call.message.edit_text(
