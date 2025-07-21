@@ -41,11 +41,12 @@ async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
         user_language_code=user_lang,
         text_localization=answer,
     )
+    logger.debug("Salam_3")
 
     await call.message.edit_text(
         text=answer_text,
         reply_markup=await support_hub_keyboard(language_code=user_lang),
         parse_mode=types.ParseMode.HTML,
     )
-    logger.debug("Salam_3")
+    logger.debug("Salam_4")
 
