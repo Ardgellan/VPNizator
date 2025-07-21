@@ -48,6 +48,34 @@ async def frequently_asked_questions(call: types.CallbackQuery, state: FSMContex
 #     )
 
 
+# @rate_limit(limit=1)
+# async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
+#     await state.finish()
+
+#     user_lang = call.from_user.language_code
+#     callback_data = call.data
+
+#     # Маппинг callback -> локализованный текст
+#     faq_mapping = {
+#         "faq_q1": localizer.message.faq_q1_message,
+#         "faq_q2": localizer.message.faq_q2_message,
+#         "faq_q3": localizer.message.faq_q3_message,
+#     }
+
+#     text_localization = faq_mapping.get(callback_data)
+
+#     answer_text = localizer.get_user_localized_text(
+#         user_language_code=user_lang,
+#         text_localization=text_localization,
+#     )
+
+#     await call.message.edit_text(
+#         text=answer_text,
+#         reply_markup=await support_hub_keyboard(language_code=user_lang),
+#         parse_mode=types.ParseMode.HTML,
+#     )
+
+
 @rate_limit(limit=1)
 async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
@@ -64,6 +92,11 @@ async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
 
     text_localization = faq_mapping.get(callback_data)
 
+    if not text_localization:
+        await call.answer("⚠️ Нет ответа на этот вопрос.", show_alert=True)
+        logger.warning(f"FAQ not found for callback: {callback_data}")
+        return
+
     answer_text = localizer.get_user_localized_text(
         user_language_code=user_lang,
         text_localization=text_localization,
@@ -71,6 +104,6 @@ async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
 
     await call.message.edit_text(
         text=answer_text,
-        reply_markup=await support_hub_keyboard(language_code=user_lang),
+        reply_markup=await insert_back_to_faq_keyboard(language_code=user_lang),
         parse_mode=types.ParseMode.HTML,
     )
