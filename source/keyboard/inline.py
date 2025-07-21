@@ -85,7 +85,7 @@ async def faq_keyboard(language_code: str):
                 user_language_code=language_code,
                 text_localization=localizer.button.write_to_support,
             ),
-            callback_data="support_write",
+            callback_data="create_support_ticket",
         ),
         # Добавь больше вопросов по необходимости
     ]
