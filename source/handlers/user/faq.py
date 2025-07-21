@@ -35,13 +35,14 @@ async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
         "faq_q2": localizer.message.faq_q2_message,
         "faq_q3": localizer.message.faq_q3_message,
     }
+    answer = faq_answers.get(call.data)
 
     answer_text = localizer.get_user_localized_text(
         user_language_code=user_lang,
-        text_localization=faq_answers.get(callback_data, localizer.message.default_faq_answer),
+        text_localization=answer,
     )
 
-    await call.message.anwer(
+    await call.message.edit_text(
         text=answer_text,
         reply_markup=await support_hub_keyboard(language_code=user_lang),
         parse_mode=types.ParseMode.HTML,
