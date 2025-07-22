@@ -34,6 +34,9 @@ async def show_faq_answer(call: types.CallbackQuery, state: FSMContext):
         "faq_q1": localizer.message.faq_q1_message,
         "faq_q2": localizer.message.faq_q2_message,
         "faq_q3": localizer.message.faq_q3_message,
+        "faq_q4": localizer.message.faq_q1_message,
+        "faq_q5": localizer.message.faq_q2_message,
+        "faq_q6": localizer.message.faq_q3_message,
     }
     answer = faq_answers.get(call.data)
 

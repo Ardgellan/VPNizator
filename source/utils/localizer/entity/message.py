@@ -310,3 +310,15 @@ class LocalizedMessageText(BaseLocalizedObject):
     def faq_q3_message(self) -> LocalizedText:
         return self._get_entity_text("faq_q3_message")
 
+    @property
+    def faq_q4_message(self) -> LocalizedText:
+        return self._get_entity_text("faq_q4_message")
+
+    @property
+    def faq_q5_message(self) -> LocalizedText:
+        return self._get_entity_text("faq_q5_message")
+
+    @property
+    def faq_q6_message(self) -> LocalizedText:
+        return self._get_entity_text("faq_q6_message")
+
