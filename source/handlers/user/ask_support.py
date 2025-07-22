@@ -37,7 +37,6 @@ async def ask_user_for_question_to_support(call: types.CallbackQuery, state: FSM
         reply_markup=await inline.insert_button_back_to_main_menu(
             language_code=call.from_user.language_code,
         ),
-        parse_mode=ParseMode.HTML,
     )
     await AskSupport.waiting_for_question.set()
     

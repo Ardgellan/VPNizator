@@ -86,7 +86,7 @@
         },
        "ask_support_question": {
             "en": "📝 Please enter your question for the support team. We will study it with the utmost care!\n\n💡Tip: If you describe the issue you're experiencing in detail and include your device model, software version, and client application, we will be able to identify and resolve the problem much faster!",
-            "ru": "📝Пожалуйста, введите свой вопрос для службы поддержки. Мы изучим его самым внимательным образом!\n\n<b>💡Совет:</b>Если в своем сообщении вы подробно опишите беспокоящую вас проблему, а также укажете Ваше устройство, версию ПО и клиентское приложение, мы сможем установить и устранить вашу проблему гораздо быстрее!"
+            "ru": "📝Пожалуйста, введите свой вопрос для службы поддержки. Мы изучим его самым внимательным образом!\n\n💡Совет: Если в своем сообщении вы подробно опишите беспокоящую вас проблему, а также укажете Ваше устройство, версию ПО и клиентское приложение, мы сможем установить и устранить вашу проблему гораздо быстрее!"
         },
         "faq_message": {
             "en": "📚 Here are answers to frequently asked questions.\n\nYou might find a solution to your issue here.",
