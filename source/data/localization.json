@@ -37,8 +37,8 @@
             "ru": "📄Актуальный список VPN соединений <b>юзера: {user_id}</b>\n\n"
         },
         "user_configs_list": {
-            "en": "📄Current list of your VPN connections!\n\nYou can call up the VPN connection configuration data by clicking on it.\nYou can also delete the connection 🗑️ if you want to!\n☝️ However, you cant delete the config that was created less than 24 hours ago!\nDaily subscription - 3 rubles per config. \n\n<b>Funds are debited daily at 12.00</b>\n\n<b>Current Balance:</b> {current_balance}\n\n<b>Current subscription price:</b> {current_subscription} rubles\n\n",
-            "ru": "📄Актуальный список Ваших VPN соединений!\n\nВы можете вызвать конфигурационные данные VPN соединения нажав на него.\nТакже вы сможете удалить соединение 🗑️, если захотите!\n☝️ Однако, вы не сможете удалить конфиг созданный раньше чем 24 часа назад!\nДневная подписка - 3 рубля за конфиг.\n\n<b>Средства списываются ежедневно в 12.00</b>\n\n<b>Текущий Баланс:</b> {current_balance} рублей\n\n<b>Текущая стоимость подписки:</b> {current_subscription} рублей\n\n"
+            "en": "📄Current list of your VPN connections!\n\nYou can call up the VPN connection configuration data by clicking on it.\nYou can also delete the config 🗑️ if you want to!\n☝️ However, you can not delete your only config if it was created less than 24 hours ago!\nDaily subscription - 3 rubles per config. \n\n<b>Funds are debited daily at 12.00</b>\n\n<b>Current Balance:</b> {current_balance}\n\n<b>Current subscription price:</b> {current_subscription} rubles\n\n",
+            "ru": "📄Актуальный список Ваших VPN соединений!\n\nВы можете вызвать конфигурационные данные VPN соединения нажав на него.\nТакже вы сможете удалить конфиг 🗑️, если захотите!\n☝️ Однако, вы не сможете удалить ваш единственный конфиг если он был создан менее чем 24 часа назад!\nДневная подписка - 3 рубля за конфиг.\n\n<b>Средства списываются ежедневно в 12.00</b>\n\n<b>Текущий Баланс:</b> {current_balance} рублей\n\n<b>Текущая стоимость подписки:</b> {current_subscription} рублей\n\n"
         },
         "no_configs_found_create_new_one": {
             "en": "📄No configs found, let's create a new VPN connection 😊\n\n⚠️To create a config, you need to have at least 15 rubles on your balance!\n\n❗The subscription cost is 3 rubles per day for each config! Configuration generation is <b>free</b>💰!\n\n💳Your current balance: {current_balance} rubles",
@@ -269,8 +269,8 @@
             "ru": "🌐 Пожалуйста, выберите страну, в которой хотите создать подключение!\n\n❗Стоимость подписки составляет 3 рубля в день за каждый конфиг! Генерация конфига <b>бесплатна</b>💰!\n\n<b>💡Совет:</b> Чем географически ближе к Вам расположена страна, тем выше и стабильнее скорость соединения.\n\n"
         },
         "can_not_delete_config_yet": {
-            "en": "❌ Unfortunately, it is not yet possible to delete the config, since it was created less than a day ago!",
-            "ru": "❌ К сожалению, удалить конфиг пока невозможно, так как он был создан менее чем сутки назад!"
+            "en": "❌ Unfortunately, you cannot delete your only config if it was created less than 24 hours ago!",
+            "ru": "❌ К сожалению, вы не можете удалить единственный конфиг, если он был создан менее 24 часов назад!"
         },
         "faq_q1_message": {
             "en": "VPN is not working 📡❌😵\n\nThere may be several reasons for this, but rarely is the VPN server itself the issue. Here are some proven steps that will help resolve the problem (But no guarantees 😭):\n\n1. Make sure you've imported the config into the app. The app itself is just a 'flight attendant', whose job is to check your 'ticket' before boarding. The config is your ticket. Look up section 3 in the FAQ to find out where to get it 🤓\n\n2. Make sure that it is our VPN that is enabled on your device 🥇\n\n3. After importing the config and pressing the connect button, wait 2–3 seconds for the connection to establish 🟢\n\n4. Try turning airplane mode on and off ✈️ (if you're on a phone). Then restart the VPN and the app you're trying to use (TikTok, Instagram, etc.)\n\nIf none of the above helps and the VPN still doesn't work 🤖❌ most likely your device is experiencing DNS poisoning. What to do in this case is explained in point 4 of the FAQ 🤓",

@@ -634,3 +634,18 @@ class Selector(DatabaseConnector):
         result = await self._execute_query(query)
         # logger.debug(f"Users for domain '{domain}': {result}")
         return [record[0] for record in result] if result else []
+
+
+    async def get_user_configs_count(self, user_id: int) -> int:
+        """
+        Возвращает количество VPN-конфигов пользователя по user_id.
+        :param user_id: Telegram user ID
+        :return: Количество конфигураций
+        """
+        query = f"""--sql
+            SELECT COUNT(*)
+            FROM vpn_configs
+            WHERE user_id = {user_id};
+        """
+        result = await self._execute_query(query)
+        return result[0][0] if result else 0

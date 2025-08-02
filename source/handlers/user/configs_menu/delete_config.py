@@ -10,34 +10,72 @@ from source.utils import localizer
 from loader import db_manager
 
 
+# @rate_limit(limit=1)
+# async def confirm_delete_config(call: types.CallbackQuery, state: FSMContext):
+
+#     await call.message.delete()
+#     config_uuid = call.data.split("_")[-1]
+
+#     # Получение даты создания конфигурации
+#     config_creation_date = await db_manager.get_config_creation_date(uuid=config_uuid)
+
+#     if datetime.now() - config_creation_date < timedelta(hours=24):
+#         await call.message.answer(
+#             text=localizer.get_user_localized_text(
+#                 user_language_code=call.from_user.language_code,
+#                 text_localization=localizer.message.can_not_delete_config_yet
+#             ),
+#             reply_markup=await inline.insert_button_back_to_main_menu(language_code=call.from_user.language_code)
+#         )
+#     else:
+#         await call.message.answer(
+#             text=localizer.get_user_localized_text(
+#                 user_language_code=call.from_user.language_code,
+#                 text_localization=localizer.message.confirm_delete_config,
+#             ),
+#             parse_mode=types.ParseMode.HTML,
+#             reply_markup=await inline.confirm_delete_config_keyboard(
+#                 config_uuid=config_uuid, language_code=call.from_user.language_code
+#             ),
+#         )
+
+
 @rate_limit(limit=1)
 async def confirm_delete_config(call: types.CallbackQuery, state: FSMContext):
-
     await call.message.delete()
     config_uuid = call.data.split("_")[-1]
 
-    # Получение даты создания конфигурации
+    # Получаем дату создания конфига
     config_creation_date = await db_manager.get_config_creation_date(uuid=config_uuid)
 
-    if datetime.now() - config_creation_date < timedelta(hours=24):
+    # Получаем количество конфигов пользователя
+    user_configs_count = await db_manager.get_user_configs_count(user_id=call.from_user.id)
+
+    # Если конфигу < 24ч и это единственный конфиг — запрещаем удаление
+    if datetime.now() - config_creation_date < timedelta(hours=24) and user_configs_count == 1:
         await call.message.answer(
             text=localizer.get_user_localized_text(
                 user_language_code=call.from_user.language_code,
                 text_localization=localizer.message.can_not_delete_config_yet
             ),
-            reply_markup=await inline.insert_button_back_to_main_menu(language_code=call.from_user.language_code)
+            reply_markup=await inline.insert_button_back_to_main_menu(
+                language_code=call.from_user.language_code
+            )
         )
-    else:
-        await call.message.answer(
-            text=localizer.get_user_localized_text(
-                user_language_code=call.from_user.language_code,
-                text_localization=localizer.message.confirm_delete_config,
-            ),
-            parse_mode=types.ParseMode.HTML,
-            reply_markup=await inline.confirm_delete_config_keyboard(
-                config_uuid=config_uuid, language_code=call.from_user.language_code
-            ),
-        )
+        return
+
+    # Показываем подтверждение на удаление
+    await call.message.answer(
+        text=localizer.get_user_localized_text(
+            user_language_code=call.from_user.language_code,
+            text_localization=localizer.message.confirm_delete_config,
+        ),
+        parse_mode=types.ParseMode.HTML,
+        reply_markup=await inline.confirm_delete_config_keyboard(
+            config_uuid=config_uuid,
+            language_code=call.from_user.language_code
+        ),
+    )
 
 
 @rate_limit(limit=1)
