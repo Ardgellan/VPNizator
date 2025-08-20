@@ -19,7 +19,7 @@ async def cleanup_all_servers(call: types.CallbackQuery):
             tasks = []
 
             for domain, uuids in domain_to_uuids.items():
-                url = f"https://proxynode.vpnizator.online/cleanup_configs/{domain}/"
+                url = f"https://newproxynode.vpnizator.online/cleanup_configs/{domain}/"
                 logger.info(f"Отправляем запрос на очистку {domain}. Всего UUID: {len(uuids)}")
 
                 task = session.delete(url, json={"valid_uuids": uuids})

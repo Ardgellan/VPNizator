@@ -88,7 +88,7 @@ async def delete_config(call: types.CallbackQuery, state: FSMContext):
 
         
     # Формируем URL для удаления конфигурации с учётом target_server
-    url = f"https://proxynode.vpnizator.online/delete_config/{target_server}/"
+    url = f"https://newproxynode.vpnizator.online/delete_config/{target_server}/"
 
         
     # Используем aiohttp для отправки POST-запроса на эндпоинт

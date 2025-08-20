@@ -27,7 +27,7 @@ async def show_specified_config(call: types.CallbackQuery, state: FSMContext):
     # Отправляем запрос к API для получения сгенерированной ссылки
     async with aiohttp.ClientSession() as session:
         async with session.get(
-            f"https://proxynode.vpnizator.online/show_specified_config/{target_server}/",
+            f"https://newproxynode.vpnizator.online/show_specified_config/{target_server}/",
             params={"config_uuid": config_uuid, "config_name": config_name}
         ) as response:
 
