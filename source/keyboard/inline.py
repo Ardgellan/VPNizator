@@ -755,6 +755,13 @@ async def country_selection_keyboard(language_code: str):
             ),
             callback_data="country_germany",
         ),
+        InlineKeyboardButton(
+            text=localizer.get_user_localized_text(
+                user_language_code=language_code,
+                text_localization=localizer.button.netherlands_button,
+            ),
+            callback_data="country_netherlands",
+        ),
         # InlineKeyboardButton(
         #     text=localizer.get_user_localized_text(
         #         user_language_code=language_code,

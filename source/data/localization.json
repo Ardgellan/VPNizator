@@ -529,6 +529,10 @@
         "russia_button": {
             "en": "🇷🇺 Russia",
             "ru": "🇷🇺 Россия"
+        },
+        "netherlands_button": {
+            "en": "🇳🇱 Netherlands",
+            "ru": "🇳🇱 Нидерланды"
         }
     }
 }
