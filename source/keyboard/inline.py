@@ -465,13 +465,13 @@ async def download_app_for_connect_to_vpn_keyboard(
             url = "https://apps.apple.com/ru/app/v2raytun/id6476628951"
 
         case "android":
-            url = "https://play.google.com/store/apps/details?id=app.hiddify.com&hl=en"
+            url = "https://play.google.com/store/apps/details?id=com.v2raytun.android&hl=ru"
 
         case "macos":
             url = "https://apps.apple.com/us/app/v2box-v2ray-client/id6446814690"
 
         case "windows":
-            url = "https://apps.microsoft.com/detail/9pdfnl3qv2s5?hl=en-EN&gl=EN"
+            url = "https://storage.v2raytun.com/v2RayTun_Setup.exe"
 
         case "linux":
             url = "https://github.com/MatsuriDayo/nekoray/releases/download/3.26/nekoray-3.26-2023-12-09-linux64.zip"
@@ -755,13 +755,13 @@ async def country_selection_keyboard(language_code: str):
             ),
             callback_data="country_germany",
         ),
-        InlineKeyboardButton(
-            text=localizer.get_user_localized_text(
-                user_language_code=language_code,
-                text_localization=localizer.button.netherlands_button,
-            ),
-            callback_data="country_netherlands",
-        ),
+        # InlineKeyboardButton(
+        #     text=localizer.get_user_localized_text(
+        #         user_language_code=language_code,
+        #         text_localization=localizer.button.netherlands_button,
+        #     ),
+        #     callback_data="country_netherlands",
+        # ),
         # InlineKeyboardButton(
         #     text=localizer.get_user_localized_text(
         #         user_language_code=language_code,
