@@ -571,6 +571,15 @@ class Selector(DatabaseConnector):
         result = await self._execute_query(query)
         return result[0][0] if result else None
 
+    async def get_netherlands_configs_count(self):
+        query = f"""
+            SELECT count(*)
+            FROM vpn_configs
+            WHERE country_name = 'Netherlands';
+        """
+        result = await self._execute_query(query)
+        return result[0][0] if result else None
+
     async def get_count_of_users_with_active_configs(self) -> int:
         """Получаем количество пользователей, у которых есть хотя бы один конфиг"""
         query = """--sql

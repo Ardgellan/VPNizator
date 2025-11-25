@@ -10,8 +10,9 @@ from source.utils import localizer
 async def show_global_stats(call: types.CallbackQuery, state: FSMContext):
     global_stats = await db_manager.get_global_stats()
     
-    germany_configs = await db_manager.get_germany_configs_count()
     finland_configs = await db_manager.get_finland_configs_count()
+    germany_configs = await db_manager.get_germany_configs_count()
+    netherlands_configs = await db_manager.get_netherlands_configs_count()
     america_configs = await db_manager.get_america_configs_count()
     active_users = await db_manager.get_count_of_users_with_active_configs()
 
@@ -26,6 +27,7 @@ async def show_global_stats(call: types.CallbackQuery, state: FSMContext):
             active_users=active_users,
             germany_configs=germany_configs,
             finland_configs=finland_configs,
+            netherlands_configs=netherlands_configs,
             america_configs=america_configs
         ),
         parse_mode=types.ParseMode.HTML,

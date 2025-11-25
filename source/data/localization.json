@@ -117,8 +117,8 @@
             "ru": "🤕Вам запрещено пользоваться ботом. Если вы считаете, что это ошибка, пожалуйста, свяжитесь с администрацией."
         },
         "global_stats": {
-            "en": "📊<b>Global statistics</b>\n\n👤Users registered: {users_registered}\n🤕Users banned: {users_banned}\n\n📄Active configs: {active_configs_count}\n🟢Active users: {active_users}\n\nGermany conigs 🇩🇪: {germany_configs}\n\nFinland configs 🇫🇮: {finland_configs}\n\nAmerica configs 🇺🇸: {america_configs}",
-            "ru": "📊<b>Глобальная статистика</b>\n\n👤Пользователей зарегистрировано: {users_registered}\n🤕Пользователей заблокировано: {users_banned}\n\n📄Активных конфигов: {active_configs_count}\n🟢Активные пользователи: {active_users}\n\nГерманские конфиги 🇩🇪: {germany_configs}\n\nФинские конфиги 🇫🇮: {finland_configs}\n\nАмериканские конфиги 🇺🇸: {america_configs}"
+            "en": "📊<b>Global statistics</b>\n\n👤Users registered: {users_registered}\n🤕Users banned: {users_banned}\n\n📄Active configs: {active_configs_count}\n🟢Active users: {active_users}\n\nGermany conigs 🇩🇪: {germany_configs}\n\nFinland configs 🇫🇮: {finland_configs}\n\nNetherlands configs 🇳🇱: {netherlands_configs}\n\nAmerica configs 🇺🇸: {america_configs}",
+            "ru": "📊<b>Глобальная статистика</b>\n\n👤Пользователей зарегистрировано: {users_registered}\n🤕Пользователей заблокировано: {users_banned}\n\n📄Активных конфигов: {active_configs_count}\n🟢Активные пользователи: {active_users}\n\nГерманские конфиги 🇩🇪: {germany_configs}\n\nФинские конфиги 🇫🇮: {finland_configs}\n\nНидерладские конфиги 🇳🇱: {netherlands_configs}\n\nАмериканские конфиги 🇺🇸: {america_configs}"
         },
         "ask_admin_for_subscription_duration": {
             "en": "⌛️Enter the number of days for which you want to give the user a subscription\n\n❔P.S: if you want to take away the user's subscription, enter a negative number\n❔P.P.S: if the user already has a subscription, it will be extended for the specified number of days, otherwise a new subscription will be issued for the specified number of days",
