@@ -471,7 +471,7 @@ async def download_app_for_connect_to_vpn_keyboard(
             url = "https://apps.apple.com/us/app/v2box-v2ray-client/id6446814690"
 
         case "windows":
-            url = "https://storage.v2raytun.com/v2RayTun_Setup.exe"
+            url = "https://github.com/Happ-proxy/happ-desktop/releases/latest/download/setup-Happ.x64.exe"
 
         case "linux":
             url = "https://github.com/MatsuriDayo/nekoray/releases/download/3.26/nekoray-3.26-2023-12-09-linux64.zip"
