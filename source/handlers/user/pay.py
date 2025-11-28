@@ -1,40 +1,39 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.utils import exceptions
-import json
 import asyncio
-import traceback # Импортируем для полной детализации ошибок
+import uuid
+import json
 
 from loguru import logger
+from yookassa import Configuration, Payment
 
 from loader import dp, db_manager
 from source.keyboard import inline
 from source.utils import localizer
 from source.data import config
-
 from source.middlewares import rate_limit
 from .check_is_user_banned import is_user_banned
-
-
-from yookassa import Configuration, Payment
-import uuid
 
 # Настройка конфигурации для ЮKassa
 Configuration.account_id = config.yookassa_shop_id
 Configuration.secret_key = config.yookassa_api_token
+# ВАЖНО: Ставим таймаут 15 секунд, чтобы бот не висел вечно при проблемах с сетью
+Configuration.timeout = 15 
 
 
 @is_user_banned
 @rate_limit(limit=1)
 async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FSMContext):
-    # logger.info(f"Пользователь {call.from_user.id} открыл меню пополнения баланса")
     await state.finish()
     
-    # Безопасный answer, чтобы не мешал диагностике
+    # Безопасный ответ на коллбек
     try:
         await call.answer()
-    except:
+    except exceptions.InvalidQueryID:
         pass
+    except Exception as e:
+        logger.error(f"Error answering callback: {e}")
 
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
@@ -49,9 +48,14 @@ async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FS
 
 @rate_limit(limit=1)
 async def handle_payment(call: types.CallbackQuery):
-    logger.info(f"⚡️ [DIAGNOSTIC] 1. Хендлер запущен. Юзер: {call.from_user.id}, Кнопка: {call.data}")
-
-    # Получаем сумму из callback_data
+    # Безопасный ответ в самом начале
+    try:
+        await call.answer()
+    except exceptions.InvalidQueryID:
+        pass 
+    except Exception as e:
+        logger.error(f"Error answering payment callback: {e}")
+    
     amount_mapping = {
         "pay_50_rubles": 50,
         "pay_100_rubles": 100,
@@ -61,21 +65,16 @@ async def handle_payment(call: types.CallbackQuery):
         "pay_1000_rubles": 1000,
         "pay_3000_rubles": 3000,
     }
-    amount = amount_mapping.get(call.data)  # Получаем сумму по нажатой кнопке
+    amount = amount_mapping.get(call.data)
 
     if amount is not None:
-        logger.info(f"⚡️ [DIAGNOSTIC] 2. Сумма определена: {amount}. Вызываем create_payment...")
-        
         try:
-            # Создаем платеж с соответствующей суммой
-            # Внимание: тут нет await, если функция синхронная, но ты ее пометил как async def
-            # поэтому await нужен.
-            payment_url, payment_id = await create_payment(amount, call.from_user.id)
+            logger.info(f"User {call.from_user.id} initiating payment for {amount} RUB")
             
-            logger.info(f"⚡️ [DIAGNOSTIC] 5. Платеж создан успешно! ID: {payment_id}")
+            # Создаем платеж (асинхронно)
+            payment_url, payment_id = await create_payment(amount, call.from_user.id)
 
             if payment_url:
-                logger.info(f"⚡️ [DIAGNOSTIC] 6. Отправляем ссылку пользователю...")
                 await call.message.answer(
                     text=localizer.get_user_localized_text(
                         user_language_code=call.from_user.language_code,
@@ -87,136 +86,131 @@ async def handle_payment(call: types.CallbackQuery):
                     ),
                 )
 
-                # Запуск проверки статуса платежа
-                logger.info(f"⚡️ [DIAGNOSTIC] 7. Запускаем проверку статуса (цикл ожидания)...")
-                payment_success = await check_payment_status(payment_id, call.from_user.id, amount)
-                
-                if payment_success:
-                    logger.info(f"⚡️ [DIAGNOSTIC] 8. Оплата прошла успешно!")
-                    current_balance = await db_manager.get_user_balance(call.from_user.id)
-                    await call.message.answer(
-                        text=localizer.get_user_localized_text(
-                            user_language_code=call.from_user.language_code,
-                            text_localization=localizer.message.successfull_payment_message,
-                        ),
-                        parse_mode=types.ParseMode.HTML,
-                        reply_markup=await inline.successfull_payment_keyboard(
-                            language_code=call.from_user.language_code
-                        ),
-                    )
-            else:
-                logger.error(f"⚡️ [DIAGNOSTIC] ERROR: URL платежа пустой!")
-                await call.message.answer(
-                    text=localizer.get_user_localized_text(
-                        user_language_code=call.from_user.language_code,
-                        text_localization=localizer.message.payment_assembly_error_message,
-                    ),
-                    parse_mode=types.ParseMode.HTML,
-                    reply_markup=await inline.insert_button_back_to_main_menu(
-                        language_code=call.from_user.language_code
-                    ),
+                # Запускаем проверку статуса
+                await check_payment_status(
+                    payment_id, 
+                    call.from_user.id, 
+                    amount, 
+                    call.from_user.language_code
                 )
-        except Exception as e:
-            logger.error(f"⚡️ [DIAGNOSTIC] CRITICAL ERROR в handle_payment:\n{traceback.format_exc()}")
-            await call.message.answer(f"Произошла ошибка: {str(e)}")
-            
-    else:
-        logger.warning(f"⚡️ [DIAGNOSTIC] Сумма НЕ определена. call.data={call.data}")
-        await call.message.answer("Неизвестная сумма. Пожалуйста, попробуйте снова.")
+            else:
+                logger.error("Payment URL was None")
+                await call.message.answer("Ошибка получения ссылки на оплату.")
 
-    try:
-        await call.answer()  # Подтверждаем обработку коллбека
-    except Exception:
-        pass
+        except Exception as e:
+            # Если словим таймаут сети или ошибку ключей
+            logger.error(f"FATAL ERROR creating payment for user {call.from_user.id}: {e}")
+            await call.message.answer(
+                text="Произошла ошибка соединения с платежной системой. Попробуйте позже.",
+                reply_markup=await inline.insert_button_back_to_main_menu(
+                    language_code=call.from_user.language_code
+                ),
+            )
+    else:
+        await call.message.answer("Неизвестная сумма. Пожалуйста, попробуйте снова.")
 
 
 async def create_payment(amount, chat_id):
-    logger.info(f"⚡️ [DIAGNOSTIC] 3. Внутри create_payment. Начинаем синхронный запрос к ЮКассе...")
-    id_key = str(uuid.uuid4())
+    loop = asyncio.get_running_loop()
     
-    try:
-        # Этот вызов блокирующий. Если тут зависнет — значит сеть или ЮКасса.
-        payment = Payment.create(
-            {
-                "amount": {"value": amount, "currency": "RUB"},
-                "confirmation": {"type": "redirect", "return_url": "https://t.me/VPNizatorBot"},
-                "capture": True,
-                "metadata": {"chat_id": chat_id},
-                "description": "Пополнение баланса VPNizator",
-                "receipt": {
-                    "customer": {"email": "user@example.com"},  # Или номер телефона, если нет email
-                    "items": [
-                        {
-                            "description": "Оплата Подписки",
-                            "quantity": 1,
-                            "amount": {"value": amount, "currency": "RUB"},
-                            "vat_code": 1,
-                        }
-                    ],
+    def _create_sync():
+        id_key = str(uuid.uuid4())
+        try:
+            return Payment.create(
+                {
+                    "amount": {"value": str(amount), "currency": "RUB"},
+                    "confirmation": {"type": "redirect", "return_url": "https://t.me/VPNizatorBot"},
+                    "capture": True,
+                    "metadata": {"chat_id": chat_id},
+                    "description": "Пополнение баланса VPNizator",
+                    "receipt": {
+                        "customer": {"email": "user@example.com"},
+                        "items": [
+                            {
+                                "description": "Оплата Подписки",
+                                "quantity": "1",
+                                "amount": {"value": str(amount), "currency": "RUB"},
+                                "vat_code": 1,
+                            }
+                        ],
+                    },
                 },
-            },
-            id_key,
-        )
-        logger.info(f"⚡️ [DIAGNOSTIC] 4. Ответ от ЮКассы получен!")
-        return payment.confirmation.confirmation_url, payment.id
-        
-    except Exception as e:
-        logger.error(f"⚡️ [DIAGNOSTIC] Ошибка ПРИ СОЗДАНИИ платежа (Payment.create):\n{traceback.format_exc()}")
-        raise e
+                id_key,
+            )
+        except Exception as e:
+            raise e
+
+    payment = await loop.run_in_executor(None, _create_sync)
+    return payment.confirmation.confirmation_url, payment.id
 
 
-async def check_payment_status(payment_id, chat_id, amount):
-    logger.info(f"⚡️ [DIAGNOSTIC] Начало проверки статуса {payment_id}")
+async def check_payment_status(payment_id, chat_id, amount, language_code):
+    loop = asyncio.get_running_loop()
+
+    def _get_status_sync():
+        p = Payment.find_one(payment_id)
+        return p.status
+
     try:
-        payment = json.loads((Payment.find_one(payment_id)).json())
+        # Первая проверка
+        status = await loop.run_in_executor(None, _get_status_sync)
+        
+        # Счетчик безопасности (15 минут максимум)
+        checks = 0
+        max_checks = 180 # 180 * 5 сек = 15 минут
 
-        while payment["status"] == "pending":
-            # logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
+        while status == "pending" and checks < max_checks:
             await asyncio.sleep(5)
-            payment = json.loads((Payment.find_one(payment_id)).json())
+            status = await loop.run_in_executor(None, _get_status_sync)
+            checks += 1
 
-        logger.info(f"⚡️ [DIAGNOSTIC] Статус изменился: {payment['status']}")
-
-        if payment["status"] == "succeeded":
-            logger.info(f"Платеж {payment_id} успешно выполнен пользователем {chat_id}.")
-
-            # Попробуем трижды обновить баланс
-            attempts = 3
+        if status == "succeeded":
+            logger.info(f"Payment {payment_id} SUCCEEDED for user {chat_id}.")
+            
+            # Обновление баланса (3 попытки)
             success = False
-            for attempt in range(attempts):
+            for attempt in range(3):
                 try:
-                    # Используем транзакцию для обновления баланса
                     async with db_manager.transaction() as conn:
                         await db_manager.update_user_balance(chat_id, amount, conn=conn)
-                    logger.info(
-                        f"Баланс пользователя {chat_id} был успешно обновлен на {amount} рублей (попытка {attempt + 1})."
+                    
+                    logger.info(f"Balance updated for user {chat_id} (+{amount} rub).")
+                    
+                    current_balance = await db_manager.get_user_balance(chat_id)
+                    
+                    await dp.bot.send_message(
+                        chat_id=chat_id,
+                        text=localizer.get_user_localized_text(
+                            user_language_code=language_code,
+                            text_localization=localizer.message.successfull_payment_message,
+                        ).format(amount=amount, current_balance=current_balance),
+                        parse_mode=types.ParseMode.HTML,
+                        reply_markup=await inline.successfull_payment_keyboard(language_code)
                     )
                     success = True
-                    break  # Если обновление прошло успешно, выходим из цикла
+                    break
                 except Exception as e:
-                    logger.error(
-                        f"Ошибка при обновлении баланса пользователя {chat_id} (попытка {attempt + 1}): {str(e)}"
-                    )
-                    await asyncio.sleep(2)  # Ожидание между попытками
+                    logger.error(f"DB Error updating balance (attempt {attempt+1}): {e}")
+                    await asyncio.sleep(2)
 
-            if success:
-                return True
-            else:
-                # Если все попытки не удались, отправляем сообщение в лог и пользователю
-                logger.critical(
-                    f"Не удалось пополнить баланс пользователя {chat_id} после успешного платежа. Пожалуйста, проверьте вручную."
-                )
+            if not success:
+                logger.critical(f"CRITICAL: Money taken but balance NOT updated! User: {chat_id}, Amount: {amount}")
                 await dp.bot.send_message(
                     chat_id=chat_id,
-                    text="⚠️<b>Критическая ошибка в процессе пополнения баланса...</b>",
+                    text="⚠️<b>CRITICAL ERROR. Please contact support immediately.</b>",
                     parse_mode=types.ParseMode.HTML,
                 )
                 return False
+            return True
 
-        elif payment["status"] == "canceled":
-            logger.info(f"Платеж {payment_id} был отменен для пользователя {chat_id}.")
+        elif status == "canceled":
+            logger.info(f"Payment {payment_id} CANCELED for user {chat_id}.")
+            return False
+        
+        else:
+            logger.info(f"Payment {payment_id} timeout or unknown status: {status}")
             return False
             
     except Exception as e:
-        logger.error(f"⚡️ [DIAGNOSTIC] Ошибка внутри check_payment_status:\n{traceback.format_exc()}")
+        logger.error(f"Error checking payment status: {e}")
         return False
