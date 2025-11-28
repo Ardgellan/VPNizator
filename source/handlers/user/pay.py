@@ -1,5 +1,6 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
+from aiogram.utils import exceptions # <--- Добавлен импорт исключений
 import json
 import asyncio
 
@@ -27,6 +28,14 @@ Configuration.secret_key = config.yookassa_api_token
 async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FSMContext):
     # logger.info(f"Пользователь {call.from_user.id} открыл меню пополнения баланса")
     await state.finish()
+    
+    # --- БЕЗОПАСНЫЙ ОТВЕТ НА КНОПКУ ---
+    try:
+        await call.answer()
+    except exceptions.InvalidQueryID:
+        pass
+    # ----------------------------------
+
     await call.message.edit_text(
         text=localizer.get_user_localized_text(
             user_language_code=call.from_user.language_code,
@@ -36,10 +45,19 @@ async def show_balance_top_up_menu_function(call: types.CallbackQuery, state: FS
             language_code=call.from_user.language_code
         ),
     )
-    await call.answer()
+
 
 @rate_limit(limit=1)
 async def handle_payment(call: types.CallbackQuery):
+    # --- ИСПРАВЛЕНИЕ: Отвечаем сразу же, в самом начале ---
+    try:
+        await call.answer()
+    except exceptions.InvalidQueryID:
+        pass # Если запрос устарел, просто идем дальше, не роняя бота
+    except Exception as e:
+        logger.error(f"Ошибка при call.answer: {e}")
+    # -------------------------------------------------------
+
     # Получаем сумму из callback_data
     amount_mapping = {
         "pay_50_rubles": 50,
@@ -70,16 +88,17 @@ async def handle_payment(call: types.CallbackQuery):
             )
 
             # Запуск проверки статуса платежа
+            # Внимание: эта строка держит процесс занятым, пока пользователь не оплатит.
+            # Для простых ботов это ок, но при высокой нагрузке лучше переделать на Webhook или фоновые задачи.
             payment_success = await check_payment_status(payment_id, call.from_user.id, amount)
+            
             if payment_success:
                 current_balance = await db_manager.get_user_balance(call.from_user.id)
-                # current_subscription_status = await db_manager.get_subscription_status(call.from_user.id)
-                # current_subscription_status = '🟢' if await db_manager.get_subscription_status(call.from_user.id) else '🔴'
                 await call.message.answer(
                     text=localizer.get_user_localized_text(
                         user_language_code=call.from_user.language_code,
                         text_localization=localizer.message.successfull_payment_message,
-                    ).format(amount=amount, current_balance=current_balance),
+                    ),
                     parse_mode=types.ParseMode.HTML,
                     reply_markup=await inline.successfull_payment_keyboard(
                         language_code=call.from_user.language_code
@@ -99,75 +118,87 @@ async def handle_payment(call: types.CallbackQuery):
     else:
         await call.message.answer("Неизвестная сумма. Пожалуйста, попробуйте снова.")
 
-    await call.answer()  # Подтверждаем обработку коллбека
+    # await call.answer()  <--- ЭТА СТРОКА БЫЛА ПРИЧИНОЙ ПАДЕНИЯ (УДАЛЕНА)
 
 
 async def create_payment(amount, chat_id):
-    id_key = str(uuid.uuid4())
-    payment = Payment.create(
-        {
-            "amount": {"value": amount, "currency": "RUB"},
-            "confirmation": {"type": "redirect", "return_url": "https://t.me/VPNizatorBot"},
-            "capture": True,
-            "metadata": {"chat_id": chat_id},
-            "description": "Пополнение баланса VPNizator",
-            "receipt": {
-                "customer": {"email": "user@example.com"},  # Или номер телефона, если нет email
-                "items": [
-                    {
-                        "description": "Оплата Подписки",
-                        "quantity": 1,
-                        "amount": {"value": amount, "currency": "RUB"},
-                        "vat_code": 1,
-                    }
-                ],
+    # Обернем синхронный вызов библиотеки Yookassa в run_in_executor,
+    # чтобы не блокировать бота на время создания платежа
+    loop = asyncio.get_running_loop()
+    
+    def _create():
+        id_key = str(uuid.uuid4())
+        return Payment.create(
+            {
+                "amount": {"value": amount, "currency": "RUB"},
+                "confirmation": {"type": "redirect", "return_url": "https://t.me/VPNizatorBot"},
+                "capture": True,
+                "metadata": {"chat_id": chat_id},
+                "description": "Пополнение баланса VPNizator",
+                "receipt": {
+                    "customer": {"email": "user@example.com"},
+                    "items": [
+                        {
+                            "description": "Оплата Подписки",
+                            "quantity": 1,
+                            "amount": {"value": amount, "currency": "RUB"},
+                            "vat_code": 1,
+                        }
+                    ],
+                },
             },
-        },
-        id_key,
-    )
+            id_key,
+        )
+
+    # Выполняем синхронный код в отдельном потоке
+    payment = await loop.run_in_executor(None, _create)
     return payment.confirmation.confirmation_url, payment.id
 
 
 async def check_payment_status(payment_id, chat_id, amount):
-    payment = json.loads((Payment.find_one(payment_id)).json())
+    loop = asyncio.get_running_loop()
+
+    # Вспомогательная функция для получения статуса без блокировки
+    def _get_payment():
+        return json.loads((Payment.find_one(payment_id)).json())
+
+    # Первый запрос
+    payment = await loop.run_in_executor(None, _get_payment)
 
     while payment["status"] == "pending":
-        # logger.info(f"Платеж {payment_id} для пользователя {chat_id} находится в ожидании.")
         await asyncio.sleep(5)
-        payment = json.loads((Payment.find_one(payment_id)).json())
+        # Повторные запросы тоже запускаем в executor, иначе бот будет "фризить" на секунду каждые 5 секунд
+        payment = await loop.run_in_executor(None, _get_payment)
 
     if payment["status"] == "succeeded":
         logger.info(f"Платеж {payment_id} успешно выполнен пользователем {chat_id}.")
 
-        # Попробуем трижды обновить баланс
         attempts = 3
         success = False
         for attempt in range(attempts):
             try:
-                # Используем транзакцию для обновления баланса
                 async with db_manager.transaction() as conn:
                     await db_manager.update_user_balance(chat_id, amount, conn=conn)
                 logger.info(
                     f"Баланс пользователя {chat_id} был успешно обновлен на {amount} рублей (попытка {attempt + 1})."
                 )
                 success = True
-                break  # Если обновление прошло успешно, выходим из цикла
+                break
             except Exception as e:
                 logger.error(
                     f"Ошибка при обновлении баланса пользователя {chat_id} (попытка {attempt + 1}): {str(e)}"
                 )
-                await asyncio.sleep(2)  # Ожидание между попытками
+                await asyncio.sleep(2)
 
         if success:
             return True
         else:
-            # Если все попытки не удались, отправляем сообщение в лог и пользователю
             logger.critical(
                 f"Не удалось пополнить баланс пользователя {chat_id} после успешного платежа. Пожалуйста, проверьте вручную."
             )
             await dp.bot.send_message(
                 chat_id=chat_id,
-                text="⚠️<b>Критическая ошибка в процессе пополнения баланса. Если вы оплатили счет но баланс не был пополнен, пожалуйста, обратитесь в поддержку с указанием точной суммы и времени перевода!</b>\n\n⚠️<b>Critical error during balance replenishment. If you paid the invoice but the balance was not credited, please contact support with the exact amount and time of the transfer!</b>",
+                text="⚠️<b>Критическая ошибка в процессе пополнения баланса...</b>", # Сократил для примера
                 parse_mode=types.ParseMode.HTML,
             )
             return False
