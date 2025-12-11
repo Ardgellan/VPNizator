@@ -503,36 +503,40 @@
             "ru": "6.Плохая скорость VPN 🏃‍♀️‍➡️😵"
         },
         "estonia_button": {
-            "en": "🇪🇪 Estonia",
-            "ru": "🇪🇪 Эстония"
+            "en": "🇪🇪 Estonia ⚡",
+            "ru": "🇪🇪 Эстония ⚡"
         },
         "germany_button": {
-            "en": "🇩🇪 Germany",
-            "ru": "🇩🇪 Германия"
+            "en": "🇩🇪 Germany ⚡",
+            "ru": "🇩🇪 Германия ⚡"
         },
         "america_button": {
-            "en": "🇺🇸 America",
-            "ru": "🇺🇸 Америка"
+            "en": "🇺🇸 America ⚡",
+            "ru": "🇺🇸 Америка ⚡"
         },
         "finland_button": {
-            "en": "🇫🇮 Finland",
-            "ru": "🇫🇮 Финляндия"
+            "en": "🇫🇮 Finland ⚡",
+            "ru": "🇫🇮 Финляндия ⚡"
         },
         "japan_button": {
-            "en": "🇯🇵 Japan",
-            "ru": "🇯🇵 Япония"
+            "en": "🇯🇵 Japan ⚡",
+            "ru": "🇯🇵 Япония ⚡"
         },
         "sweden_button": {
-            "en": "🇸🇪 Sweden",
-            "ru": "🇸🇪 Швеция"
+            "en": "🇸🇪 Sweden ⚡",
+            "ru": "🇸🇪 Швеция ⚡"
         },
         "russia_button": {
-            "en": "🇷🇺 Russia",
-            "ru": "🇷🇺 Россия"
+            "en": "🇷🇺 Russia ⚡",
+            "ru": "🇷🇺 Россия ⚡"
         },
         "netherlands_button": {
-            "en": "🇳🇱 Netherlands",
-            "ru": "🇳🇱 Нидерланды"
+            "en": "🇳🇱 Netherlands ⚡",
+            "ru": "🇳🇱 Нидерланды ⚡"
+        },
+        "encryptions_button": {
+            "en": "🌐 Enhanced encryption",
+            "ru": "🌐 Усиленное шифрование"
         }
     }
 }
