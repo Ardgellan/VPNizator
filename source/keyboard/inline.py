@@ -765,7 +765,7 @@ async def country_selection_keyboard(language_code: str):
         InlineKeyboardButton(
             text=localizer.get_user_localized_text(
                 user_language_code=language_code,
-                text_localization=localizer.button.encryptions_button,
+                text_localization=localizer.button.encryption_button,
             ),
             callback_data="country_encryption",
         ),
